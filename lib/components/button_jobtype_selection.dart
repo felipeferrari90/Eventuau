@@ -6,7 +6,8 @@ import 'package:flutter/material.dart';
 
  
 Widget setButtonJobTypeSelection(context, {IconData icon, String title, String link, bool isSelected = false, Function functionOnTap }) => 
-  GestureDetector(
+Expanded(
+  child: GestureDetector(
         child:Container(
           decoration: BoxDecoration(
             border: isSelected ? Border(
@@ -28,6 +29,7 @@ Widget setButtonJobTypeSelection(context, {IconData icon, String title, String l
           ),
         ),
         onTap: functionOnTap?? (){} ,   
-  );
-
+  )
+);
+  
     

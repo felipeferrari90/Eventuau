@@ -25,7 +25,7 @@ class EventUau extends StatelessWidget {
         primaryColor: primaryColor,
         accentColor: accentColor,
         visualDensity: VisualDensity.adaptivePlatformDensity,
-        iconTheme: IconThemeData(color: primaryColor, size: 48) ,
+        iconTheme: IconThemeData(size: 48) ,
         fontFamily: "Roboto",
         textTheme: TextTheme(          
           headline1: TextStyle( fontSize: 24 , color: primaryColor , fontWeight: FontWeight.bold ),

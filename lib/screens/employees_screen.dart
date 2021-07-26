@@ -1,6 +1,6 @@
 
 import 'package:event_uau/components/app_bar_eventual.dart';
-import 'package:event_uau/components/button-jobtype_selection.dart';
+import 'package:event_uau/components/button_jobtype_selection.dart';
 import 'package:event_uau/components/card_employee.dart';
 import 'package:event_uau/utils/colors.dart';
 import 'package:event_uau/utils/icons.dart';
@@ -19,8 +19,13 @@ class EmployeeScreen extends StatefulWidget {
 
 class _EmployeeScreenState extends State<EmployeeScreen> {
 
-  //GlobalKey<_NavBarJobTypeState> navGlobalKey = new GlobalKey<_NavBarJobTypeState>();
 
+  //o numero de icones abaixo tem que ser sempre igual ao comprimento desse array, se não dara erro.
+  List<bool> _isSelected = [true, false,false, false];
+
+  
+
+  String _employeeSelected = "garcom";
 
   @override
   Widget build(BuildContext context) {
@@ -37,41 +42,89 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
             ),         
             Container(
               padding: EdgeInsets.symmetric( vertical: 24),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  setButtonJobTypeSelection(context, icon: EventuauIcons.garcom_logo, title: "garcom", link: null,isSelected: true),
-                  setButtonJobTypeSelection(context, icon: EventuauIcons.clown, title: "animador", link: null,),
-                  setButtonJobTypeSelection(context, icon: EventuauIcons.buffet, title: "buffet", link: null,),
-                  setButtonJobTypeSelection(context, icon: EventuauIcons.grill, title: "churrasco", link: null,),
-                ]             
-              ),
-            ),
-            IndexedStack(
-              children: [              
-                expandido2(),
-                expandido3(),
-              ],
-            )          
+                child: ToggleButtons(        
+                  children: [  
+                    setButtonJobTypeSelection(icon: EventuauIcons.garcom_logo, title: "garçom"),
+                    setButtonJobTypeSelection(icon: EventuauIcons.clown, title: "animador"),
+                    setButtonJobTypeSelection(icon: EventuauIcons.buffet , title: "buffet"),
+                    setButtonJobTypeSelection(icon: EventuauIcons.grill, title: "churrasco"),
+                  ],
+                  isSelected: _isSelected,
+                  onPressed: (int index) {
+                    setState(() {
+                      _isSelected = _isSelected.map((e) => false).toList();
+                      _isSelected[index] = true;                     
+                      switch (index) {
+                        case 0: 
+                          _employeeSelected = "garcom";
+                          break;
+                        case 1:                       
+                          _employeeSelected = "animador";
+                          break;
+                        case 2: 
+                          _employeeSelected = "buffet";
+                          break;
+                        case 3: 
+                          _employeeSelected = "churrasco";
+                          break;
+                      }
+                    });
+                    print(_employeeSelected);         
+                  },
+                  selectedColor: primaryColor,
+                  fillColor: colorBg,
+                  borderWidth: 0,
+                  borderColor: colorBg,
+                  color: Color.fromRGBO(0,0,0,0.3),
+                  renderBorder: false,
+                  constraints: BoxConstraints(
+                      minWidth: (MediaQuery.of(context).size.width - 48) / _isSelected.length,
+                  ),
+                  focusColor: primaryColor,
+                )  
+              )         
           ]
         ),
       )
     );
   }
+
 }
 
-
+Widget expandido1(){
+  return Text("Expandido Garçom");
+}
 
 Widget expandido2(){
-  return Text("data");
+  return Text("Expandido Animador");
 }
 
 Widget expandido3(){
-  return Text("seccao3");
+  return Text("Expandido Buffet");
 }
 
 Widget expandido4(){
-  return Text("seccao4");
+  return Text("Expandido Churrasco");
 }
 
+
+Widget setButtonJobTypeSelection({IconData icon, String title, bool isSelected = false}) => 
+       Column(
+          children: <Widget>[
+              Icon(icon),
+              Container(
+                padding: EdgeInsets.symmetric(vertical: 16.0),
+                child: Text(title?? ""),
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(
+                      width: 2.0,
+                    )
+                  )
+                ),
+              )             
+            ]
+          );
+      
+        
 
