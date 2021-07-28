@@ -1,6 +1,5 @@
 
 import 'package:event_uau/components/app_bar_eventual.dart';
-import 'package:event_uau/components/button_jobtype_selection.dart';
 import 'package:event_uau/components/card_employee.dart';
 import 'package:event_uau/utils/colors.dart';
 import 'package:event_uau/utils/icons.dart';
@@ -22,8 +21,6 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
 
   //o numero de icones abaixo tem que ser sempre igual ao comprimento desse array, se não dara erro.
   List<bool> _isSelected = [true, false,false, false];
-
-  
 
   String _employeeSelected = "garcom";
 
@@ -82,7 +79,39 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
                   ),
                   focusColor: primaryColor,
                 )  
-              )         
+              ),
+              Container(
+                child: Expanded(
+                  child:SingleChildScrollView(
+                    child: GridView.count(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 12,
+                      mainAxisSpacing: 12,
+                      shrinkWrap:  true, 
+                      primary: false,
+                      children: [
+                        setCardEmployee(),
+                        setCardEmployee(),
+                        setCardEmployee(),
+                        setCardEmployee(),
+                        setCardEmployee(),
+                        setCardEmployee(),
+                        setCardEmployee(),
+                        setCardEmployee(),
+                        setCardEmployee(),
+                        setCardEmployee(),
+                        setCardEmployee(),
+                        setCardEmployee(),
+                        setCardEmployee(),
+                        setCardEmployee(),
+                        setCardEmployee(),
+                        setCardEmployee(),
+                        setCardEmployee(),
+                      ],
+                    )
+                  ),
+                )
+              )     
           ]
         ),
       )

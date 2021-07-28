@@ -1,0 +1,109 @@
+import 'package:dio/dio.dart';
+import 'package:event_uau/models/contratante_model.dart';
+import 'package:event_uau/service/service_config.dart';
+
+
+class ContratanteService {
+
+  static final String _endpoint =
+      "https://60ff7206257411001707898c.mockapi.io/eventuau/api/contratante";
+
+  static final String _resource = 'curso';
+
+  final ServiceConfig service = new ServiceConfig(_endpoint);
+
+
+  Future<List<ContratanteModel>> findAll() async {
+    List<ContratanteModel> lista = new List<ContratanteModel>();
+    try {
+      Response response = await service.create().get(_resource);
+      if (response.statusCode == 200) {
+        response.data.forEach(
+          (value) {
+            print(value);
+            lista.add(
+              ContratanteModel.fromMap(value),
+            );
+          },
+        );
+      }
+    } catch (error) {
+      print("Service Error: $error ");
+      throw error;
+    }
+
+    return lista;
+  }
+
+  Future<int> create(ContratanteModel contratanteModel) async {
+    try {
+      contratanteModel.id = 0;
+      Response response = await service.create().post(
+            _resource,
+            data: contratanteModel.toMap(),
+          );
+
+      if (response.statusCode == 201) {
+        var retorno = ( response.data["id"] is String ) ? 
+            int.parse(response.data["id"]) : 
+            response.data["id"];
+        return retorno;
+      }
+    } catch (error) {
+      print("Service Error: $error ");
+      throw error;
+    }
+  }
+
+  Future<ContratanteModel> getById(int id) async {
+    try {
+      String endpoint = _resource + "/" + id.toString();
+      Response response = await service.create().get(endpoint);
+
+      if (response.statusCode == 200) {
+        var retorno = ContratanteModel.fromMap(response.data);
+        return retorno;
+      }
+
+    } catch (error) {
+      print("Service Error: $error ");
+      throw error;
+    }
+  }
+
+  Future<int> update(ContratanteModel cursoModel) async {
+    try {
+      String endpoint = _resource + "/" + cursoModel.id.toString();
+
+      Response response = await service.create().put(
+            endpoint,
+            data: cursoModel.toMap(),
+          );
+
+      var retorno = ( response.data["id"] is String ) ? 
+            int.parse(response.data["id"]) : 
+            response.data["id"];
+        return retorno;
+    } catch (error) {
+      print("Service Error: $error ");
+      throw error;
+    }
+  }
+
+  Future<void> delete(ContratanteModel contratanteModel) async {
+    try {
+      String endpoint = _resource + "/" + contratanteModel.id.toString();
+
+      Response response = await service.create().delete(
+            endpoint,
+          );
+
+      if (response.statusCode != 200) {
+        throw Exception("Não foi possível excluir o recurso!");
+      }
+
+    } catch (error) {
+      throw error;
+    }
+  }
+}

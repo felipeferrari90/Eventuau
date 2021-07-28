@@ -15,7 +15,7 @@ Widget setButton({String text, Function function, bool outline = false, bool upp
                color: primaryColor
              ) : BorderSide.none,
           ),
-          child: Padding(
+        child: Padding(
             padding: EdgeInsets.symmetric( vertical: 16.0),
             child: Text(uppercase? text.toUpperCase(): text,
               style: TextStyle(
@@ -23,8 +23,8 @@ Widget setButton({String text, Function function, bool outline = false, bool upp
               fontSize: 16,
               )
             ) ,
-          ),
-          color: outline? colorBg : primaryColor
+        ),
+        color: outline? colorBg : primaryColor
       ) 
     );  
  
