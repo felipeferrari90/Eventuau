@@ -1,4 +1,5 @@
 import 'package:event_uau/screens/employee_login_screen.dart';
+import 'package:event_uau/screens/employee_management_screen.dart';
 import 'package:event_uau/screens/employee_screen_description.dart';
 import 'package:event_uau/screens/employee_signup.dart';
 import 'package:event_uau/screens/employees_screen.dart';
@@ -50,6 +51,7 @@ class EventUau extends StatelessWidget {
         )
       ),
       routes: {
+
         "/" : (context) => HomeScreen(),
 
         /*ROTAS DO FLUXO APP CONTRATANTE*/ 
@@ -60,6 +62,7 @@ class EventUau extends StatelessWidget {
         "/event/id" : (context) => EventScreenDescription(),
         '/employees' : (context) => EmployeeChoiceScreen(),
         '/employees/id' : (context) => EmployeeScreenDescription(),
+        "/employee/management" : (context) => EmployeesManagement(),
 
         /*ROTAS DO FLUXO APP FUNCIONARIO*/ 
         "/employee/login" : (context) => LoginEmployeeScreen(),
@@ -71,6 +74,8 @@ class EventUau extends StatelessWidget {
     );
   }
 }
+
+
 
 
 

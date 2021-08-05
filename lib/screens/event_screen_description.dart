@@ -162,7 +162,9 @@ class _EventScreenDescriptionState extends State<EventScreenDescription> {
                     Align(
                       alignment: Alignment.center,
                       child: RaisedButton.icon(
-                      onPressed: (){},
+                      onPressed: (){
+                        Navigator.pushNamed(context, "/employee/management");
+                      },
                       padding: EdgeInsets.symmetric(horizontal: 16 , vertical: 8),
                        icon: Icon(Icons.assignment_ind, size: 16), 
                        label: Text("Gerenciador de Funcionarios"),

@@ -15,7 +15,7 @@ Widget setCardEventDismissible(context) => Card(
         borderRadius: BorderRadius.circular(15),       
         color: primaryColor,
         ),
-        child: Align( child: Icon(EventuauIcons2.handshake , color: colorBg,), alignment:  Alignment.centerRight,),
+        child: Align( child: Icon(Icons.thumb_up , color: colorBg,), alignment:  Alignment.centerRight,),
       ),
       background: Container( 
         padding: EdgeInsets.only(left: 16, right: 16),
@@ -67,7 +67,7 @@ Widget setCardEventDismissible(context) => Card(
             children: [
                 InkWell(
                   onTap: (){
-                    Navigator.pushNamed(context, "employee/event/id");
+                    Navigator.pushNamed(context, "/employee/event/id");
                   },
                   child: Container(
                     width: MediaQuery.of(context).size.width / 3,
