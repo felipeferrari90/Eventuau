@@ -1,21 +1,22 @@
 import 'package:event_uau/components/app_bar_eventual.dart';
 import 'package:event_uau/components/buttons.dart';
-import 'package:event_uau/components/card_event.dart';
+import 'package:event_uau/components/card_event_dismissible.dart';
 
 import 'package:event_uau/utils/colors.dart';
 import 'package:flutter/material.dart';
 
-class DashBoardEvents extends StatefulWidget {
-  const DashBoardEvents({ Key key }) : super(key: key);
+class EventScreenChoice extends StatefulWidget {
+  const EventScreenChoice({ Key key }) : super(key: key);
 
   @override
-  _DashBoardEventsState createState() => _DashBoardEventsState();
+  _EventScreenChoiceState createState() => _EventScreenChoiceState();
+
 }
 
-class _DashBoardEventsState extends State<DashBoardEvents> {
+class _EventScreenChoiceState extends State<EventScreenChoice> {
 
-  @override
-  Widget build(BuildContext context) {
+     @override
+     Widget build(BuildContext context) {
       return Scaffold(
         appBar: setAppBar(context, username: "Felipe Ferreira Marques" ),
         backgroundColor: colorBg,
@@ -65,12 +66,17 @@ class _DashBoardEventsState extends State<DashBoardEvents> {
                   child:  SingleChildScrollView(
                     child: Column(
                       children:[
-                          setCardEvent(context),
-                          setCardEvent(context),
-                          setCardEvent(context),
-                          setCardEvent(context),
-                          setCardEvent(context),
-                          setCardEvent(context),
+                          setCardEventDismissible(context),
+                          setCardEventDismissible(context),
+                          setCardEventDismissible(context),
+                          setCardEventDismissible(context),
+                          setCardEventDismissible(context),
+                          setCardEventDismissible(context),
+                          setCardEventDismissible(context),
+                          setCardEventDismissible(context),
+                          setCardEventDismissible(context),
+                          setCardEventDismissible(context),
+                          setCardEventDismissible(context),
                       ]
                     ),
                   ),

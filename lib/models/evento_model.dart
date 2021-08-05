@@ -18,7 +18,7 @@ class EventoModel{
   double tempoDuracaoReal;
   int numeroCurtidas;
   int numeroFuncionarios;
-  double valorTotal;
+  double valorEvento;
   double valorReservaEmergencia;
   StatusContratacaoEvento statusContratacaoEvento;
   List<FuncionarioModel> funcionarios = List();
@@ -34,7 +34,7 @@ class EventoModel{
                this.fimPrevisto,
                this.numeroCurtidas,
                this.numeroFuncionarios,
-               this.valorTotal,
+               this.valorEvento,
                this.valorReservaEmergencia,
                this.statusContratacaoEvento,
                this.funcionarios
@@ -51,7 +51,7 @@ class EventoModel{
      fimPrevisto: json["fimPrevisto"],
      numeroCurtidas: json["numeroCurtidas"],
      numeroFuncionarios: json["numeroFuncionarios"],
-     valorTotal: json["valorTotal"],
+     valorEvento: json["valorTotal"],
      valorReservaEmergencia: json["valorReservaEmergencia"],
      statusContratacaoEvento: json["statusContratacaoEvento"] 
   );
@@ -68,7 +68,7 @@ class EventoModel{
       "fimReal" : this.fimReal,
       "tempoDuracaoPrevisto;" : this.tempoDuracaoPrevisto,
       "tempoDuracaoReal": this.tempoDuracaoReal,
-      "valorTotal": this.valorTotal,
+      "valorTotal": this.valorEvento,
       "valorReservaEmergencia": this.valorReservaEmergencia
   };
      

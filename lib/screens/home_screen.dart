@@ -47,7 +47,15 @@ class _HomeScreenState extends State<HomeScreen> {
                 Navigator.pushNamed(context, "/signup");
               }
             ),
-            setButtonText(text: "seja um proffisional", underline: true, uppercase: true , color: accentPink),
+            setButtonText(
+              text: "seja um proffisional", 
+              underline: true, 
+              uppercase: true, 
+              color: accentPink,
+              function: () {
+                Navigator.pushNamed(context, "/employee/login");
+              }
+            ),
             Spacer(),
           ]
         ),

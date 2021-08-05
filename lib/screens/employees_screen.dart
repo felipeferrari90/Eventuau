@@ -7,16 +7,16 @@ import 'package:flutter/material.dart';
 
 
 
-class EmployeeScreen extends StatefulWidget {
-  const EmployeeScreen({ Key key }) : super(key: key);
+class EmployeeChoiceScreen extends StatefulWidget {
+  const EmployeeChoiceScreen({ Key key }) : super(key: key);
 
   static int option;
 
   @override
-  _EmployeeScreenState createState() => _EmployeeScreenState();
+  _EmployeeChoiceScreenState createState() => _EmployeeChoiceScreenState();
 }
 
-class _EmployeeScreenState extends State<EmployeeScreen> {
+class _EmployeeChoiceScreenState extends State<EmployeeChoiceScreen> {
 
 
   //o numero de icones abaixo tem que ser sempre igual ao comprimento desse array, se não dara erro.
@@ -87,28 +87,45 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
                       crossAxisCount: 2,
                       crossAxisSpacing: 12,
                       mainAxisSpacing: 12,
+                      childAspectRatio: 0.66,
                       shrinkWrap:  true, 
                       primary: false,
                       children: [
-                        setCardEmployee(),
-                        setCardEmployee(),
-                        setCardEmployee(),
-                        setCardEmployee(),
-                        setCardEmployee(),
-                        setCardEmployee(),
-                        setCardEmployee(),
-                        setCardEmployee(),
-                        setCardEmployee(),
-                        setCardEmployee(),
-                        setCardEmployee(),
-                        setCardEmployee(),
-                        setCardEmployee(),
-                        setCardEmployee(),
-                        setCardEmployee(),
-                        setCardEmployee(),
-                        setCardEmployee(),
+                        setCardEmployee(context), 
+                        setCardEmployee(context), 
+                        setCardEmployee(context), 
+                        setCardEmployee(context), 
+                        setCardEmployee(context), 
+                        setCardEmployee(context), 
+                        setCardEmployee(context), 
+
+                        setCardEmployee(context), 
+                        setCardEmployee(context), 
+                        setCardEmployee(context), 
+                        setCardEmployee(context), 
+                        setCardEmployee(context), 
+                        setCardEmployee(context), 
+                        setCardEmployee(context), 
+                        setCardEmployee(context), 
+
+                        setCardEmployee(context), 
                       ],
                     )
+                  ),
+                )
+              ),
+              Container(
+                width: double.infinity,
+                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+                child: RaisedButton.icon(
+                  color: primaryColor,
+                  textColor: colorBg,
+                  padding: EdgeInsets.all(10),
+                  onPressed: (){}, 
+                  icon: Icon(Icons.assignment_ind, color: colorBg, size: 24),
+                  label: Text("ver minhas contratações", style: TextStyle(fontSize: 16)),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(25)
                   ),
                 )
               )     

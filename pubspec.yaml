@@ -49,6 +49,7 @@ flutter:
   assets:
     - assets/images/imagescreenlogin.png
     - assets/images/party.png
+    - assets/images/barbecue.png
     
 
   # An image asset can refer to one or more resolution-specific "variants", see

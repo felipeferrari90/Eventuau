@@ -19,3 +19,5 @@ Color accentColor = pink;
 Color primaryColorText = pink;
 Color secondaryColorText = Colors.black;
 Color userLogged = yellow;
+
+

@@ -1,5 +1,11 @@
+import 'package:event_uau/screens/employee_login_screen.dart';
+import 'package:event_uau/screens/employee_screen_description.dart';
+import 'package:event_uau/screens/employee_signup.dart';
 import 'package:event_uau/screens/employees_screen.dart';
 import 'package:event_uau/screens/event_new_screen.dart';
+import 'package:event_uau/screens/event_screen_choice.dart';
+import 'package:event_uau/screens/employee_event_screen_description.dart';
+import 'package:event_uau/screens/event_screen_description.dart';
 import 'package:event_uau/screens/events_screen.dart';
 import 'package:event_uau/screens/home_screen.dart';
 import 'package:event_uau/screens/login_screen.dart';
@@ -26,6 +32,12 @@ class EventUau extends StatelessWidget {
         accentColor: accentColor,
         visualDensity: VisualDensity.adaptivePlatformDensity,
         iconTheme: IconThemeData(size: 48) ,
+        dividerTheme: DividerThemeData(
+          color: Colors.black,
+          indent: 0,
+          endIndent: 0,
+          space: 32,
+        ),
         fontFamily: "Roboto",
         textTheme: TextTheme(          
           headline1: TextStyle( fontSize: 24 , color: primaryColor , fontWeight: FontWeight.bold ),
@@ -39,13 +51,26 @@ class EventUau extends StatelessWidget {
       ),
       routes: {
         "/" : (context) => HomeScreen(),
+
+        /*ROTAS DO FLUXO APP CONTRATANTE*/ 
         "/login" : (context) => LoginScreen(),
         "/signup" : (context) => SignUpScreen(),
         "/events" : (context) => DashBoardEvents(),
         "/event/new" : (context) => EventNewScreen(),
-        '/employees' : (context) => EmployeeScreen(),
+        "/event/id" : (context) => EventScreenDescription(),
+        '/employees' : (context) => EmployeeChoiceScreen(),
+        '/employees/id' : (context) => EmployeeScreenDescription(),
+
+        /*ROTAS DO FLUXO APP FUNCIONARIO*/ 
+        "/employee/login" : (context) => LoginEmployeeScreen(),
+        "/employee/signup" : (context) => SignUpEmployeeScreen(),
+        "/employee/events" : (context) => EventScreenChoice(),
+        "/employee/event/id" : (context) => EmployeeEventScreenDescription(),
+     
       },
     );
   }
 }
+
+
 
