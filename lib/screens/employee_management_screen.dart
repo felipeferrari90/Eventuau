@@ -14,9 +14,9 @@ class _EmployeesManagementState extends State<EmployeesManagement> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-       appBar: setAppBar(context),
+       appBar: setAppBar(context, title: 'gerenciador de funcionarios', username: "Felipe Ferreira"),
        body: Container(
-         padding: EdgeInsets.all(16),
+         padding: EdgeInsets.symmetric(vertical:16),
          color: colorBg,
          child: Container(  
              child: SingleChildScrollView(
@@ -57,12 +57,25 @@ class _EmployeesManagementState extends State<EmployeesManagement> {
 }
 
 
-setCardManagementEmployee(BuildContext context) => 
+setCardManagementEmployee(BuildContext context, {Function f, bool isChecked = false }) =>
   Card(
-    child: ListTile(
-      title: Text("Pedro Lemes"),
-      subtitle: Text("RG 12345678910"),
-      leading: Icon(EventuauIcons.garcom_logo, size: 24 , color: primaryColor),
-      trailing: Text("FE")
-    )
+      child:ListTile(
+            title: Text("Pedro Lemes", style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
+            subtitle: Text("RG 12345678910", style: TextStyle(fontSize: 12)),
+            leading: Icon(EventuauIcons.garcom_logo, size: 32 , color: primaryColor,),
+            trailing: RaisedButton(
+              onPressed: () {},
+              textColor: colorBg,
+              color: primaryColor,
+              padding: EdgeInsets.symmetric(vertical: 2 , horizontal: 12),
+              child: Text("confirmar presença", style: TextStyle(fontSize: 12),),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(25),
+              ),  
+            )
+          ), 
   );
+
+ 
+
+

@@ -200,7 +200,6 @@ class _EmployeeEventScreenDescriptionState extends State<EmployeeEventScreenDesc
                             ),
                           ],
                       )  
-                    
                   ],
                 ),
             )

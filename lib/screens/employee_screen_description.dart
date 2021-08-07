@@ -105,7 +105,7 @@ class _EmployeeScreenDescriptionState extends State<EmployeeScreenDescription> {
                                 shape: CircleBorder(),
                                 child: Icon(EventuauIcons2.cancel, color: primaryColor, size: 64,),
                                   
-                                )
+                              )
                             ),
                           ],
                         )  

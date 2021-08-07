@@ -191,7 +191,7 @@ class _EventScreenDescriptionState extends State<EventScreenDescription> {
                        icon: Icons.save,
                     ),
                     setButtonText(
-                       text: "deletar evento",
+                       text: "cancelar evento",
                        icon: Icons.delete_outline,
                        uppercase: true,
                        color: Colors.red.shade400

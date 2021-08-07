@@ -11,20 +11,22 @@ class ContratanteModel{
    String cpf;
    String senha;
    String telefone;
+   String endereco;
    DateTime dataNascimento;
    double valorEmCaixa;
    List<EventoModel> eventos;
-   
+   // fotos.
 
    ContratanteModel({
         this.id ,
         this.nome, 
         this.cpf, 
         this.senha, 
-        this.telefone , 
+        this.telefone ,
+        this.endereco, 
         this.dataNascimento, 
         this.valorEmCaixa,
-        this.eventos
+        this.eventos,
         //this.fotos
    });
 
@@ -34,6 +36,7 @@ class ContratanteModel{
        cpf: json["cpf"], 
        senha: json["senha"], 
        telefone: json["telefone"], 
+       endereco: json["endereco"],
        dataNascimento: json["dataNascimento"] , 
        valorEmCaixa: json["valorEmCaixa"],
        eventos: json["eventos"]
@@ -45,12 +48,14 @@ class ContratanteModel{
      "senha" : this.senha,
      "cpf" : this.cpf,
      "telefone" : this.telefone,
-     "dataNascimento" : dataNascimento,
-     "eventos": eventos
+     "dataNascimento" : this.dataNascimento,
+     "eventos": this.eventos,
    };
 
    factory ContratanteModel.fromJson(String str) => ContratanteModel.fromMap(json.decode(str));
 
    String toJson() => json.encode(toMap());
+
+
 
 }

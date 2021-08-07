@@ -13,6 +13,7 @@ class FuncionarioModel{
    String telefone;
    String sobreMim; 
    DateTime dataNascimento;
+   DateTime ultimoLogin;
    Status status;
    TipoProfissao tipoProfissao;
    double valorASerSacado;
@@ -21,10 +22,11 @@ class FuncionarioModel{
    double horasTrabalhadas;
    double mediaDeAvaliacao;
    double valorCobradoAHora;
+   List<EventoModel> eventosParaEscolher;
    List<EventoModel> eventosEmEspera;
    List<EventoModel> eventosEmAndamento;
    List<EventoModel> historicoEventos;
-   //campo para fotos 
+   //fotos de funcionario
    
 
    FuncionarioModel({
@@ -36,6 +38,7 @@ class FuncionarioModel{
         this.telefone,
         this.sobreMim, 
         this.dataNascimento,
+        this.ultimoLogin,
         this.status,
         this.tipoProfissao,
         this.valorASerSacado,
@@ -44,10 +47,11 @@ class FuncionarioModel{
         this.horasTrabalhadas,
         this.mediaDeAvaliacao,
         this.valorCobradoAHora,
+        this.eventosParaEscolher,
         this.eventosEmEspera,
         this.eventosEmAndamento,
         this.historicoEventos
-        //this.fotos
+        //fotos de funcionario
    });
 
    factory FuncionarioModel.fromMap(Map<String, dynamic> json) => FuncionarioModel(
@@ -59,6 +63,7 @@ class FuncionarioModel{
        telefone: json["endereco"], 
        sobreMim: json["sobreMim"],
        dataNascimento: json["dataNascimento"] ,
+       ultimoLogin: json["ultimoLogin"] ,
        status: json["status"],
        tipoProfissao: json["tipoProfissao"],
        valorASerSacado: json["telefone"],
@@ -67,6 +72,7 @@ class FuncionarioModel{
        horasTrabalhadas: json["horasTrabalhadas"] , 
        mediaDeAvaliacao: json["mediaDeAvaliacao"] , 
        valorCobradoAHora: json["valorCobradoAHora"] , 
+       eventosParaEscolher: json["eventosParaEscolher"],
        eventosEmEspera: json["eventosEmEspera"] , 
        eventosEmAndamento: json["eventosEmAndamento"],
        historicoEventos: json["historicoEventos"],
@@ -80,6 +86,7 @@ class FuncionarioModel{
      "telefone" : this.telefone,
      "sobreMim" : this.dataNascimento,
      "dataNascimento": this.dataNascimento,
+     "ultimoLogin" : this.ultimoLogin,
      "status": this.status,
      "tipoProfissao": status,
      "valorEmCaixa": this.valorEmCaixa,
@@ -102,5 +109,5 @@ enum TipoProfissao {
 }
 
 enum Status {
-   ATIVO, EM_EVENTO, INATIVO
+   DISPONIVEL, EM_EVENTO,  AUSENTE , INVISIVEL
 }

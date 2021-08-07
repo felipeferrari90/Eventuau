@@ -1,27 +1,18 @@
-import 'package:event_uau/components/app_bar_eventual.dart';
-import 'package:event_uau/components/buttons.dart';
 import 'package:event_uau/components/card_event.dart';
-
 import 'package:event_uau/utils/colors.dart';
 import 'package:flutter/material.dart';
 
-class DashBoardEvents extends StatefulWidget {
-  const DashBoardEvents({ Key key }) : super(key: key);
+class DashBoardScreenEvents extends StatefulWidget {
+  const DashBoardScreenEvents({ Key key }) : super(key: key);
 
   @override
-  _DashBoardEventsState createState() => _DashBoardEventsState();
+  _DashBoardScreenEventsState createState() => _DashBoardScreenEventsState();
 }
 
-class _DashBoardEventsState extends State<DashBoardEvents> {
-
+class _DashBoardScreenEventsState extends State<DashBoardScreenEvents> {
   @override
   Widget build(BuildContext context) {
-      return Scaffold(
-        appBar: setAppBar(context, username: "Felipe Ferreira Marques" ),
-        backgroundColor: colorBg,
-        drawer: Drawer(     
-        ),
-        body: Container(
+    return Container(
           padding: EdgeInsets.all(16),
             child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -40,13 +31,15 @@ class _DashBoardEventsState extends State<DashBoardEvents> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Padding(
-                    padding: EdgeInsets.only(left: 16),
+                    padding: EdgeInsets.only(left: 16,),
                     child: Icon(Icons.history, 
                       size: 32,
                       color: pink,
                     ),
                   ),
-                  RaisedButton(
+                  Padding(
+                    padding: EdgeInsets.only(bottom: 8),
+                    child: RaisedButton(
                     onPressed: () {},
                     color: primaryColor,
                     textColor: colorBg,                  
@@ -57,7 +50,8 @@ class _DashBoardEventsState extends State<DashBoardEvents> {
                       padding:  EdgeInsets.symmetric( horizontal: 12 , vertical: 10),
                       child: Text("Criar Evento"),
                     ) 
-                  ) 
+                  ) ,
+                  )
                 ],
               ),
               Container(
@@ -76,10 +70,8 @@ class _DashBoardEventsState extends State<DashBoardEvents> {
                   ),
                 )
               ),
-              setButton(text: "Contratar sem criar evento", uppercase: true),
             ],
           ),
-        )
-      );
+        );
   }
 }
