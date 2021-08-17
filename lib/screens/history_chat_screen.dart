@@ -38,17 +38,19 @@ class _HistoryChatScreenState extends State<HistoryChatScreen> {
 
 
 setCardChat(BuildContext context, {Function f}) =>
-InkWell(
-  child: Card(
+  Card(
+    elevation:0,
     child:ListTile(
-      title: Text("Pedro Lemes", style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
+      onTap: (){},
+      title: Text("Pedro Lemes", style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500, color: primaryColor)),
+      subtitle: Text("Animador", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.black54)),
       leading: Icon(Icons.chat_bubble_outline, size: 32 , color: primaryColor,),
       trailing: CircleAvatar(
         backgroundColor: primaryColor,
         radius: 15,
         child: Text("2"),
-        )
-      ), 
-  )
-);
+      )
+    ), 
+  );
+
   

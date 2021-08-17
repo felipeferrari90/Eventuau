@@ -65,40 +65,7 @@ Widget setCardEvent(context) => Card(
                      padding: EdgeInsets.only(left: 12),     
                      child: Column(
                         children:[         
-                                Spacer( flex: 2,),
-                                Row(
-                                  children: [
-                                        Container(
-                                          width: MediaQuery.of(context).size.width / 4.5,
-                                          child: Align (
-                                            alignment: Alignment.center,
-                                            child:  Row(
-                                              children: [
-                                                Icon(Icons.hourglass_empty, size: 16, color: primaryColor,),
-                                                SizedBox(width: 4,),
-                                                Text("12h", style: TextStyle(fontSize: 14, color:  Colors.black54),)
-                                              ],
-                                            ),
-                                          )
-                                        ) ,
-                                       Container(
-                                         width:  MediaQuery.of(context).size.width / 4.6,
-                                          child: Align (
-                                            alignment: Alignment.center,
-                                            child:  Row(
-                                              children: [
-                                                Icon(Icons.location_on, size: 16, color: primaryColor ,),
-                                                SizedBox(width: 4,),
-                                                Text("120km", style: TextStyle(fontSize: 14, color:  Colors.black54 ),)
-                                              ],
-                                            ),
-                                          )
-                                        ) ,
-                                    ],
-                                ),
-
-                                Spacer(),
-
+                                Spacer(flex: 3),
                                 Row(
                                   children: [
                                         Container(
@@ -129,9 +96,23 @@ Widget setCardEvent(context) => Card(
                                         ) ,
                                     ],
                                 ),
-
-                                Spacer(),
-                               
+                               Spacer(flex: 2),
+                                       Container(
+                                          width: MediaQuery.of(context).size.width / 2.3,
+                                          child: Align (
+                                            alignment: Alignment.centerLeft,
+                                            child:  Row(
+                                              children: [
+                                                Icon(Icons.hourglass_empty, size: 16, color: primaryColor,),
+                                                SizedBox(width: 4,),
+                                                Text("12 até 16 horas", style: TextStyle(fontSize: 14, color:  Colors.black54),)
+                                              ],
+                                            ),
+                                          )
+                                        ) ,
+                                 
+                                
+                                Spacer(flex: 2),
                                        Container(
                                           width: MediaQuery.of(context).size.width / 2.3,
                                           child: Align (
@@ -145,10 +126,7 @@ Widget setCardEvent(context) => Card(
                                             ),
                                           )
                                         ) ,
-                                      
-                             
-                                Spacer(),
-
+                                Spacer(flex: 2),
                                         Container(
                                           width: MediaQuery.of(context).size.width / 2.4,
                                           child: Align (
@@ -162,8 +140,37 @@ Widget setCardEvent(context) => Card(
                                             ),
                                           )
                                         ) ,
-
                                 Spacer(flex: 2),
+                                    Wrap(
+                                      alignment: WrapAlignment.spaceBetween,
+                                      spacing: 24,
+                                      clipBehavior: Clip.hardEdge,
+                                      children: [
+                                       RaisedButton(
+                                          child: Icon(Icons.person_add, color: primaryColor, size: 24), 
+                                          onPressed: (){
+                                            Navigator.pushNamed(context, "/employees");
+                                          },
+                                          color: colorBg,
+                                          elevation: 4,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(6)
+                                          )
+                                        ),
+                                        RaisedButton(
+                                          child: Icon(Icons.assignment_ind, color: primaryColor, size: 24), 
+                                          onPressed: (){
+                                            Navigator.pushNamed(context, "/employee/management");
+                                          },
+                                          color: colorBg,
+                                          elevation: 4,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(6)
+                                          )
+                                        ),
+                                      ],
+                                    ),        
+                                Spacer(),
                       ]
                     ),  
                   ),

@@ -76,6 +76,9 @@ class _EmployeeScreenDescriptionState extends State<EmployeeScreenDescription> {
                       child: Text("trabalhei como garçom tem 4 anos sou formado em engenharia civil, trabalhei na doceria doce lar, tenho experiencia com crianças ", style: TextStyle( fontSize: 16, fontWeight: FontWeight.w500, color: Color.fromRGBO(0, 0, 0, 0.7))),
                     ), 
                     Divider(), 
+
+                    //COLOCAR AQUI DEPOIS PRA VER OUTRAS FOTOS DELE
+
                     Positioned(
                         child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -103,8 +106,7 @@ class _EmployeeScreenDescriptionState extends State<EmployeeScreenDescription> {
                                 color: pink,
                                 padding: EdgeInsets.all(24),
                                 shape: CircleBorder(),
-                                child: Icon(EventuauIcons2.cancel, color: primaryColor, size: 64,),
-                                  
+                                child: Icon(EventuauIcons2.cancel, color: primaryColor, size: 64,), 
                               )
                             ),
                           ],

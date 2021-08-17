@@ -1,28 +1,18 @@
-import 'package:event_uau/components/app_bar_eventual.dart';
-import 'package:event_uau/components/buttons.dart';
-import 'package:event_uau/components/card_event_dismissible.dart';
-
+import 'package:event_uau/components/card_event.dart';
 import 'package:event_uau/utils/colors.dart';
 import 'package:flutter/material.dart';
 
-class EventScreenChoice extends StatefulWidget {
-  const EventScreenChoice({ Key key }) : super(key: key);
+class DashBoardScreenEvents extends StatefulWidget {
+  const DashBoardScreenEvents({ Key key }) : super(key: key);
 
   @override
-  _EventScreenChoiceState createState() => _EventScreenChoiceState();
-
+  _DashBoardScreenEventsState createState() => _DashBoardScreenEventsState();
 }
 
-class _EventScreenChoiceState extends State<EventScreenChoice> {
-
-     @override
-     Widget build(BuildContext context) {
-      return Scaffold(
-        appBar: setAppBar(context, username: "Felipe Ferreira Marques" ),
-        backgroundColor: colorBg,
-        drawer: Drawer(     
-        ),
-        body: Container(
+class _DashBoardScreenEventsState extends State<DashBoardScreenEvents> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
           padding: EdgeInsets.all(16),
             child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -41,14 +31,18 @@ class _EventScreenChoiceState extends State<EventScreenChoice> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Padding(
-                    padding: EdgeInsets.only(left: 16),
+                    padding: EdgeInsets.only(left: 16,),
                     child: Icon(Icons.history, 
                       size: 32,
                       color: pink,
                     ),
                   ),
-                  RaisedButton(
-                    onPressed: () {},
+                  Padding(
+                    padding: EdgeInsets.only(bottom: 8),
+                    child: RaisedButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, "/event/new");
+                    },
                     color: primaryColor,
                     textColor: colorBg,                  
                     shape: RoundedRectangleBorder(
@@ -58,7 +52,8 @@ class _EventScreenChoiceState extends State<EventScreenChoice> {
                       padding:  EdgeInsets.symmetric( horizontal: 12 , vertical: 10),
                       child: Text("Criar Evento"),
                     ) 
-                  ) 
+                  ) ,
+                  )
                 ],
               ),
               Container(
@@ -66,26 +61,19 @@ class _EventScreenChoiceState extends State<EventScreenChoice> {
                   child:  SingleChildScrollView(
                     child: Column(
                       children:[
-                          setCardEventDismissible(context),
-                          setCardEventDismissible(context),
-                          setCardEventDismissible(context),
-                          setCardEventDismissible(context),
-                          setCardEventDismissible(context),
-                          setCardEventDismissible(context),
-                          setCardEventDismissible(context),
-                          setCardEventDismissible(context),
-                          setCardEventDismissible(context),
-                          setCardEventDismissible(context),
-                          setCardEventDismissible(context),
+                          setCardEvent(context),
+                          setCardEvent(context),
+                          setCardEvent(context),
+                          setCardEvent(context),
+                          setCardEvent(context),
+                          setCardEvent(context),
                       ]
                     ),
                   ),
                 )
               ),
-              setButton(text: "Contratar sem criar evento", uppercase: true),
             ],
           ),
-        )
-      );
+        );
   }
 }

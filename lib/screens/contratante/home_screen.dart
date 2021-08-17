@@ -1,6 +1,4 @@
 import 'package:event_uau/components/app_bar_eventual.dart';
-import 'package:event_uau/components/buttons.dart';
-import 'package:event_uau/components/card_event.dart';
 import 'package:event_uau/screens/history_chat_screen.dart';
 import 'package:event_uau/screens/notifications_screen.dart';
 import 'package:event_uau/screens/wallet_screen.dart';

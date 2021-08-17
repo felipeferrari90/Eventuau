@@ -16,8 +16,8 @@ class _EventScreenDescriptionState extends State<EventScreenDescription> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-       appBar: setAppBar(context),
-       body: Container(
+      appBar: setAppBar(context),
+      body: Container(
          padding: EdgeInsets.all(16),
          color: colorBg,
          child: Container(  
@@ -45,7 +45,20 @@ class _EventScreenDescriptionState extends State<EventScreenDescription> {
                       children: [
                         Padding(
                           padding: EdgeInsets.fromLTRB(0, 0, 2, 4),
-                          child:  Text("Duração: ", style: TextStyle( fontSize: 16, fontWeight: FontWeight.w500, color: primaryColor)),
+                          child:  Text("Duração Minima: ", style: TextStyle( fontSize: 16, fontWeight: FontWeight.w500, color: primaryColor)),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(0, 2, 0, 4),
+                          child: Text("5 Horas", style: TextStyle( fontSize: 16, fontWeight: FontWeight.w300, color: Color.fromRGBO(0, 0,0,0.7))),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(0, 0, 2, 4),
+                          child:  Text("Duração Maxima: ", style: TextStyle( fontSize: 16, fontWeight: FontWeight.w500, color: primaryColor)),
                         ),
                         Padding(
                           padding: EdgeInsets.fromLTRB(0, 2, 0, 4),
@@ -79,7 +92,33 @@ class _EventScreenDescriptionState extends State<EventScreenDescription> {
                         ),
                       ],
                     ),
-                     Row(
+                   Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(0, 0, 2, 4),
+                          child:  Text("Valor Minimo: ", style: TextStyle( fontSize: 16, fontWeight: FontWeight.w500, color: primaryColor)),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(0, 2, 0, 4),
+                          child: Text("R\$ 500", style: TextStyle( fontSize: 16, fontWeight: FontWeight.w300, color: Color.fromRGBO(0, 0,0,0.7))),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(0, 0, 2, 4),
+                          child:  Text("Valor Maximo: ", style: TextStyle( fontSize: 16, fontWeight: FontWeight.w500, color: primaryColor)),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(0, 2, 0, 4),
+                          child: Text("r\$ 1200", style: TextStyle( fontSize: 16, fontWeight: FontWeight.w300, color: Color.fromRGBO(0, 0,0,0.7))),
+                        ),
+                      ],
+                    ),
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Padding(
@@ -92,19 +131,67 @@ class _EventScreenDescriptionState extends State<EventScreenDescription> {
                         ),
                       ],
                     ),
+                    SizedBox(height:12),
+                    Container(
+                      margin: EdgeInsets.all(12),
+                      padding: EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                        border: Border.all(width: 1, color: Colors.black54),
+                      ),
+                      child:  ListTile(
+                        leading: Icon(Icons.info_outline, size: 32,),
+                        title: Text("nesse status o evento é vistado pelos funcionarios com a data e hora marcados", 
+                          style: TextStyle( fontSize: 12, fontWeight: FontWeight.w500, color: Colors.black54), textAlign: TextAlign.left,),
+                        ), 
+                    ),
+                    SizedBox(height:12),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Padding(
                           padding: EdgeInsets.fromLTRB(0, 0, 2, 4),
                           child:  Text("status contratacoes: ", style: TextStyle( fontSize: 16, fontWeight: FontWeight.w500, color: primaryColor)),
-                        ),
+                        ), 
                         Padding(
                           padding: EdgeInsets.fromLTRB(0, 2, 0, 4),
                           child: Text("Contratando", style: TextStyle( fontSize: 16, fontWeight: FontWeight.w700, color: Color.fromRGBO(0, 0,0,0.7))),
                         ),
                       ],
                     ),
+                    SizedBox(height:12),
+                    Container(
+                      margin: EdgeInsets.all(12),
+                      padding: EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                        border: Border.all(width: 1, color: Colors.black54),
+                      ),
+                      child:  ListTile(
+                        leading: Icon(Icons.info_outline, size: 32,),
+                        title: Text("nesse status de contratação sera vistado para os funcionarios que este evento ainda aceita novos matches", 
+                          style: TextStyle( fontSize: 12, fontWeight: FontWeight.w500, color: Colors.black54), textAlign: TextAlign.left,),
+                        ), 
+                    ),
+                    SizedBox(
+                      height: 12,
+                    ),
+                    Align(
+                      alignment: Alignment.center,
+                      child: RaisedButton.icon(
+                        onPressed: (){
+                          Navigator.pushNamed(context, "/employees");
+                        },
+                        padding: EdgeInsets.symmetric(horizontal: 16 , vertical: 8),
+                        icon: Icon(Icons.search, size: 16), 
+                        label: Text("IR PRA TELA DE ESCOLHAS"),
+                        color: primaryColor,
+                        textColor: colorBg,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15)
+                        ),
+                      ),
+                    ),   
                     Divider(),
                     Padding(
                       padding: EdgeInsets.fromLTRB(0, 8, 0, 8),
@@ -168,10 +255,10 @@ class _EventScreenDescriptionState extends State<EventScreenDescription> {
                       padding: EdgeInsets.symmetric(horizontal: 16 , vertical: 8),
                        icon: Icon(Icons.assignment_ind, size: 16), 
                        label: Text("Gerenciador de Funcionarios"),
-                       color: primaryColor,
-                       textColor: colorBg,
+                       color: secundaryColor,
+                       textColor: primaryColor,
                        shape: RoundedRectangleBorder(
-                         borderRadius: BorderRadius.circular(15)
+                         borderRadius: BorderRadius.circular(15),
                        ),
                       ),
                     ),  
@@ -185,10 +272,33 @@ class _EventScreenDescriptionState extends State<EventScreenDescription> {
                       child: Text("os garçons que participarao desse evento terão de usar uma roupa especial designada pela empresa aqui contratante", style: TextStyle( fontSize: 16, fontWeight: FontWeight.w300, color: Color.fromRGBO(0, 0, 0, 0.7))),
                     ), 
                     Divider(),
+                    SizedBox(height: 24),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16),
+                      child:  Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children:[
+                          Text("saldo disponivel: ", style: TextStyle(fontSize: 16, color: Colors.black, fontWeight: FontWeight.w700)),
+                          Text("R\$ 420,00", style: TextStyle(fontSize: 24, color: Colors.black, fontWeight: FontWeight.w700)),
+                        ] 
+                      ),
+                    ),
+                    SizedBox(height: 24),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16),
+                        child:  Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text("VALOR TOTAL: ", style: TextStyle(fontSize: 16, color: primaryColor, fontWeight: FontWeight.w700)),
+                          Text("R\$ 350,00", style: TextStyle(fontSize: 24, color: primaryColor, fontWeight: FontWeight.w700)),
+                        ] 
+                      ),
+                    ),
+                    SizedBox(height: 24),
                     setButton(
-                       text: "salvar alteracoes",
+                       text: "editar evento",
                        uppercase: true,
-                       icon: Icons.save,
+                       icon: Icons.edit,
                     ),
                     setButtonText(
                        text: "cancelar evento",

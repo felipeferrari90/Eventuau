@@ -1,32 +1,15 @@
+import 'package:event_uau/screens/profissional/employee_event_screen_description.dart';
 import 'package:event_uau/utils/colors.dart';
 import 'package:event_uau/utils/icons.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-Widget setCardEventDismissible(context) => Card(
+Widget setCardEventToEmployee(context) => Card(
   shape: RoundedRectangleBorder(
     borderRadius: BorderRadius.circular(15),
   ),
   color: secundaryColor,
-  child: Dismissible(
-  secondaryBackground: Container( 
-      padding: EdgeInsets.only(left: 16, right: 16),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(15),       
-        color: primaryColor,
-        ),
-        child: Align( child: Icon(Icons.thumb_up , color: colorBg,), alignment:  Alignment.centerRight,),
-      ),
-      background: Container( 
-        padding: EdgeInsets.only(left: 16, right: 16),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15),
-          color: pink,
-        ),
-        child: Align( child: Icon(EventuauIcons2.cancel,  color: primaryColor), alignment:  Alignment.centerLeft ),
-        ),
-    key: Key("evento"), 
-    child: Column(
+  child: Column(
       children:[
         Container( 
           padding: EdgeInsets.all(16),
@@ -47,7 +30,7 @@ Widget setCardEventDismissible(context) => Card(
                   Padding(padding: EdgeInsets.only(right: 8),
                     child: Icon(Icons.calendar_today, color: primaryColor, size: 16,),
                   ),
-                  Text("12 Agosto 2020 - 8:00", style: Theme.of(context).textTheme.headline5 )
+                  Text("12 Agosto 2020 - 8:00", style: Theme.of(context).textTheme.headline5 ),
                 ]
               )
             ],
@@ -67,7 +50,9 @@ Widget setCardEventDismissible(context) => Card(
             children: [
                 InkWell(
                   onTap: (){
-                    Navigator.pushNamed(context, "/employee/event/id");
+                      Navigator.push(context, MaterialPageRoute(
+                        builder: (context) => EmployeeEventScreenDescription(buttonsChoice: false,), 
+                      ));
                   },
                   child: Container(
                     width: MediaQuery.of(context).size.width / 3,
@@ -115,9 +100,7 @@ Widget setCardEventDismissible(context) => Card(
                                         ) ,
                                     ],
                                 ),
-
                                 Spacer(),
-
                                 Row(
                                   children: [
                                         Container(
@@ -149,7 +132,7 @@ Widget setCardEventDismissible(context) => Card(
                                     ],
                                 ),
                                 Spacer(),
-                                      Container(
+                                       Container(
                                           width: MediaQuery.of(context).size.width / 2.3,
                                           child: Align (
                                             alignment: Alignment.centerLeft,
@@ -161,26 +144,23 @@ Widget setCardEventDismissible(context) => Card(
                                               ],
                                             ),
                                           )
-                                      ) ,
-                                Spacer(),
-                               
-                                       Container(
-                                          width: MediaQuery.of(context).size.width / 2.3,
-                                          child: Align (
-                                            alignment: Alignment.centerLeft,
-                                            child:  Row(
-                                              children: [
-                                                Icon(Icons.assignment_ind, size: 16, color: primaryColor,),
-                                                SizedBox(width: 4,),
-                                                Text(": em contratação", style: TextStyle(fontSize: 14, color:  Colors.black54),)
-                                              ],
-                                            ),
-                                          )
                                         ) ,
-                                      
-                             
-                                Spacer(),
 
+                                Spacer(),
+                                Container(
+                                   width: MediaQuery.of(context).size.width / 2.3,
+                                   child: Align (
+                                      alignment: Alignment.centerLeft,
+                                      child:  Row(
+                                        children: [
+                                          Icon(Icons.assignment_ind, size: 16, color: primaryColor,),
+                                          SizedBox(width: 4,),
+                                          Text(": em contratação", style: TextStyle(fontSize: 14, color:  Colors.black54),)
+                                        ],
+                                      ),
+                                    )
+                                ),
+                                Spacer(),
                                         Container(
                                           width: MediaQuery.of(context).size.width / 2.4,
                                           child: Align (
@@ -207,6 +187,5 @@ Widget setCardEventDismissible(context) => Card(
           //colocar aqui as coisas do conteudo abaixo do container com foto e icones acima
       ],
     ),
-  ),
 );
 

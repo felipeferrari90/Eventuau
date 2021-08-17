@@ -45,7 +45,7 @@ class _LoginEmployeeScreenState extends State<LoginEmployeeScreen> {
                   ),
                 ),
               ),        
-             Padding(
+              Padding(
                 padding: EdgeInsets.only(left: 8 , bottom: 1),
                 child: TextFormField(
                   obscureText: true,
@@ -67,14 +67,25 @@ class _LoginEmployeeScreenState extends State<LoginEmployeeScreen> {
                   ),
                 ),
               ),
-
               setButton(text: "entrar", 
                 uppercase: true,
                 function: (){
                    Navigator.pushNamed(context, "/employee/events");
                 }
               ),
-              setButtonText(text:"esqueci minha senha", uppercase: true, color: primaryColor),           
+              setButton(text: "esqueci minha senha", 
+                outline: true,
+                uppercase: true,
+                function: (){}
+              ),
+              setButtonText(
+                text:"criar conta",  
+                color: accentPink,
+                underline: true,
+                function: (){
+                  Navigator.pushNamed(context, "/employee/home");
+                } 
+              )             
             ]
           ),
         ),

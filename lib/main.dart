@@ -1,16 +1,19 @@
-import 'package:event_uau/screens/employee_login_screen.dart';
-import 'package:event_uau/screens/employee_management_screen.dart';
-import 'package:event_uau/screens/employee_screen_description.dart';
-import 'package:event_uau/screens/employee_signup.dart';
-import 'package:event_uau/screens/employees_screen.dart';
-import 'package:event_uau/screens/event_new_screen.dart';
-import 'package:event_uau/screens/event_screen_choice.dart';
-import 'package:event_uau/screens/employee_event_screen_description.dart';
-import 'package:event_uau/screens/event_screen_description.dart';
-import 'package:event_uau/screens/home_screen.dart';
+import 'package:event_uau/screens/contract_screen.dart';
+import 'package:event_uau/screens/profissional/employee_myevents_screen.dart';
+import 'package:event_uau/screens/profissional/employee_events_choice_screen.dart';
+import 'package:event_uau/screens/profissional/employee_home_screen.dart';
+import 'package:event_uau/screens/profissional/employee_login_screen.dart';
+import 'package:event_uau/screens/contratante/employee_management_screen.dart';
+import 'package:event_uau/screens/contratante/employee_screen_description.dart';
+import 'package:event_uau/screens/profissional/employee_signup.dart';
+import 'package:event_uau/screens/contratante/employees_screen.dart';
+import 'package:event_uau/screens/contratante/event_new_screen.dart';
+import 'package:event_uau/screens/profissional/employee_event_screen_description.dart';
+import 'package:event_uau/screens/contratante/event_screen_description.dart';
+import 'package:event_uau/screens/contratante/home_screen.dart';
 import 'package:event_uau/screens/init_screen.dart';
 import 'package:event_uau/screens/login_screen.dart';
-import 'package:event_uau/screens/signup_screen.dart';
+import 'package:event_uau/screens/contratante/signup_screen.dart';
 import 'package:event_uau/utils/colors.dart';
 import 'package:flutter/material.dart';
 
@@ -39,6 +42,9 @@ class EventUau extends StatelessWidget {
           endIndent: 0,
           space: 32,
         ),
+        buttonTheme: ButtonThemeData(
+          minWidth: 22.0
+        ),
         fontFamily: "Roboto",
         textTheme: TextTheme(          
           headline1: TextStyle( fontSize: 24 , color: primaryColor , fontWeight: FontWeight.bold ),
@@ -63,16 +69,21 @@ class EventUau extends StatelessWidget {
         '/employees' : (context) => EmployeeChoiceScreen(),
         '/employees/id' : (context) => EmployeeScreenDescription(),
         "/employee/management" : (context) => EmployeesManagement(),
+        "/employee/events" : (context) => HomeScreen(),
+        "/contract/id" : (context) => ContractScreen(),
 
         /*ROTAS DO FLUXO APP FUNCIONARIO*/ 
         "/employee/login" : (context) => LoginEmployeeScreen(),
-        "/employee/signup" : (context) => SignUpEmployeeScreen(),
-        "/employee/events" : (context) => EventScreenChoice(),
+        "/employee/new" : (context) => SignUpEmployeeScreen(),
+        "/employee/home" : (context) => HomeScreenEmployee(),
+        "/employee/id" : (context) => ContractScreen(),
+        "/employee/events/choice": (context) => EmployeeEventChoiceScreen(),
         "/employee/event/id" : (context) => EmployeeEventScreenDescription(),
+
      
       },
     );
-  }
+  } 
 }
 
 

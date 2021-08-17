@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 
 import 'evento_model.dart';
+import 'notifications_model.dart';
 
 class ContratanteModel{
 
@@ -11,22 +12,28 @@ class ContratanteModel{
    String cpf;
    String senha;
    String telefone;
-   String endereco;
    DateTime dataNascimento;
-   double valorEmCaixa;
-   List<EventoModel> eventos;
-   // fotos.
+   DateTime dataCriacaoConta;
+   double valorEmCaixaDisponivel;
+   double valorBloqueado;
+   List<EventoModel> eventosCriados;
+   List<EventoModel> historicoEventos;
+   List<NotificationsModel> notificacoes;
+   // fotos
 
    ContratanteModel({
         this.id ,
         this.nome, 
         this.cpf, 
         this.senha, 
-        this.telefone ,
-        this.endereco, 
+        this.telefone , 
         this.dataNascimento, 
-        this.valorEmCaixa,
-        this.eventos,
+        this.dataCriacaoConta,
+        this.valorEmCaixaDisponivel,
+        this.valorBloqueado,
+        this.eventosCriados,
+        this.historicoEventos,
+        this.notificacoes
         //this.fotos
    });
 
@@ -36,10 +43,13 @@ class ContratanteModel{
        cpf: json["cpf"], 
        senha: json["senha"], 
        telefone: json["telefone"], 
-       endereco: json["endereco"],
        dataNascimento: json["dataNascimento"] , 
-       valorEmCaixa: json["valorEmCaixa"],
-       eventos: json["eventos"]
+       dataCriacaoConta : json["dataCriacaoConta"],
+       valorEmCaixaDisponivel: json["valorEmCaixa"],
+       valorBloqueado: json["valorBloqueado"],
+       eventosCriados: json["eventosCriados"],
+       historicoEventos: json["historicoEventos"],
+       notificacoes: json["notificacoes"]
    );
 
    Map<String, dynamic> toMap() => {
@@ -49,13 +59,16 @@ class ContratanteModel{
      "cpf" : this.cpf,
      "telefone" : this.telefone,
      "dataNascimento" : this.dataNascimento,
-     "eventos": this.eventos,
+     "dataCriacaoConta" : this.dataCriacaoConta,
+     "valorEmCaixaDisponivel": this.valorEmCaixaDisponivel,
+     "valorBloqueado" : this.valorBloqueado,
+     "eventosCriados": this.eventosCriados,
+     "historicoEventos" : this.historicoEventos,
+     "notificacoes" : this.notificacoes
    };
 
    factory ContratanteModel.fromJson(String str) => ContratanteModel.fromMap(json.decode(str));
 
    String toJson() => json.encode(toMap());
-
-
 
 }

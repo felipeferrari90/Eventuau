@@ -1,6 +1,6 @@
 import 'package:event_uau/components/app_bar_eventual.dart';
 import 'package:event_uau/utils/colors.dart';
-import 'package:event_uau/utils/icons.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class EmployeesManagement extends StatefulWidget {
@@ -9,6 +9,7 @@ class EmployeesManagement extends StatefulWidget {
   @override
   _EmployeesManagementState createState() => _EmployeesManagementState();
 }
+
 
 class _EmployeesManagementState extends State<EmployeesManagement> {
   @override
@@ -53,29 +54,34 @@ class _EmployeesManagementState extends State<EmployeesManagement> {
     );  
   }
 
-      
+  setCardManagementEmployee(BuildContext context, {Function f, bool estaPresente }) =>
+    Card( 
+        child: SwitchListTile( 
+          contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          title:  Text("presente:", style:TextStyle(color: Colors.black54) , textAlign: TextAlign.right),
+          value: estaPresente?? false,
+          activeColor: primaryColor,
+          inactiveTrackColor: colorBg,
+          autofocus: true ,
+          onChanged: (bool value){
+            setState(() {
+              estaPresente = value;
+            });
+          },
+          secondary: InkWell(
+            onTap: (){
+              Navigator.pushNamed(context,"/contract/id");
+            },
+            child: Text("Pedro Lemes\nRG\: 12345678-9\t", style: Theme.of(context).textTheme.headline5),
+          ),  
+          controlAffinity: ListTileControlAffinity.trailing
+        ) 
+  );
+       
+  
 }
 
 
-setCardManagementEmployee(BuildContext context, {Function f, bool isChecked = false }) =>
-  Card(
-      child:ListTile(
-            title: Text("Pedro Lemes", style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
-            subtitle: Text("RG 12345678910", style: TextStyle(fontSize: 12)),
-            leading: Icon(EventuauIcons.garcom_logo, size: 32 , color: primaryColor,),
-            trailing: RaisedButton(
-              onPressed: () {},
-              textColor: colorBg,
-              color: primaryColor,
-              padding: EdgeInsets.symmetric(vertical: 2 , horizontal: 12),
-              child: Text("confirmar presença", style: TextStyle(fontSize: 12),),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(25),
-              ),  
-            )
-          ), 
-  );
 
- 
 
 

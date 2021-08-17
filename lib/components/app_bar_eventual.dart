@@ -24,7 +24,7 @@ setAppBar(BuildContext context,{String title, String username}) =>
               child: Padding(
                 padding: EdgeInsets.all(10.0),
                 child: Text(username != null ? 
-                  username.split(" ").sublist(0,2).map((e) { return e[0]; }).join() : "" ,
+                  username.split(" ").sublist(0,2).map((e) { return e[0]; }).join().toUpperCase() : "" ,
                   style: TextStyle(
                     fontSize: 18.0, 
                     color: primaryColor                  

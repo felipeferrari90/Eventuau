@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:event_uau/models/funcionario_model.dart';
-import 'package:flutter/cupertino.dart';
 
 import 'evento_model.dart';
 
@@ -10,12 +9,11 @@ class ContratoModel{
   EventoModel evento;
   FuncionarioModel funcionario;
   int notaFuncionario;
-  int notaEvento;
-  StatusContrato statusContrato;
   StatusFuncionario statusFuncionario;
-  DateTime horaMatch = DateTime.now();
-  DateTime horaSaidaEvento;
-  double valorExcedente = 0.00;
+  DateTime horaContratacao;
+  DateTime horaChegadaFuncionario;
+  DateTime horaSaidaFuncionario;
+  double valorExcedente;
   bool eventoFoiCurtido;
   bool funcionarioFoiCurtido;
 
@@ -24,11 +22,10 @@ class ContratoModel{
     this.evento,
     this.funcionario,
     this.notaFuncionario,
-    this.notaEvento,
-    this.statusContrato,
     this.statusFuncionario,
-    this.horaMatch,
-    this.horaSaidaEvento,
+    this.horaContratacao,
+    this.horaChegadaFuncionario,
+    this.horaSaidaFuncionario,
     this.valorExcedente,
     this.eventoFoiCurtido,
     this.funcionarioFoiCurtido
@@ -39,11 +36,10 @@ class ContratoModel{
     evento: json["evento"],
     funcionario: json["funcionario"],
     notaFuncionario: json["notaFuncionario"],
-    notaEvento: json["notaEvento"],
-    statusContrato: json["statusContrato"],
     statusFuncionario: json["statusFuncionario"],
-    horaMatch: json["horaMatch"],
-    horaSaidaEvento: json["horaSaidaEvento"],
+    horaContratacao: json["horaMatch"],
+    horaChegadaFuncionario: json["horaChegadaFuncionario"],
+    horaSaidaFuncionario: json["horaSaidaEvento"],
     valorExcedente: json["valorExcedente"],
     eventoFoiCurtido: json["eventoFoiCurtido"],
     funcionarioFoiCurtido: json["funcionarioFoiCurtido"],
@@ -54,11 +50,10 @@ class ContratoModel{
     "evento": this.evento,
     "funcionario": this.funcionario,
     "notaFuncionario": this.notaFuncionario,
-    "notaEvento": this.notaEvento,
-    "statusContrato": this.statusContrato,
     "statusFuncionario" : this.statusFuncionario,
-    "horaMatch": this.horaMatch,
-    "horaSaidaEvento": this.horaSaidaEvento,
+    "horahoraContratacao": this.horaContratacao,
+    "horaChegadaFuncionario" : this.horaChegadaFuncionario,
+    "horaSaidaEvento": this.horaSaidaFuncionario,
     "valorExcedente": this.valorExcedente,
     "eventoFoiCurtido": this.eventoFoiCurtido,
     "funcionarioFoiCurtido": this.funcionarioFoiCurtido
@@ -71,10 +66,10 @@ class ContratoModel{
 
 }
 
-enum StatusContrato {
-  PARCIAL_MATCH, MATCH, FECHADO, TERMINADO, CANCELADO
-}
-
 enum StatusFuncionario{
-  PRESENTE , ATRASADO, AUSENTE, DEMITIDO
+  EM_ESPERA,   //status que perdura até a data do evento
+  PRESENTE,   //quando o funcionario chegou no local e esta trabalhando
+  ATRASADO,   //quando o funcionario ainda nao chegou ao local mas contrato esta ativo
+  AUSENTE,    //quando o funcionario nao comparece ao evento marcado
+  DEMITIDO    //funcionario demitido 
 }

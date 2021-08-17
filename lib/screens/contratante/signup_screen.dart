@@ -27,6 +27,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               children: [
                 setInputForm(context, labeltext: "nome completo"),
                 setInputForm(context, labeltext: "escolha uma senha", keyboardType: TextInputType.visiblePassword ),
+                setInputForm(context, labeltext: "CPF", keyboardType: TextInputType.number ),
                 setInputForm(context, labeltext: "e-mail", keyboardType: TextInputType.emailAddress ),
                 setInputForm(context, labeltext: "telefone de contato", keyboardType: TextInputType.phone ),
                 setInputForm(context, labeltext: "data de nascimento", keyboardType: TextInputType.datetime ),

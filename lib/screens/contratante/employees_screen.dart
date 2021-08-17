@@ -87,7 +87,7 @@ class _EmployeeChoiceScreenState extends State<EmployeeChoiceScreen> {
                       crossAxisCount: 2,
                       crossAxisSpacing: 12,
                       mainAxisSpacing: 12,
-                      childAspectRatio: 0.66,
+                      childAspectRatio: 0.55,
                       shrinkWrap:  true, 
                       primary: false,
                       children: [
@@ -98,7 +98,6 @@ class _EmployeeChoiceScreenState extends State<EmployeeChoiceScreen> {
                         setCardEmployee(context), 
                         setCardEmployee(context), 
                         setCardEmployee(context), 
-
                         setCardEmployee(context), 
                         setCardEmployee(context), 
                         setCardEmployee(context), 
@@ -107,7 +106,6 @@ class _EmployeeChoiceScreenState extends State<EmployeeChoiceScreen> {
                         setCardEmployee(context), 
                         setCardEmployee(context), 
                         setCardEmployee(context), 
-
                         setCardEmployee(context), 
                       ],
                     )
@@ -121,7 +119,9 @@ class _EmployeeChoiceScreenState extends State<EmployeeChoiceScreen> {
                   color: primaryColor,
                   textColor: colorBg,
                   padding: EdgeInsets.all(10),
-                  onPressed: (){}, 
+                  onPressed: (){
+                    Navigator.pushNamed(context, "/employee/management");
+                  }, 
                   icon: Icon(Icons.assignment_ind, color: colorBg, size: 24),
                   label: Text("ver minhas contratações", style: TextStyle(fontSize: 16)),
                   shape: RoundedRectangleBorder(
@@ -155,22 +155,15 @@ Widget expandido4(){
 
 
 Widget setButtonJobTypeSelection({IconData icon, String title, bool isSelected = false}) => 
-       Column(
+        Column(
           children: <Widget>[
               Icon(icon),
               Container(
                 padding: EdgeInsets.symmetric(vertical: 16.0),
-                child: Text(title?? ""),
-                decoration: BoxDecoration(
-                  border: Border(
-                    bottom: BorderSide(
-                      width: 2.0,
-                    )
-                  )
-                ),
+                child: Text(title?? ""), 
               )             
             ]
-          );
+        );
       
         
 
