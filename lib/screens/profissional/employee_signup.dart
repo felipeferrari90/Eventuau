@@ -1,84 +1,125 @@
 import 'package:event_uau/components/app_bar_eventual.dart';
-import 'package:event_uau/components/buttons.dart';
-import 'package:event_uau/components/input_form_eventual.dart';
-import 'package:event_uau/utils/colors.dart';
 import 'package:flutter/material.dart';
 
-class SignUpEmployeeScreen extends StatefulWidget {
-  const SignUpEmployeeScreen({ Key key }) : super(key: key);
+class EmployeeSignupScreen extends StatefulWidget {
+  static const routeName = 'employee/signup';
+  const EmployeeSignupScreen({Key key}) : super(key: key);
 
   @override
-  _SignUpEmployeeScreenState createState() => _SignUpEmployeeScreenState();
+  _EmployeeSignupScreenState createState() => _EmployeeSignupScreenState();
 }
 
-class _SignUpEmployeeScreenState extends State<SignUpEmployeeScreen> {
+class _EmployeeSignupScreenState extends State<EmployeeSignupScreen> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: EventUauAppBar(
+        title: 'Seja um Parceiro',
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            ParagraphText(
+                'Olá! Ficamos felizes em saber que você quer fazer parte do nosso time.'),
+            ParagraphText(
+                'Vimos que você ainda não tem foto, toque no avatar abaixo e escolha uma que mostre bem o seu rosto:'),
+            Stack(
+              children: [
+                CircleAvatar(
+                  radius: 75,
+                  backgroundColor: Theme.of(context).accentColor,
+                  child: Text(
+                    'FF',
+                    style: Theme.of(context)
+                        .textTheme
+                        .headline3
+                        .copyWith(fontSize: 48),
+                  ),
+                ),
+                Positioned(
+                  child: Container(
+                    height: 40,
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle, color: Colors.white),
+                    child: IconButton(
+                        splashRadius: 1,
+                        color: Theme.of(context).primaryColor,
+                        icon: Icon(Icons.edit),
+                        onPressed: () {}),
+                  ),
+                  right: 0,
+                )
+              ],
+            ),
+            SizedBox(
+              height: 18,
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                EditableRow('Felipe Ferreira'),
+                EditableRow('24 Anos'),
+                EditableRow('Liberdade - SP')
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
 
-  int _valueDropdownTypeEmployee = 0;
-  bool _invisivel = false;
+class EditableRow extends StatelessWidget {
+  const EditableRow(
+    this.text, {
+    Key key,
+  }) : super(key: key);
+
+  final String text;
 
   @override
-   Widget build(BuildContext context) {
-      return Scaffold(
-        appBar: setAppBar(context,title: "Cadastre-se"),
-        backgroundColor: colorBg,
-        body: Container(
-          padding: EdgeInsets.all(16.0),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                setInputForm(context, labeltext: "nome completo"),
-                setInputForm(context, labeltext: "escolha uma senha", keyboardType: TextInputType.visiblePassword ),
-                setInputForm(context, labeltext: "e-mail", keyboardType: TextInputType.emailAddress ),
-                setInputForm(context, labeltext: "Rg", keyboardType: TextInputType.number ),
-                setInputForm(context, labeltext: "CPF", keyboardType: TextInputType.number ),
-                setInputForm(context, labeltext: "telefone de contato", keyboardType: TextInputType.phone ),
-                setInputForm(context, labeltext: "data de nascimento", keyboardType: TextInputType.datetime ),
-                setInputForm(context, labeltext: "endereco", keyboardType: TextInputType.datetime ),
-          
-                ListTile(
-                  leading: Text("escolha seu serviço: ", style: TextStyle(fontSize: 16),),
-                  title: DropdownButton(   
-                    value:  _valueDropdownTypeEmployee,
-                    dropdownColor: Color.fromRGBO(255, 255, 255, 1.0),
-                    style: TextStyle(fontSize: 12 , color: primaryColor, fontWeight: FontWeight.w700),
-                    focusColor: primaryColor,
-                    itemHeight: 50,
-                    items: [
-                      DropdownMenuItem(
-                        child: Text("GARÇOM" , style: TextStyle(fontSize: 12),),
-                        value: 0,  
-                      ),
-                      DropdownMenuItem(
-                        child: Text("ANIMADOR", style: TextStyle(fontSize: 12),),
-                        value: 1,
-                      ),
-                      DropdownMenuItem(
-                        child: Text("BUFFET", style: TextStyle(fontSize: 12),),
-                        value: 2,
-                      ),
-                      DropdownMenuItem(
-                        child: Text("CHURRASCO", style: TextStyle(fontSize: 12),),
-                        value: 3,
-                      ),
-                    ],
-                    
-                    onChanged: (int value){
-                      setState(() {
-                        _valueDropdownTypeEmployee = value;
-                      });
-                    }
-                  ), 
-                ),
-               
-                SizedBox( height: 24),
-                setButton(text: "Cadastrar",
-                function: (){
-                   Navigator.pushNamed(context, '/employee/home');
-                })
-              ]
-            )
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10.0),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(text,
+              textAlign: TextAlign.end,
+              style:
+                  Theme.of(context).textTheme.headline1.copyWith(fontSize: 18)),
+          SizedBox(
+            width: 10,
           ),
-      )
+          InkWell(
+            child: Icon(
+              Icons.edit,
+              size: 24,
+              color: Theme.of(context).primaryColor,
+            ),
+            onTap: () {},
+            borderRadius: BorderRadius.circular(100),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class ParagraphText extends StatelessWidget {
+  const ParagraphText(this.text, {Key key}) : super(key: key);
+
+  final text;
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Text(
+        text,
+        style: Theme.of(context).textTheme.headline1.copyWith(fontSize: 18),
+      ),
     );
   }
 }

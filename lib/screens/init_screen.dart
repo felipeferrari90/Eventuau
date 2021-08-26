@@ -1,5 +1,5 @@
 import 'package:event_uau/components/buttons.dart';
-import 'package:event_uau/utils/colors.dart';
+import 'package:event_uau/screens/profissional/employee_signup.dart';
 import 'package:flutter/material.dart';
 
 class InitScreen extends StatefulWidget {
@@ -42,90 +42,104 @@ class _InitScreenState extends State<InitScreen> {
         padding: EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.only(left: 40),
-                  child:
-                      Image.asset("assets/images/logo-roxo.png", height: 200),
+          child: Stack(children: [
+            Positioned(
+                top: 10,
+                left: 0,
+                child: PopupMenuButton(
+                  onSelected: (value) => Navigator.pushNamed(context, value),
+                  itemBuilder: (context) => [
+                    PopupMenuItem(
+                      child: Text('DEVELOPER MENU FOR QUICK SCREEN ROUTING'),
+                      enabled: false,
+                    ),
+                    PopupMenuItem(
+                      child: Text('Go to ${EmployeeSignupScreen.routeName}'),
+                      value: EmployeeSignupScreen.routeName,
+                    )
+                  ],
+                )),
+            Column(mainAxisAlignment: MainAxisAlignment.center, children: <
+                Widget>[
+              Padding(
+                padding: EdgeInsets.only(left: 40),
+                child: Image.asset("assets/images/logo-roxo.png", height: 200),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 16),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.baseline,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text("Event",
+                        style: Theme.of(context).textTheme.headline1.copyWith(
+                            color: Theme.of(context).primaryColor,
+                            fontSize: 36),
+                        textAlign: TextAlign.center),
+                    Text("uau",
+                        style: Theme.of(context).textTheme.headline3.copyWith(
+                            color: Theme.of(context).accentColor, fontSize: 52),
+                        textAlign: TextAlign.center),
+                  ],
                 ),
+              ),
+              Column(children: <Widget>[
                 Padding(
-                  padding: EdgeInsets.symmetric(vertical: 16),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.baseline,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text("Event",
-                          style: Theme.of(context).textTheme.headline1.copyWith(
-                              color: Theme.of(context).primaryColor,
-                              fontSize: 36),
-                          textAlign: TextAlign.center),
-                      Text("uau",
-                          style: Theme.of(context).textTheme.headline3.copyWith(
-                              color: Theme.of(context).accentColor,
-                              fontSize: 52),
-                          textAlign: TextAlign.center),
-                    ],
-                  ),
-                ),
-                Column(children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.only(left: 8, bottom: 1),
-                    child: TextFormField(
-                      textInputAction: TextInputAction.next,
-                      onFieldSubmitted: (_) =>
-                          _passwordFocusNode.requestFocus(),
-                      autocorrect: false,
-                      keyboardType: TextInputType.emailAddress,
-                      validator: (value) {
-                        if (value.isEmpty || !value.contains('@')) {
-                          return 'Email Inválido';
-                        }
-                        return null;
-                      },
-                      onSaved: (value) {
-                        _authData['email'] = value;
-                      },
-                      decoration: InputDecoration(
-                        labelText: "E-mail",
-                      ),
+                  padding: EdgeInsets.only(left: 8, bottom: 1),
+                  child: TextFormField(
+                    textInputAction: TextInputAction.next,
+                    onFieldSubmitted: (_) => _passwordFocusNode.requestFocus(),
+                    autocorrect: false,
+                    keyboardType: TextInputType.emailAddress,
+                    validator: (value) {
+                      if (value.isEmpty || !value.contains('@')) {
+                        return 'Email Inválido';
+                      }
+                      return null;
+                    },
+                    onSaved: (value) {
+                      _authData['email'] = value;
+                    },
+                    decoration: InputDecoration(
+                      labelText: "E-mail",
                     ),
                   ),
-                  Padding(
-                    padding: EdgeInsets.only(left: 8, bottom: 1),
-                    child: TextFormField(
-                      focusNode: _passwordFocusNode,
-                      onFieldSubmitted: (_) => _onSubmit(),
-                      autocorrect: false,
-                      validator: (value) {
-                        if (value.isEmpty || value.length < 5) {
-                          return 'Senha muito pequena!';
-                        }
-                        return null;
-                      },
-                      onSaved: (value) {
-                        _authData['password'] = value;
-                      },
-                      obscureText: true,
-                      keyboardType: TextInputType.visiblePassword,
-                      decoration: InputDecoration(
-                        labelText: "Senha",
-                      ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(left: 8, bottom: 1),
+                  child: TextFormField(
+                    focusNode: _passwordFocusNode,
+                    onFieldSubmitted: (_) => _onSubmit(),
+                    autocorrect: false,
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return 'Campo Obrigatório';
+                      }
+                      return null;
+                    },
+                    onSaved: (value) {
+                      _authData['password'] = value;
+                    },
+                    obscureText: true,
+                    keyboardType: TextInputType.visiblePassword,
+                    decoration: InputDecoration(
+                      labelText: "Senha",
                     ),
                   ),
-                ]),
-                setButton(
-                  text: "Entrar",
-                  function: _onSubmit,
                 ),
-                setButton(
-                    text: "Criar conta",
-                    outline: true,
-                    function: () {
-                      Navigator.pushNamed(context, "/signup");
-                    }),
               ]),
+              setButton(
+                text: "Entrar",
+                function: _onSubmit,
+              ),
+              setButton(
+                  text: "Criar conta",
+                  outline: true,
+                  function: () {
+                    Navigator.pushNamed(context, "/signup");
+                  }),
+            ]),
+          ]),
         ),
       ),
     ));

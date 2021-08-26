@@ -48,7 +48,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   void _onSubmit() {
-    if (!_formKey.currentState.validate()) {
+    if (!_formKey.currentState.validate() || !contractChecked) {
       return;
     }
 
@@ -59,15 +59,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final PreferredSizeWidget appBar = setAppBar(context, title: "Cadastre-se");
     final mediaQuery = MediaQuery.of(context);
     return Scaffold(
-      appBar: appBar,
+      appBar: EventUauAppBar(),
       backgroundColor: colorBg,
       body: Container(
         height: (mediaQuery.size.height -
             mediaQuery.padding.top -
-            appBar.preferredSize.height),
+            EventUauAppBar().preferredSize.height),
         width: mediaQuery.size.width,
         child: SingleChildScrollView(
           padding: EdgeInsets.symmetric(
@@ -110,6 +109,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       validator: (value) {
                         if (value.isEmpty) {
                           return "Campo Obrigatório";
+                        }
+
+                        final hasSpace = value.contains(" ");
+
+                        if (!hasSpace) {
+                          return "É necessário nome e sobrenome";
+                        }
+
+                        if (hasSpace && value.split(" ").length < 2) {
+                          return "É necessário nome e sobrenome";
                         }
 
                         return null;
@@ -209,6 +218,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       textInputAction: TextInputAction.done,
                       onFieldSubmitted: (_) => _onSubmit(),
                       validator: (value) {
+                        if (value.isEmpty) {
+                          return "Campo Obrigatório";
+                        }
                         if (value != _passwordController.text) {
                           return "As duas senhas não coincidem";
                         }

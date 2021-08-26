@@ -13,7 +13,6 @@ import './screens/profissional/employee_event_screen_description.dart';
 import './screens/contratante/event_screen_description.dart';
 import './screens/contratante/home_screen.dart';
 import './screens/init_screen.dart';
-import './screens/login_screen.dart';
 import './screens/contratante/signup_screen.dart';
 import './utils/colors.dart';
 
@@ -67,7 +66,6 @@ class EventUau extends StatelessWidget {
         "/": (context) => InitScreen(),
 
         /*ROTAS DO FLUXO APP CONTRATANTE*/
-        "/login": (context) => LoginScreen(),
         "/signup": (context) => SignUpScreen(),
         "/events": (context) => HomeScreen(),
         "/event/new": (context) => EventNewScreen(),
@@ -79,8 +77,9 @@ class EventUau extends StatelessWidget {
         "/contract/id": (context) => ContractScreen(),
 
         /*ROTAS DO FLUXO APP FUNCIONARIO*/
+        EmployeeSignupScreen.routeName: (context) => EmployeeSignupScreen(),
         "/employee/login": (context) => LoginEmployeeScreen(),
-        "/employee/new": (context) => SignUpEmployeeScreen(),
+        // "/employee/new": (context) => SignUpEmployeeScreen(),
         "/employee/home": (context) => HomeScreenEmployee(),
         "/employee/id": (context) => ContractScreen(),
         "/employee/events/choice": (context) => EmployeeEventChoiceScreen(),
