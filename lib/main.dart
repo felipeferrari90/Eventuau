@@ -6,7 +6,7 @@ import './screens/profissional/employee_home_screen.dart';
 import './screens/profissional/employee_login_screen.dart';
 import './screens/contratante/employee_management_screen.dart';
 import './screens/contratante/employee_screen_description.dart';
-import './screens/profissional/employee_signup.dart';
+import 'screens/profissional/employee_signup/employee_signup.dart';
 import './screens/contratante/employees_screen.dart';
 import './screens/contratante/event_new_screen.dart';
 import './screens/profissional/employee_event_screen_description.dart';
@@ -14,6 +14,7 @@ import './screens/contratante/event_screen_description.dart';
 import './screens/contratante/home_screen.dart';
 import './screens/init_screen.dart';
 import './screens/contratante/signup_screen.dart';
+import './screens/profissional/employee_signup/employee_add_documents.dart';
 import './utils/colors.dart';
 
 void main() {
@@ -28,9 +29,15 @@ class EventUau extends StatelessWidget {
       initialRoute: "/",
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
+          appBarTheme: AppBarTheme(
+            shadowColor: Colors.transparent,
+            elevation: 0,
+            color: Theme.of(context).scaffoldBackgroundColor,
+            iconTheme: IconThemeData(color: primaryColor, size: 16),
+          ),
           dividerColor: primaryColor,
           primaryColor: primaryColor,
-          accentColor: accentColor,
+          accentColor: secundaryColor,
           visualDensity: VisualDensity.adaptivePlatformDensity,
           iconTheme: IconThemeData(size: 48),
           dividerTheme: DividerThemeData(
@@ -39,7 +46,11 @@ class EventUau extends StatelessWidget {
             endIndent: 0,
             space: 32,
           ),
-          buttonTheme: ButtonThemeData(minWidth: 22.0),
+          buttonTheme: Theme.of(context).buttonTheme.copyWith(
+              buttonColor: primaryColor,
+              textTheme: ButtonTextTheme.primary,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15))),
           fontFamily: "Roboto",
           textTheme: TextTheme(
             headline1: TextStyle(
@@ -54,7 +65,7 @@ class EventUau extends StatelessWidget {
                 height: 1.2),
             headline5: TextStyle(fontSize: 16, color: primaryColor),
             bodyText1: TextStyle(fontSize: 8, color: primaryColor),
-            button: TextStyle(fontSize: 16, color: gray),
+            button: TextStyle(fontSize: 16, color: Colors.white),
           ),
           inputDecorationTheme: InputDecorationTheme(
             alignLabelWithHint: false,
@@ -78,6 +89,7 @@ class EventUau extends StatelessWidget {
 
         /*ROTAS DO FLUXO APP FUNCIONARIO*/
         EmployeeSignupScreen.routeName: (context) => EmployeeSignupScreen(),
+        EmployeeAddDocuments.routeName: (context) => EmployeeAddDocuments(),
         "/employee/login": (context) => LoginEmployeeScreen(),
         // "/employee/new": (context) => SignUpEmployeeScreen(),
         "/employee/home": (context) => HomeScreenEmployee(),

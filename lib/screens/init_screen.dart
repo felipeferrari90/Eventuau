@@ -1,6 +1,9 @@
-import 'package:event_uau/components/buttons.dart';
-import 'package:event_uau/screens/profissional/employee_signup.dart';
 import 'package:flutter/material.dart';
+
+import './profissional/employee_signup/employee_add_documents.dart';
+import './profissional/employee_signup/employee_signup.dart';
+import '../utils/colors.dart';
+import '../components/buttons.dart';
 
 class InitScreen extends StatefulWidget {
   const InitScreen({Key key}) : super(key: key);
@@ -56,6 +59,10 @@ class _InitScreenState extends State<InitScreen> {
                     PopupMenuItem(
                       child: Text('Go to ${EmployeeSignupScreen.routeName}'),
                       value: EmployeeSignupScreen.routeName,
+                    ),
+                    PopupMenuItem(
+                      child: Text('Go to ${EmployeeAddDocuments.routeName}'),
+                      value: EmployeeAddDocuments.routeName,
                     )
                   ],
                 )),
@@ -77,8 +84,10 @@ class _InitScreenState extends State<InitScreen> {
                             fontSize: 36),
                         textAlign: TextAlign.center),
                     Text("uau",
-                        style: Theme.of(context).textTheme.headline3.copyWith(
-                            color: Theme.of(context).accentColor, fontSize: 52),
+                        style: Theme.of(context)
+                            .textTheme
+                            .headline3
+                            .copyWith(color: accentColor, fontSize: 52),
                         textAlign: TextAlign.center),
                   ],
                 ),
