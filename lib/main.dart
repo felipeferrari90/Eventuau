@@ -33,7 +33,6 @@ class EventUau extends StatelessWidget {
       theme: ThemeData(
         dividerColor: primaryColor,
         primaryColor: primaryColor,
-        accentColor: accentColor,
         visualDensity: VisualDensity.adaptivePlatformDensity,
         iconTheme: IconThemeData(size: 48) ,
         dividerTheme: DividerThemeData(
@@ -80,7 +79,6 @@ class EventUau extends StatelessWidget {
         "/employee/events/choice": (context) => EmployeeEventChoiceScreen(),
         "/employee/event/id" : (context) => EmployeeEventScreenDescription(),
 
-     
       },
     );
   } 

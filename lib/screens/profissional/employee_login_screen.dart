@@ -4,7 +4,7 @@ import 'package:event_uau/utils/colors.dart';
 import 'package:flutter/material.dart';
 
 class LoginEmployeeScreen extends StatefulWidget {
-  const LoginEmployeeScreen({ Key key }) : super(key: key);
+  const LoginEmployeeScreen({ Key? key }) : super(key: key);
 
   @override
   _LoginEmployeeScreenState createState() => _LoginEmployeeScreenState();
