@@ -1,13 +1,14 @@
 import 'package:event_uau/utils/colors.dart';
 import 'package:flutter/material.dart';
 
-Widget setButton(
-        {String text,
-        Function function,
-        bool outline = false,
-        bool uppercase = false,
-        IconData icon,
-        EdgeInsets margin}) =>
+Widget setButton({
+  String text,
+  Function function,
+  bool outline = false,
+  bool uppercase = false,
+  IconData icon,
+  EdgeInsets margin,
+}) =>
     Container(
         margin: margin ?? EdgeInsets.only(top: 20.0),
         width: double.infinity,

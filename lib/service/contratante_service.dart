@@ -1,29 +1,25 @@
-
-
 import 'dart:async';
 import 'dart:convert';
 import 'package:event_uau/models/contratante_model.dart';
 import 'package:event_uau/models/evento_model.dart';
 import 'package:http/http.dart' as http;
 
-
-
 class ContratanteService {
-   
-  Future<int?> create(ContratanteModel contratanteModel) async{
-    try{
-       contratanteModel.id = 0;
-       http.Response response = await http.post(Uri.parse("API"),
-          headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8',
-          },
-          body: contratanteModel.toJson(),
-       );
-       if(response.statusCode == 201){
-          Map<String,dynamic> jsonResponse =  json.decode(response.body);
-          int idRetornado = jsonResponse["id"];
-          return idRetornado;
-       }
+  Future<int> create(ContratanteModel contratanteModel) async {
+    try {
+      contratanteModel.id = 0;
+      http.Response response = await http.post(
+        Uri.parse("API"),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: contratanteModel.toJson(),
+      );
+      if (response.statusCode == 201) {
+        Map<String, dynamic> jsonResponse = json.decode(response.body);
+        int idRetornado = jsonResponse["id"];
+        return idRetornado;
+      }
     } catch (error) {
       print("Service Error: $error ");
       throw error;
@@ -32,44 +28,41 @@ class ContratanteService {
 
   Future<List<ContratanteModel>> getAllEvents() async {
     List<ContratanteModel> lista = new List.empty();
-    try{
+    try {
       http.Response response = await http.get(Uri.parse("API"));
-      if(response.statusCode == 200){
-        (json.decode(response.body) as List<ContratanteModel>).forEach(
-          (value)  {
-            lista.add(ContratanteModel.fromMap(value as Map<String,dynamic>));
-          }
-        );
-      } 
-    } catch(error){
-       throw error;
-    }
-    return lista; 
-  }
-
-
-  Future<ContratanteModel?> getById(int id) async {
-    try{
-      http.Response response = await http.get(Uri.parse("API/${id}"));
-      if(response.statusCode == 200){
-        return ContratanteModel.fromJson(response.body);
-      }   
-    } catch(error) {
-      throw error;
-    }
-  }
-  
-  Future<void> delete(ContratanteModel contratante) async {
-    try{
-      http.Response response = await http.delete(Uri.parse("API/${contratante.id}"));
-      if(response.statusCode != 206){
-         throw Exception("Não foi possível excluir seu cadastro!");
+      if (response.statusCode == 200) {
+        (json.decode(response.body) as List<ContratanteModel>).forEach((value) {
+          lista.add(ContratanteModel.fromMap(value as Map<String, dynamic>));
+        });
       }
-    } catch(error) {
+    } catch (error) {
+      throw error;
+    }
+    return lista;
+  }
+
+  Future<ContratanteModel> getById(int id) async {
+    try {
+      http.Response response = await http.get(Uri.parse("API/${id}"));
+      if (response.statusCode == 200) {
+        return ContratanteModel.fromJson(response.body);
+      }
+    } catch (error) {
       throw error;
     }
   }
-       
+
+  Future<void> delete(ContratanteModel contratante) async {
+    try {
+      http.Response response =
+          await http.delete(Uri.parse("API/${contratante.id}"));
+      if (response.statusCode != 206) {
+        throw Exception("Não foi possível excluir seu cadastro!");
+      }
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 /*
