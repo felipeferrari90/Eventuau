@@ -44,6 +44,23 @@ Widget setButton(
                 )),
             color: outline ? colorBg : primaryColor));
 
+class BaseButton extends StatelessWidget {
+  const BaseButton({Key key, @required this.text, this.onPressed})
+      : super(key: key);
+
+  final String text;
+  final Function onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return RaisedButton(
+      child: Text(text.toUpperCase()),
+      onPressed: onPressed,
+      padding: EdgeInsets.all(16),
+    );
+  }
+}
+
 class BaseTextButton extends StatelessWidget {
   const BaseTextButton(
       {Key key,

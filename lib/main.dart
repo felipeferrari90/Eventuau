@@ -15,6 +15,8 @@ import './screens/contratante/home_screen.dart';
 import './screens/init_screen.dart';
 import './screens/contratante/signup_screen.dart';
 import './screens/profissional/employee_signup/employee_add_documents.dart';
+import './screens/profissional/employee_signup/employee_application_success.dart';
+import './screens/profissional/employee_signup/employee_application_pending.dart';
 import './utils/colors.dart';
 
 void main() {
@@ -78,7 +80,7 @@ class EventUau extends StatelessWidget {
 
         /*ROTAS DO FLUXO APP CONTRATANTE*/
         "/signup": (context) => SignUpScreen(),
-        "/events": (context) => HomeScreen(),
+        HomeScreen.routeName: (context) => HomeScreen(),
         "/event/new": (context) => EventNewScreen(),
         "/event/id": (context) => EventScreenDescription(),
         '/employees': (context) => EmployeeChoiceScreen(),
@@ -90,6 +92,10 @@ class EventUau extends StatelessWidget {
         /*ROTAS DO FLUXO APP FUNCIONARIO*/
         EmployeeSignupScreen.routeName: (context) => EmployeeSignupScreen(),
         EmployeeAddDocuments.routeName: (context) => EmployeeAddDocuments(),
+        EmployeeApplicationPending.routeName: (context) =>
+            EmployeeApplicationPending(),
+        EmployeeApplicationSuccess.routeName: (context) =>
+            EmployeeApplicationSuccess(),
         "/employee/login": (context) => LoginEmployeeScreen(),
         // "/employee/new": (context) => SignUpEmployeeScreen(),
         "/employee/home": (context) => HomeScreenEmployee(),

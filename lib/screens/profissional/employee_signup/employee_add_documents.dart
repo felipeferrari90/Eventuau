@@ -1,7 +1,14 @@
-import 'package:event_uau/components/employee_signup/add_document_card.dart';
 import 'package:flutter/material.dart';
 
+import 'employee_application_pending.dart';
+import '../../../components/employee_signup/add_document_card.dart';
 import '../../../components/employee_signup/paragraph_text.dart';
+import '../../contratante/home_screen.dart';
+
+import 'dart:io';
+import 'dart:async';
+import 'package:image_cropper/image_cropper.dart';
+import 'package:image_picker/image_picker.dart';
 
 class EmployeeAddDocuments extends StatefulWidget {
   static const routeName = '/employee/signup/personalfiles';
@@ -12,6 +19,60 @@ class EmployeeAddDocuments extends StatefulWidget {
 }
 
 class _EmployeeAddDocumentsState extends State<EmployeeAddDocuments> {
+  Map<String, File> documents = {
+    'rgFrente': null,
+    'rgVerso': null,
+    'rgSelfie': null
+  };
+
+  void _handleSubmit() {
+    //@TODO
+    // 1. VALDATE IF USER HAS ADDED EVERY DOCUMENTO
+    // 2. UPLOAD IMAGE DOCUMENTS WHILE SHOWING SPINNER ON APPBAR CHECKMARK
+    // 3. NAVIGATE TO NEXT PAGE
+    Navigator.of(context).pushNamedAndRemoveUntil(
+        (EmployeeApplicationPending.routeName),
+        (route) => route.settings.name == HomeScreen.routeName);
+  }
+
+  Future<Null> _pickImage(document) async {
+    // ESCOLHER ENTRE CAMERA OU GALERIA
+
+    // BUSCAR OU TIRAR FOTO
+    final image = await ImagePicker().getImage(source: ImageSource.camera);
+
+    if (image != null) {
+      File croppedImage = await _cropImage(image);
+
+      setState(() {
+        document = croppedImage;
+      });
+    } else {
+      print('No image picked');
+    }
+  }
+
+  Future<File> _cropImage(image) {
+    return ImageCropper.cropImage(
+      sourcePath: image.path,
+      aspectRatioPresets: Platform.isAndroid
+          ? [
+              CropAspectRatioPreset.square,
+              CropAspectRatioPreset.original,
+            ]
+          : [
+              CropAspectRatioPreset.original,
+              CropAspectRatioPreset.square,
+            ],
+      androidUiSettings: AndroidUiSettings(
+          hideBottomControls: true,
+          toolbarTitle: 'Cortar imagem',
+          showCropGrid: false,
+          initAspectRatio: CropAspectRatioPreset.original,
+          lockAspectRatio: false),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,7 +84,9 @@ class _EmployeeAddDocumentsState extends State<EmployeeAddDocuments> {
         actions: [
           IconButton(
             icon: Icon(Icons.check),
-            onPressed: () {},
+            onPressed: () {
+              _handleSubmit();
+            },
             color: Colors.green,
           )
         ],
@@ -46,12 +109,12 @@ class _EmployeeAddDocumentsState extends State<EmployeeAddDocuments> {
                   AddDocumentCard(
                     isOnRow: true,
                     text: 'Foto da Frente',
-                    onTap: () {},
+                    onTap: () => _pickImage(documents['rgFrente']),
                   ),
                   AddDocumentCard(
                     isOnRow: true,
                     text: 'Foto do Verso',
-                    onTap: () {},
+                    onTap: () => _pickImage(documents['rgVerso']),
                   )
                 ],
               )
@@ -66,7 +129,7 @@ class _EmployeeAddDocumentsState extends State<EmployeeAddDocuments> {
               ),
               AddDocumentCard(
                 text: 'Foto com RG na mão.',
-                onTap: () {},
+                onTap: () => _pickImage(documents['rgSelfie']),
               )
             ],
           )

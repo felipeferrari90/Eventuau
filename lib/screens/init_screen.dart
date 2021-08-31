@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import './profissional/employee_signup/employee_add_documents.dart';
 import './profissional/employee_signup/employee_signup.dart';
+
 import '../utils/colors.dart';
 import '../components/buttons.dart';
 
@@ -59,10 +59,6 @@ class _InitScreenState extends State<InitScreen> {
                     PopupMenuItem(
                       child: Text('Go to ${EmployeeSignupScreen.routeName}'),
                       value: EmployeeSignupScreen.routeName,
-                    ),
-                    PopupMenuItem(
-                      child: Text('Go to ${EmployeeAddDocuments.routeName}'),
-                      value: EmployeeAddDocuments.routeName,
                     )
                   ],
                 )),

@@ -40,7 +40,7 @@ class _AddDocumentCardState extends State<AddDocumentCard> {
         color: Colors.white,
         borderRadius: BorderRadius.circular(15),
         child: InkWell(
-          onTap: () {},
+          onTap: widget.onTap,
           child: Stack(
             fit: StackFit.expand,
             children: [

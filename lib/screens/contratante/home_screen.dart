@@ -10,6 +10,7 @@ import 'dashboard_events_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key key}) : super(key: key);
+  static const routeName = "/events";
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
