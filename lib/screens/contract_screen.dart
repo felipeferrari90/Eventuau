@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 class ContractScreen extends StatefulWidget {
 
   final bool professional;
-  const ContractScreen({ Key key , this.professional = false}) : super(key: key);
+  const ContractScreen({ Key? key , this.professional = false}) : super(key: key);
 
   
   @override
