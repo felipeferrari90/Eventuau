@@ -1,3 +1,4 @@
+import 'package:event_uau/screens/profissional/employee_profile_screen.dart';
 import 'package:flutter/material.dart';
 
 import './profissional/employee_signup/employee_signup.dart';
@@ -59,6 +60,10 @@ class _InitScreenState extends State<InitScreen> {
                     PopupMenuItem(
                       child: Text('Go to ${EmployeeSignupScreen.routeName}'),
                       value: EmployeeSignupScreen.routeName,
+                    ),
+                    PopupMenuItem(
+                      child: Text('Go to ${EmployeeProfileScreen.routeName}'),
+                      value: EmployeeProfileScreen.routeName,
                     )
                   ],
                 )),
