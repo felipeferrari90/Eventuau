@@ -8,16 +8,17 @@ import 'package:http/http.dart' as http;
 
 
 
-class ContratanteService {
+class EventoService {
    
-  Future<int?> create(ContratanteModel contratanteModel) async{
+  Future<int?> create(EventoModel eventoModel) async{
+
+    
     try{
-       contratanteModel.id = 0;
        http.Response response = await http.post(Uri.parse("API"),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
           },
-          body: contratanteModel.toJson(),
+          body: eventoModel.toJson(),
        );
        if(response.statusCode == 201){
           Map<String,dynamic> jsonResponse =  json.decode(response.body);
@@ -30,14 +31,14 @@ class ContratanteService {
     }
   }
 
-  Future<List<ContratanteModel>> getAllEvents() async {
-    List<ContratanteModel> lista = new List.empty();
+  Future<List<EventoModel>> getAllbyContratante() async {
+    List<EventoModel> lista = new List.empty();
     try{
       http.Response response = await http.get(Uri.parse("API"));
       if(response.statusCode == 200){
-        (json.decode(response.body) as List<ContratanteModel>).forEach(
+        (json.decode(response.body) as List<EventoModel>).forEach(
           (value)  {
-            lista.add(ContratanteModel.fromMap(value as Map<String,dynamic>));
+            lista.add(EventoModel.fromMap(value as Map<String,dynamic>));
           }
         );
       } 
@@ -47,23 +48,39 @@ class ContratanteService {
     return lista; 
   }
 
+  
 
-  Future<ContratanteModel?> getById(int id) async {
+  Future<EventoModel?> getById(int id) async {
     try{
       http.Response response = await http.get(Uri.parse("API/${id}"));
       if(response.statusCode == 200){
-        return ContratanteModel.fromJson(response.body);
+        return EventoModel.fromJson(response.body);
       }   
     } catch(error) {
       throw error;
     }
   }
-  
-  Future<void> delete(ContratanteModel contratante) async {
+
+  Future<int?> update(EventoModel eventoModel) async{
     try{
-      http.Response response = await http.delete(Uri.parse("API/${contratante.id}"));
-      if(response.statusCode != 206){
-         throw Exception("Não foi possível excluir seu cadastro!");
+      http.Response response = await http.put(Uri.parse("API/${eventoModel.id}"),
+        body: eventoModel.toJson(),
+      );
+      if(response.statusCode == 200){
+        Map<String,dynamic> jsonResponse =  json.decode(response.body);
+          int idRetornado = (jsonResponse['id'] is String) ? int.parse(jsonResponse["id"]) : jsonResponse["id"] ;
+          return idRetornado;
+      }   
+    }catch(error){
+      throw error;
+    }
+  } 
+  
+  Future<void> delete(EventoModel eventoModel) async {
+    try{
+      http.Response response = await http.delete(Uri.parse("API/${eventoModel.id}"));
+      if(response.statusCode == 206){
+         throw Exception("Não foi possível excluir seu evento!");
       }
     } catch(error) {
       throw error;
