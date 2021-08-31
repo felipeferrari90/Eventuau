@@ -4,25 +4,25 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class EmployeesManagement extends StatefulWidget {
-  const EmployeesManagement({ Key key }) : super(key: key);
+  const EmployeesManagement({Key key}) : super(key: key);
 
   @override
   _EmployeesManagementState createState() => _EmployeesManagementState();
 }
 
-
 class _EmployeesManagementState extends State<EmployeesManagement> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-       appBar: setAppBar(context, title: 'gerenciador de funcionarios', username: "Felipe Ferreira"),
-       body: Container(
-         padding: EdgeInsets.symmetric(vertical:16),
-         color: colorBg,
-         child: Container(  
-             child: SingleChildScrollView(
-               child: Column(
-                 children: [
+        appBar: EventUauAppBar(
+            title: 'gerenciador de funcionarios', username: "Felipe Ferreira"),
+        body: Container(
+            padding: EdgeInsets.symmetric(vertical: 16),
+            color: colorBg,
+            child: Container(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
                     setCardManagementEmployee(context),
                     setCardManagementEmployee(context),
                     setCardManagementEmployee(context),
@@ -46,42 +46,35 @@ class _EmployeesManagementState extends State<EmployeesManagement> {
                     setCardManagementEmployee(context),
                     setCardManagementEmployee(context),
                     setCardManagementEmployee(context),
-                 ],
-               ),
-             ),
-         )
-       )
-    );  
+                  ],
+                ),
+              ),
+            )));
   }
 
-  setCardManagementEmployee(BuildContext context, {Function f, bool estaPresente }) =>
-    Card( 
-        child: SwitchListTile( 
-          contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          title:  Text("presente:", style:TextStyle(color: Colors.black54) , textAlign: TextAlign.right),
-          value: estaPresente?? false,
-          activeColor: primaryColor,
-          inactiveTrackColor: colorBg,
-          autofocus: true ,
-          onChanged: (bool value){
-            setState(() {
-              estaPresente = value;
-            });
-          },
-          secondary: InkWell(
-            onTap: (){
-              Navigator.pushNamed(context,"/contract/id");
-            },
-            child: Text("Pedro Lemes\nRG\: 12345678-9\t", style: Theme.of(context).textTheme.headline5),
-          ),  
-          controlAffinity: ListTileControlAffinity.trailing
-        ) 
-  );
-       
-  
+  setCardManagementEmployee(BuildContext context,
+          {Function f, bool estaPresente}) =>
+      Card(
+          child: SwitchListTile(
+              contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              title: Text("presente:",
+                  style: TextStyle(color: Colors.black54),
+                  textAlign: TextAlign.right),
+              value: estaPresente ?? false,
+              activeColor: primaryColor,
+              inactiveTrackColor: colorBg,
+              autofocus: true,
+              onChanged: (bool value) {
+                setState(() {
+                  estaPresente = value;
+                });
+              },
+              secondary: InkWell(
+                onTap: () {
+                  Navigator.pushNamed(context, "/contract/id");
+                },
+                child: Text("Pedro Lemes\nRG\: 12345678-9\t",
+                    style: Theme.of(context).textTheme.headline5),
+              ),
+              controlAffinity: ListTileControlAffinity.trailing));
 }
-
-
-
-
-

@@ -1,30 +1,24 @@
-
-
 import 'dart:async';
 import 'dart:convert';
 import 'package:event_uau/models/contratante_model.dart';
 import 'package:event_uau/models/evento_model.dart';
 import 'package:http/http.dart' as http;
 
-
-
 class EventoService {
-   
-  Future<int?> create(EventoModel eventoModel) async{
-
-    
-    try{
-       http.Response response = await http.post(Uri.parse("API"),
-          headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8',
-          },
-          body: eventoModel.toJson(),
-       );
-       if(response.statusCode == 201){
-          Map<String,dynamic> jsonResponse =  json.decode(response.body);
-          int idRetornado = jsonResponse["id"];
-          return idRetornado;
-       }
+  Future<int> create(EventoModel eventoModel) async {
+    try {
+      http.Response response = await http.post(
+        Uri.parse("API"),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: eventoModel.toJson(),
+      );
+      if (response.statusCode == 201) {
+        Map<String, dynamic> jsonResponse = json.decode(response.body);
+        int idRetornado = jsonResponse["id"];
+        return idRetornado;
+      }
     } catch (error) {
       print("Service Error: $error ");
       throw error;
@@ -33,60 +27,59 @@ class EventoService {
 
   Future<List<EventoModel>> getAllbyContratante() async {
     List<EventoModel> lista = new List.empty();
-    try{
+    try {
       http.Response response = await http.get(Uri.parse("API"));
-      if(response.statusCode == 200){
-        (json.decode(response.body) as List<EventoModel>).forEach(
-          (value)  {
-            lista.add(EventoModel.fromMap(value as Map<String,dynamic>));
-          }
-        );
-      } 
-    } catch(error){
-       throw error;
+      if (response.statusCode == 200) {
+        (json.decode(response.body) as List<EventoModel>).forEach((value) {
+          lista.add(EventoModel.fromMap(value as Map<String, dynamic>));
+        });
+      }
+    } catch (error) {
+      throw error;
     }
-    return lista; 
+    return lista;
   }
 
-  
-
-  Future<EventoModel?> getById(int id) async {
-    try{
+  Future<EventoModel> getById(int id) async {
+    try {
       http.Response response = await http.get(Uri.parse("API/${id}"));
-      if(response.statusCode == 200){
+      if (response.statusCode == 200) {
         return EventoModel.fromJson(response.body);
-      }   
-    } catch(error) {
+      }
+    } catch (error) {
       throw error;
     }
   }
 
-  Future<int?> update(EventoModel eventoModel) async{
-    try{
-      http.Response response = await http.put(Uri.parse("API/${eventoModel.id}"),
+  Future<int> update(EventoModel eventoModel) async {
+    try {
+      http.Response response = await http.put(
+        Uri.parse("API/${eventoModel.id}"),
         body: eventoModel.toJson(),
       );
-      if(response.statusCode == 200){
-        Map<String,dynamic> jsonResponse =  json.decode(response.body);
-          int idRetornado = (jsonResponse['id'] is String) ? int.parse(jsonResponse["id"]) : jsonResponse["id"] ;
-          return idRetornado;
-      }   
-    }catch(error){
-      throw error;
-    }
-  } 
-  
-  Future<void> delete(EventoModel eventoModel) async {
-    try{
-      http.Response response = await http.delete(Uri.parse("API/${eventoModel.id}"));
-      if(response.statusCode == 206){
-         throw Exception("Não foi possível excluir seu evento!");
+      if (response.statusCode == 200) {
+        Map<String, dynamic> jsonResponse = json.decode(response.body);
+        int idRetornado = (jsonResponse['id'] is String)
+            ? int.parse(jsonResponse["id"])
+            : jsonResponse["id"];
+        return idRetornado;
       }
-    } catch(error) {
+    } catch (error) {
       throw error;
     }
   }
-       
+
+  Future<void> delete(EventoModel eventoModel) async {
+    try {
+      http.Response response =
+          await http.delete(Uri.parse("API/${eventoModel.id}"));
+      if (response.statusCode == 206) {
+        throw Exception("Não foi possível excluir seu evento!");
+      }
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 /*

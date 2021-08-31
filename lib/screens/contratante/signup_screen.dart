@@ -6,43 +6,40 @@ import 'package:event_uau/models/contratante_model.dart';
 import 'package:event_uau/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:intl/intl.dart';
-
-
-
 
 class SignUpScreen extends StatefulWidget {
-  const SignUpScreen({ Key? key }) : super(key: key);
+  const SignUpScreen({Key key}) : super(key: key);
 
   @override
   _SignUpScreenState createState() => _SignUpScreenState();
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
-
-
-
-  bool _contractChecked = false;
-
-  final GlobalKey<FormState> _formKeySignUp = new GlobalKey<FormState>();
+  final GlobalKey<FormState> _formKey = new GlobalKey();
 
   final FocusNode _nameFocusNode = new FocusNode();
-  final FocusNode _cpfFocusNode = new FocusNode();
-  final FocusNode _emailFocusNode = new FocusNode();
-  final FocusNode _phoneFocusNode = new FocusNode();
   final FocusNode _birthDateFocusNode = new FocusNode();
- 
+  final FocusNode _phoneFocusNode = new FocusNode();
+  final FocusNode _emailFocusNode = new FocusNode();
   final FocusNode _passwordFocusNode = new FocusNode();
   final FocusNode _confirPasswordFocusNode = new FocusNode();
 
+  bool contractChecked = false;
+
   TextEditingController _passwordController = new TextEditingController();
 
-  ContratanteModel contratanteModel = new ContratanteModel();
+  Map<String, dynamic> _formValues = {
+    'name': null,
+    'password': null,
+    'cpf': null,
+    'email': null,
+    'phone': null,
+    'birthDate': null
+  };
 
   @override
   void dispose() {
     _nameFocusNode.dispose();
-    _cpfFocusNode.dispose();
     _birthDateFocusNode.dispose();
     _phoneFocusNode.dispose();
     _emailFocusNode.dispose();
@@ -52,42 +49,37 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   void _onSubmit() {
-    if (!_formKeySignUp.currentState!.validate() & !_contractChecked ) {
+    if (!_formKey.currentState.validate() || !contractChecked) {
       return;
     }
-    _formKeySignUp.currentState!.save();
-    print(contratanteModel);
+
+    _formKey.currentState.save();
+
+    print(_formValues);
   }
-   
-  
 
   @override
   Widget build(BuildContext context) {
-      return Scaffold(
-        appBar: setAppBar(context,title: "Cadastre-se"),
-        backgroundColor: colorBg,
-        body: Container(
-          padding: EdgeInsets.all(16.0),
-          child: SingleChildScrollView(
-            child: Form( 
-              key: _formKeySignUp,
-              child: Column(
+    final mediaQuery = MediaQuery.of(context);
+    return Scaffold(
+      appBar: EventUauAppBar(),
+      backgroundColor: colorBg,
+      body: Container(
+        height: (mediaQuery.size.height -
+            mediaQuery.padding.top -
+            EventUauAppBar().preferredSize.height),
+        width: mediaQuery.size.width,
+        child: SingleChildScrollView(
+          padding: EdgeInsets.symmetric(
+              vertical: mediaQuery.size.width * 0.05,
+              horizontal: mediaQuery.size.width * 0.1),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              // mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Column(
                   children: [
-                    TextFormField(
-                      keyboardType: TextInputType.name,
-                      decoration: InputDecoration(labelText: 'Nome Completo'),
-                      textInputAction: TextInputAction.next,
-                      onFieldSubmitted: (_) => _nameFocusNode.requestFocus(),
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return "Campo Obrigatório";
-                        }
-                        return null;
-                      },
-                      onSaved: (value) {
-                        contratanteModel.nome = value;
-                      },
-                    ),
                     TextFormField(
                       autofocus: true,
                       keyboardType: TextInputType.number,
@@ -97,20 +89,49 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         CpfInputFormatter()
                       ],
                       textInputAction: TextInputAction.next,
-                      onFieldSubmitted: (_) => _cpfFocusNode.requestFocus(),
+                      onFieldSubmitted: (_) => _nameFocusNode.requestFocus(),
                       validator: (value) {
-                        if (value!.isEmpty) {
+                        if (value.isEmpty) {
                           return "Campo Obrigatório";
                         }
+
+                        return null;
                       },
                       onSaved: (value) {
-                        contratanteModel.cpf = value as String;
+                        _formValues['cpf'] = value;
+                      },
+                    ),
+                    TextFormField(
+                      keyboardType: TextInputType.name,
+                      decoration: InputDecoration(labelText: 'Nome Completo'),
+                      textInputAction: TextInputAction.next,
+                      onFieldSubmitted: (_) =>
+                          _birthDateFocusNode.requestFocus(),
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          return "Campo Obrigatório";
+                        }
+
+                        final hasSpace = value.contains(" ");
+
+                        if (!hasSpace) {
+                          return "É necessário nome e sobrenome";
+                        }
+
+                        if (hasSpace && value.split(" ").length < 2) {
+                          return "É necessário nome e sobrenome";
+                        }
+
+                        return null;
+                      },
+                      onSaved: (value) {
+                        _formValues['name'] = value;
                       },
                     ),
                     TextFormField(
                       keyboardType: TextInputType.datetime,
                       decoration:
-                        InputDecoration(labelText: 'Data de Nascimento'),
+                          InputDecoration(labelText: 'Data de Nascimento'),
                       inputFormatters: [
                         FilteringTextInputFormatter.digitsOnly,
                         DataInputFormatter()
@@ -118,14 +139,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       textInputAction: TextInputAction.next,
                       onFieldSubmitted: (_) => _phoneFocusNode.requestFocus(),
                       validator: (value) {
-                        if (value!.isEmpty) {
+                        if (value.isEmpty) {
                           return "Campo Obrigatório";
                         }
 
                         return null;
                       },
                       onSaved: (value) {
-                        contratanteModel.dataNascimento = DateFormat.yMd("pt_BR").parse(value as String);
+                        _formValues['birthDate'] = value;
                       },
                     ),
                     TextFormField(
@@ -139,14 +160,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       textInputAction: TextInputAction.next,
                       onFieldSubmitted: (_) => _emailFocusNode.requestFocus(),
                       validator: (value) {
-                        if (value!.isEmpty) {
+                        if (value.isEmpty) {
                           return "Campo Obrigatório";
                         }
 
                         return null;
                       },
                       onSaved: (value) {
-                        contratanteModel.telefone = value;
+                        _formValues['phone'] = value;
                       },
                     ),
                     TextFormField(
@@ -156,7 +177,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       onFieldSubmitted: (_) =>
                           _passwordFocusNode.requestFocus(),
                       validator: (value) {
-                        if (value!.isEmpty) {
+                        if (value.isEmpty) {
                           return "Campo Obrigatório";
                         }
                         if (!value.contains('@')) {
@@ -166,7 +187,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         return null;
                       },
                       onSaved: (value) {
-                        contratanteModel.email = value;
+                        _formValues['email'] = value;
                       },
                     ),
                     TextFormField(
@@ -178,27 +199,33 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       onFieldSubmitted: (_) =>
                           _passwordFocusNode.requestFocus(),
                       validator: (value) {
-                        if (value!.isEmpty) {
+                        if (value.isEmpty) {
                           return "Campo Obrigatório";
                         }
                         if (value.length < 6) {
                           return "A senha precisa conter no mínimo 6 dígitos";
                         }
+
                         return null;
                       },
                       onSaved: (value) {
-                        contratanteModel.senha = value;
+                        _formValues['password'] = value;
                       },
                     ),
                     TextFormField(
                       obscureText: true,
-                      decoration: InputDecoration(labelText: 'Confirme a Senha'),
+                      decoration:
+                          InputDecoration(labelText: 'Confirme a Senha'),
                       textInputAction: TextInputAction.done,
                       onFieldSubmitted: (_) => _onSubmit(),
                       validator: (value) {
+                        if (value.isEmpty) {
+                          return "Campo Obrigatório";
+                        }
                         if (value != _passwordController.text) {
                           return "As duas senhas não coincidem";
                         }
+
                         return null;
                       },
                     ),
@@ -208,12 +235,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     Row(
                       children: [
                         Checkbox(
-                            value: _contractChecked,
+                            value: contractChecked,
                             checkColor: colorBg,
                             activeColor: primaryColor,
-                            onChanged: (bool? value) {
+                            onChanged: (bool value) {
                               setState(() {
-                                _contractChecked = value as bool;
+                                contractChecked = value;
                               });
                             }),
                         Text(
@@ -225,12 +252,21 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         )
                       ],
                     ),
-                  ]
+                  ],
+                ),
+                SizedBox(
+                  height: 15,
+                ),
+                setButton(
+                  margin: EdgeInsets.all(0),
+                  text: "Confirmar",
+                  function: _onSubmit,
                 )
-             ),
+              ],
+            ),
           ),
-      )
-    ); 
+        ),
+      ),
+    );
   }
 }
-
