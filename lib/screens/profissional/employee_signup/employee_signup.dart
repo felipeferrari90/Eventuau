@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../components/employee_signup/paragraph_text.dart';
-import '../../../components/employee_signup/editable_row.dart';
+import '../../../components/employee/signup/paragraph_text.dart';
+import '../../../components/employee/signup/editable_row.dart';
 import './employee_add_documents.dart';
 
 class EmployeeSignupScreen extends StatefulWidget {

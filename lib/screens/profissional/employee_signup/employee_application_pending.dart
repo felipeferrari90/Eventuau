@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../components/buttons.dart';
-import '../../../components/employee_signup/paragraph_text.dart';
+import '../../../components/employee/signup/paragraph_text.dart';
 import '../../../components/app_bar_eventual.dart';
 import '../../../screens/contratante/home_screen.dart';
 

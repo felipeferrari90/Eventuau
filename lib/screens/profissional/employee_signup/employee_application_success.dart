@@ -1,4 +1,4 @@
-import 'package:event_uau/components/employee_signup/paragraph_text.dart';
+import 'package:event_uau/components/employee/signup/paragraph_text.dart';
 import 'package:flutter/material.dart';
 
 class EmployeeApplicationSuccess extends StatelessWidget {

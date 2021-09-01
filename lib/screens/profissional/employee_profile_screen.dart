@@ -1,64 +1,72 @@
+import 'package:event_uau/components/employee/profile_screen/profile_picture.dart';
+import 'package:event_uau/components/employee/profile_screen/user_details.dart';
 import 'package:flutter/material.dart';
 
-class EmployeeProfileScreen extends StatelessWidget {
+class EmployeeProfileScreen extends StatefulWidget {
   const EmployeeProfileScreen({Key key}) : super(key: key);
 
   static const routeName = '/employee/profile';
 
   @override
+  _EmployeeProfileScreenState createState() => _EmployeeProfileScreenState();
+}
+
+class _EmployeeProfileScreenState extends State<EmployeeProfileScreen> {
+  final List<String> _imageList = [
+    'https://upload.wikimedia.org/wikipedia/commons/7/7e/Borat_in_Cologne.jpg',
+    'https://www.torredevigilancia.com/wp-content/uploads/2021/01/borat-2.png',
+    'https://cdn.jornaldebrasilia.com.br/wp-content/uploads/2021/01/06152117/borat-subsequent-moviefilm-review-1200-1000x600.jpg'
+  ];
+
+  @override
   Widget build(BuildContext context) {
-    final mediaQuery = MediaQuery.of(context);
+    final primaryColor = Theme.of(context).primaryColor;
     return Scaffold(
-      body: Column(
+      floatingActionButton: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           Container(
-            height: 350,
-            child: Stack(
-              fit: StackFit.expand,
-              children: [
-                Image.network(
-                  'https://upload.wikimedia.org/wikipedia/commons/7/7e/Borat_in_Cologne.jpg',
-                  fit: BoxFit.fitWidth,
-                  alignment: Alignment.topCenter,
+            width: 33,
+            decoration: BoxDecoration(
+              color: primaryColor,
+              borderRadius: BorderRadius.circular(90),
+            ),
+            child: FittedBox(
+              child: IconButton(
+                color: Colors.white,
+                onPressed: () => Navigator.of(context).pop(),
+                icon: Icon(
+                  Icons.arrow_back,
                 ),
-                Positioned(
-                  width: mediaQuery.size.width,
-                  bottom: 5,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        height: 4,
-                        width: mediaQuery.size.width * 0.97,
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(100)),
-                      )
-                    ],
-                  ),
-                ),
-                Row(
-                  children: [
-                    InkWell(
-                      onTap: () => print('i clicked left'),
-                      child: Container(
-                        height: double.infinity,
-                        width: mediaQuery.size.width * 0.5,
-                      ),
-                    ),
-                    InkWell(
-                      onTap: () => print('i clicked right'),
-                      child: Container(
-                        height: double.infinity,
-                        width: mediaQuery.size.width * 0.5,
-                      ),
-                    )
-                  ],
-                )
-              ],
+                iconSize: 100,
+              ),
+            ),
+          ),
+          SizedBox(
+            width: 8,
+          ),
+          Container(
+            decoration: BoxDecoration(
+              color: Theme.of(context).accentColor,
+              borderRadius: BorderRadius.circular(90),
+            ),
+            child: IconButton(
+              color: primaryColor,
+              onPressed: () {},
+              icon: Icon(
+                Icons.edit,
+              ),
+              iconSize: 40,
             ),
           )
         ],
+      ),
+      body: SingleChildScrollView(
+        child: Column(children: [
+          ProfilePicture(imageList: _imageList),
+          UserDetails(),
+        ]),
       ),
     );
   }

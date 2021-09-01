@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'employee_application_pending.dart';
-import '../../../components/employee_signup/add_document_card.dart';
-import '../../../components/employee_signup/paragraph_text.dart';
+import '../../../components/employee/signup/add_document_card.dart';
+import '../../../components/employee/signup/paragraph_text.dart';
 import '../../contratante/home_screen.dart';
 
 import 'dart:io';
