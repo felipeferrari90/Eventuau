@@ -1,4 +1,6 @@
+import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../../../components/employee/signup/paragraph_text.dart';
 import '../../../components/employee/signup/editable_row.dart';
@@ -136,10 +138,66 @@ class _EmployeeSignupScreenState extends State<EmployeeSignupScreen> {
                     children: [
                       EditableRow('Felipe Ferreira'),
                       EditableRow('24 Anos'),
-                      EditableRow('Liberdade - SP')
+                      EditableRow('Liberdade - SP'),
+                      OutlineButton(
+                        highlightedBorderColor: Theme.of(context).primaryColor,
+                        splashColor:
+                            Theme.of(context).primaryColor.withOpacity(0.2),
+                        borderSide: BorderSide(
+                          color: Theme.of(context).primaryColor,
+                        ),
+                        onPressed: () async {
+                          await showDialog(
+                            context: context,
+                            child: AlertDialog(
+                              actions: [
+                                TextButton(
+                                    onPressed: () =>
+                                        Navigator.of(context).pop(),
+                                    child: Text('CARALHO EU QUASE ESQUECI'))
+                              ],
+                              title: Text(
+                                  'IMPLEMENTAR O SELETOR DE INTERVALO DE TRABALHO'),
+                            ),
+                          );
+                        },
+                        child: Text('Escala de Trabalho',
+                            style: TextStyle(
+                              color: Theme.of(context).primaryColor,
+                            )),
+                      )
                     ],
                   ),
                 ),
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Valor da Hora Trabalhada:',
+                    style: Theme.of(context)
+                        .textTheme
+                        .headline1
+                        .copyWith(fontSize: 16),
+                  ),
+                  TextFormField(
+                    keyboardType: TextInputType.number,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                      RealInputFormatter(centavos: true)
+                    ],
+                    decoration: InputDecoration(
+                        prefixStyle: TextStyle(color: Colors.black),
+                        prefixText: 'R\$ ',
+                        isDense: true,
+                        hintText:
+                            'Quanto você quer cobrar por hora? Ex: R\$20,00',
+                        floatingLabelBehavior: FloatingLabelBehavior.never),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 16,
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -157,8 +215,7 @@ class _EmployeeSignupScreenState extends State<EmployeeSignupScreen> {
                     style: TextStyle(fontSize: 16),
                     decoration: InputDecoration(
                         isDense: true,
-                        labelText: 'Filtrar especialidades...',
-                        contentPadding: EdgeInsets.zero,
+                        hintText: 'Filtrar especialidades...',
                         floatingLabelBehavior: FloatingLabelBehavior.never),
                   ),
                   Wrap(
