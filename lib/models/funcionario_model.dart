@@ -1,7 +1,6 @@
 import 'dart:convert';
+import 'package:enum_to_string/enum_to_string.dart';
 
-
-import 'evento_model.dart';
 import 'notifications_model.dart';
 
 class FuncionarioModel{
@@ -20,13 +19,9 @@ class FuncionarioModel{
    double valorASerSacado;
    double valorEmCaixa;
    double valorBloqueado;
-   double horasTrabalhadas;
+   double horasTrabalhadasTotais;
    double mediaDeAvaliacao;
    double precoDoServicoAHora;
-   List<EventoModel> eventosParaEscolher;
-   List<EventoModel> eventosEmEspera;
-   List<EventoModel> eventosEmAndamento;
-   List<EventoModel> historicoEventos;
    List<NotificationsModel> notificacoes;
    //fotos de funcionario
    
@@ -47,14 +42,10 @@ class FuncionarioModel{
         this.valorASerSacado,
         this.valorEmCaixa,
         this.valorBloqueado,
-        this.horasTrabalhadas,
+        this.horasTrabalhadasTotais,
         this.mediaDeAvaliacao,
         this.precoDoServicoAHora,
-        this.eventosParaEscolher,
-        this.eventosEmEspera,
-        this.eventosEmAndamento,
-        this.historicoEventos,
-        this.notificacoes
+        this.notificacoes,
         //fotos de funcionario
    });
 
@@ -67,20 +58,16 @@ class FuncionarioModel{
        endereco: json["endereco"], 
        telefone: json["endereco"], 
        sobreMim: json["sobreMim"],
-       dataNascimento: json["dataNascimento"] ,
-       ultimoLogin: json["ultimoLogin"] ,
-       status: json["status"],
+       dataNascimento: DateTime.fromMillisecondsSinceEpoch(json["dataNascimento"]) ,
+       ultimoLogin: DateTime.fromMillisecondsSinceEpoch(json["ultimoLogin"]) ,
+       status: EnumToString.fromString(Status.values, json["status"]),
        tipoProfissao: json["tipoProfissao"],
        valorASerSacado: json["telefone"],
        valorEmCaixa: json["valorEmCaixa"], 
        valorBloqueado: json["valorBloqueado"] , 
-       horasTrabalhadas: json["horasTrabalhadas"] , 
+       horasTrabalhadasTotais: json["horasTrabalhadas"] , 
        mediaDeAvaliacao: json["mediaDeAvaliacao"] , 
        precoDoServicoAHora: json["precoDoServicoAHora"] , 
-       eventosParaEscolher: json["eventosParaEscolher"],
-       eventosEmEspera: json["eventosEmEspera"] , 
-       eventosEmAndamento: json["eventosEmAndamento"],
-       historicoEventos: json["historicoEventos"],
        notificacoes: json["Notificacoes"]
    );
 
@@ -92,18 +79,15 @@ class FuncionarioModel{
      "senha" : this.cpf,
      "telefone" : this.telefone,
      "sobreMim" : this.dataNascimento,
-     "dataNascimento": this.dataNascimento,
-     "ultimoLogin" : this.ultimoLogin,
-     "status": this.status,
+     "dataNascimento": this.dataNascimento.millisecondsSinceEpoch,
+     "ultimoLogin" : this.ultimoLogin.millisecondsSinceEpoch,
+     "status": EnumToString.convertToString(this.status),
      "tipoProfissao": this.tipoProfissao,
      "valorEmCaixa": this.valorEmCaixa,
      "valorBloqueado": this.valorBloqueado,
-     "horasTrabalhadas": this.horasTrabalhadas,
+     "horasTrabalhadasTotais": this.horasTrabalhadasTotais,
      "mediaDeAvaliacao": this.mediaDeAvaliacao,
      "precoDoServicoAHora": this.precoDoServicoAHora,
-     "eventosEmEspera": this.eventosEmEspera,
-     "eventosEmAndamento": this.historicoEventos,
-     "historicoEventos": this.historicoEventos,
      "notificacoes" : this.notificacoes
    };
 

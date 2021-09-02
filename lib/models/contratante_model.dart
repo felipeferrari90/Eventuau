@@ -15,6 +15,7 @@ class ContratanteModel {
   DateTime dataCriacaoConta = DateTime.now();
   double valorEmCaixaDisponivel;
   double valorBloqueado;
+  List<NotificationsModel> notificacoes;
 
   // fotos
 
@@ -29,6 +30,7 @@ class ContratanteModel {
     this.dataCriacaoConta,
     this.valorEmCaixaDisponivel,
     this.valorBloqueado,
+    this.notificacoes
     //this.fotos
   });
 
@@ -46,20 +48,22 @@ class ContratanteModel {
             DateTime.fromMillisecondsSinceEpoch(json["dataCriacaoConta"]),
         valorEmCaixaDisponivel: json["valorEmCaixa"],
         valorBloqueado: json["valorBloqueado"],
+        notificacoes: json["notificacoes"],
       );
 
   Map<String, dynamic> toMap() => {
-        "id": this.id,
-        "nome": this.nome,
-        "senha": this.senha,
-        "cpf": this.cpf,
-        "email": this.email,
-        "telefone": this.telefone,
-        "dataNascimento": this.dataNascimento.millisecondsSinceEpoch,
-        "dataCriacaoConta": this.dataCriacaoConta.millisecondsSinceEpoch,
-        "valorEmCaixaDisponivel": this.valorEmCaixaDisponivel,
-        "valorBloqueado": this.valorBloqueado,
-      };
+    "id": this.id,
+    "nome": this.nome,
+    "senha": this.senha,
+    "cpf": this.cpf,
+    "email": this.email,
+    "telefone": this.telefone,
+    "dataNascimento": this.dataNascimento.millisecondsSinceEpoch,
+    "dataCriacaoConta": this.dataCriacaoConta.millisecondsSinceEpoch,
+    "valorEmCaixaDisponivel": this.valorEmCaixaDisponivel,
+    "valorBloqueado": this.valorBloqueado,
+    "notificacoes" : this.notificacoes,
+  };
 
   factory ContratanteModel.fromJson(String str) =>
       ContratanteModel.fromMap(json.decode(str));
