@@ -55,6 +55,20 @@ class _EmployeeSignupScreenState extends State<EmployeeSignupScreen> {
     rebuildChipList();
   }
 
+  void _showShiftSelecionDialog() async {
+    await showDialog(
+      context: context,
+      child: AlertDialog(
+        actions: [
+          TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text('CARALHO EU QUASE ESQUECI'))
+        ],
+        title: Text('IMPLEMENTAR O SELETOR DE INTERVALO DE TRABALHO'),
+      ),
+    );
+  }
+
   void _handleSubmit() {
     //@TODO
     // 1. VALDATE IF USER HAS IMAGE AND HAS SELECTED AT LEAST 1 JOB
@@ -134,11 +148,24 @@ class _EmployeeSignupScreenState extends State<EmployeeSignupScreen> {
                 child: Align(
                   alignment: Alignment.center,
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      EditableRow('Felipe Ferreira'),
-                      EditableRow('24 Anos'),
-                      EditableRow('Liberdade - SP'),
+                      // ESTUDAR A POSSIBILIDADE DE USAR UM EDITABLETEXT
+                      // ESTUDAR A POSSIBILIDADE DE USAR UM EDITABLETEXT
+                      // ESTUDAR A POSSIBILIDADE DE USAR UM EDITABLETEXT
+                      // ESTUDAR A POSSIBILIDADE DE USAR UM EDITABLETEXT
+                      // ESTUDAR A POSSIBILIDADE DE USAR UM EDITABLETEXT
+                      // ESTUDAR A POSSIBILIDADE DE USAR UM EDITABLETEXT
+                      // ESTUDAR A POSSIBILIDADE DE USAR UM EDITABLETEXT
+
+                      EditableRow(
+                          editableText:
+                              'Felipe Ferreira Marques da Silva Sauro'),
+                      EditableRow(
+                        editableText: '24',
+                        uneditableText: "Anos",
+                      ),
+                      EditableRow(editableText: 'Liberdade - SP'),
                       OutlineButton(
                         highlightedBorderColor: Theme.of(context).primaryColor,
                         splashColor:
@@ -146,21 +173,7 @@ class _EmployeeSignupScreenState extends State<EmployeeSignupScreen> {
                         borderSide: BorderSide(
                           color: Theme.of(context).primaryColor,
                         ),
-                        onPressed: () async {
-                          await showDialog(
-                            context: context,
-                            child: AlertDialog(
-                              actions: [
-                                TextButton(
-                                    onPressed: () =>
-                                        Navigator.of(context).pop(),
-                                    child: Text('CARALHO EU QUASE ESQUECI'))
-                              ],
-                              title: Text(
-                                  'IMPLEMENTAR O SELETOR DE INTERVALO DE TRABALHO'),
-                            ),
-                          );
-                        },
+                        onPressed: _showShiftSelecionDialog,
                         child: Text('Escala de Trabalho',
                             style: TextStyle(
                               color: Theme.of(context).primaryColor,
