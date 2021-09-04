@@ -1,9 +1,11 @@
 import 'package:brasil_fields/brasil_fields.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../../components/employee/signup/paragraph_text.dart';
 import '../../../components/employee/signup/editable_row.dart';
+import '../../../components/employee/signup/shift_selection.dart';
 import './employee_add_documents.dart';
 
 class EmployeeSignupScreen extends StatefulWidget {
@@ -56,17 +58,7 @@ class _EmployeeSignupScreenState extends State<EmployeeSignupScreen> {
   }
 
   void _showShiftSelecionDialog() async {
-    await showDialog(
-      context: context,
-      child: AlertDialog(
-        actions: [
-          TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: Text('CARALHO EU QUASE ESQUECI'))
-        ],
-        title: Text('IMPLEMENTAR O SELETOR DE INTERVALO DE TRABALHO'),
-      ),
-    );
+    await showDialog(context: context, child: ShiftSelection());
   }
 
   void _handleSubmit() {
@@ -100,6 +92,7 @@ class _EmployeeSignupScreenState extends State<EmployeeSignupScreen> {
             children: [
               ParagraphText(
                   'Olá! Ficamos felizes em saber que você quer fazer parte do nosso time.'),
+              // IF HASNOPHOTO
               ParagraphText(
                   'Vimos que você ainda não tem foto, toque no avatar abaixo e escolha uma que mostre bem o seu rosto:'),
               Align(
@@ -150,14 +143,6 @@ class _EmployeeSignupScreenState extends State<EmployeeSignupScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      // ESTUDAR A POSSIBILIDADE DE USAR UM EDITABLETEXT
-                      // ESTUDAR A POSSIBILIDADE DE USAR UM EDITABLETEXT
-                      // ESTUDAR A POSSIBILIDADE DE USAR UM EDITABLETEXT
-                      // ESTUDAR A POSSIBILIDADE DE USAR UM EDITABLETEXT
-                      // ESTUDAR A POSSIBILIDADE DE USAR UM EDITABLETEXT
-                      // ESTUDAR A POSSIBILIDADE DE USAR UM EDITABLETEXT
-                      // ESTUDAR A POSSIBILIDADE DE USAR UM EDITABLETEXT
-
                       EditableRow(
                           editableText:
                               'Felipe Ferreira Marques da Silva Sauro'),

@@ -39,13 +39,6 @@ class _EditableRowState extends State<EditableRow> {
         children: [
           _isEditing
               ? IntrinsicWidth(
-                  // ESTUDAR A POSSIBILIDADE DE USAR UM EDITABLETEXT
-                  // ESTUDAR A POSSIBILIDADE DE USAR UM EDITABLETEXT
-                  // ESTUDAR A POSSIBILIDADE DE USAR UM EDITABLETEXT
-                  // ESTUDAR A POSSIBILIDADE DE USAR UM EDITABLETEXT
-                  // ESTUDAR A POSSIBILIDADE DE USAR UM EDITABLETEXT
-                  // ESTUDAR A POSSIBILIDADE DE USAR UM EDITABLETEXT
-                  // ESTUDAR A POSSIBILIDADE DE USAR UM EDITABLETEXT
                   child: ConstrainedBox(
                     constraints: BoxConstraints(
                         minWidth: 30,
