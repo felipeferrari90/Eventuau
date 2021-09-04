@@ -1,6 +1,7 @@
 
 import 'package:brasil_fields/brasil_fields.dart';
 import 'package:event_uau/components/editable_row.dart';
+import 'package:event_uau/components/employee/signup/shift_selection.dart';
 import 'package:event_uau/components/paragraph_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -143,8 +144,7 @@ class _EmployeeSignupScreenState extends State<EmployeeSignupScreen> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       EditableRow(
-                          editableText:
-                              'Felipe Ferreira Marques da Silva Sauro'),
+                          editableText:'Felipe Ferreira Marques da Silva Sauro'),
                       EditableRow(
                         editableText: '24',
                         uneditableText: "Anos",

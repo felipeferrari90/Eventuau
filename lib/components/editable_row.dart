@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 class EditableRow extends StatelessWidget {
   const EditableRow(
-    this.text, {
-    Key key,
+    {
+    Key key, String editableText, String uneditableText,
   }) : super(key: key);
 
   final String text;
