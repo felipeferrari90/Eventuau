@@ -51,7 +51,7 @@ class _InitScreenState extends State<InitScreen> {
                 top: 10,
                 left: 0,
                 child: PopupMenuButton(
-                  onSelected: (value) => Navigator.pushNamed(context, value),
+                  onSelected: (value) => Navigator.pushNamed(context, value as String),
                   itemBuilder: (context) => [
                     PopupMenuItem(
                       child: Text('DEVELOPER MENU FOR QUICK SCREEN ROUTING'),

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:enum_to_string/enum_to_string.dart';
 import 'package:event_uau/models/funcionario_model.dart';
 
 import 'evento_model.dart';
@@ -13,9 +14,10 @@ class ContratoModel{
   DateTime horaContratacao;
   DateTime horaChegadaFuncionario;
   DateTime horaSaidaFuncionario;
-  double valorExcedente;
-  bool eventoFoiCurtido;
-  bool funcionarioFoiCurtido;
+  Duration horaExtra;
+  double precoAhoraCombinado;
+  double valorTotal;
+  bool funcionarioAceitou = false;
 
   ContratoModel({
     this.idContrato,
@@ -26,9 +28,10 @@ class ContratoModel{
     this.horaContratacao,
     this.horaChegadaFuncionario,
     this.horaSaidaFuncionario,
-    this.valorExcedente,
-    this.eventoFoiCurtido,
-    this.funcionarioFoiCurtido
+    this.horaExtra,
+    this.precoAhoraCombinado,
+    this.valorTotal,
+    this.funcionarioAceitou,
   });
 
   factory ContratoModel.fromMap(Map<String, dynamic> json) => ContratoModel(
@@ -36,13 +39,13 @@ class ContratoModel{
     evento: json["evento"],
     funcionario: json["funcionario"],
     notaFuncionario: json["notaFuncionario"],
-    statusFuncionario: json["statusFuncionario"],
-    horaContratacao: json["horaMatch"],
-    horaChegadaFuncionario: json["horaChegadaFuncionario"],
-    horaSaidaFuncionario: json["horaSaidaEvento"],
-    valorExcedente: json["valorExcedente"],
-    eventoFoiCurtido: json["eventoFoiCurtido"],
-    funcionarioFoiCurtido: json["funcionarioFoiCurtido"],
+    statusFuncionario: EnumToString.fromString(StatusFuncionario.values, json["statusFuncionario"]),
+    horaContratacao: DateTime.fromMillisecondsSinceEpoch(json["horaContratacao"]),
+    horaChegadaFuncionario: DateTime.fromMillisecondsSinceEpoch(json["horaChegadaFuncionario"]),
+    horaSaidaFuncionario: DateTime.fromMillisecondsSinceEpoch(json["horaSaidaFuncionario"]),
+    horaExtra: json["valorExcedente"],
+    valorTotal: json["valorTotal"],
+    funcionarioAceitou: json["funcionarioAceitou"],
   );
 
   Map<String, dynamic> toMap() => {
@@ -50,23 +53,31 @@ class ContratoModel{
     "evento": this.evento,
     "funcionario": this.funcionario,
     "notaFuncionario": this.notaFuncionario,
-    "statusFuncionario" : this.statusFuncionario,
-    "horahoraContratacao": this.horaContratacao,
-    "horaChegadaFuncionario" : this.horaChegadaFuncionario,
-    "horaSaidaEvento": this.horaSaidaFuncionario,
-    "valorExcedente": this.valorExcedente,
-    "eventoFoiCurtido": this.eventoFoiCurtido,
-    "funcionarioFoiCurtido": this.funcionarioFoiCurtido
+    "statusFuncionario" : EnumToString.convertToString(this.statusFuncionario),
+    "horahoraContratacao": this.horaContratacao.millisecondsSinceEpoch,
+    "horaChegadaFuncionario" : this.horaChegadaFuncionario.millisecondsSinceEpoch,
+    "horaSaidaEvento": this.horaSaidaFuncionario.millisecondsSinceEpoch,
+    "horaExtra": this.horaExtra,
+    "valorTotal": this.valorTotal,
   };
 
   factory ContratoModel.fromJson(String str) => ContratoModel.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
+ 
+  double pegarValorTotalContrato(){
+    return (((this.horaSaidaFuncionario.millisecondsSinceEpoch.toDouble() - 
+            this.horaChegadaFuncionario.millisecondsSinceEpoch.toDouble()) + 
+            this.horaExtra.inMilliseconds) / 3600000 ) * this.precoAhoraCombinado.toDouble();       
+  }
 
-
+  double _getHoraCombinada() {
+    return this.funcionario.precoDoServicoAHora;
+  }
 }
 
 enum StatusFuncionario{
+  NAO_CONTRATADO,    // proposta pendente que o funcionario nao aceitou
   EM_ESPERA,   //status que perdura até a data do evento
   PRESENTE,   //quando o funcionario chegou no local e esta trabalhando
   ATRASADO,   //quando o funcionario ainda nao chegou ao local mas contrato esta ativo

@@ -1,8 +1,10 @@
+import 'package:event_uau/components/add_document_card.dart';
+import 'package:event_uau/components/paragraph_text.dart';
 import 'package:flutter/material.dart';
 
 import 'employee_application_pending.dart';
-import '../../../components/employee/signup/add_document_card.dart';
-import '../../../components/employee/signup/paragraph_text.dart';
+
+
 import '../../contratante/home_screen.dart';
 
 import 'dart:io';
