@@ -1,4 +1,5 @@
-import 'package:event_uau/components/employee_signup/paragraph_text.dart';
+
+import 'package:event_uau/components/paragraph_text.dart';
 import 'package:flutter/material.dart';
 
 class EmployeeApplicationSuccess extends StatelessWidget {
@@ -21,7 +22,7 @@ class EmployeeApplicationSuccess extends StatelessWidget {
               height: 12,
             ),
             ParagraphText('Agora você pode receber propostas.'),
-            RaisedButton(
+            ElevatedButton(
               onPressed: () {},
               child: Text('Ir para o Meu Perfil'),
             )

@@ -301,7 +301,7 @@ class _EventNewScreenState extends State<EventNewScreen> {
                   maxLines: 7,
                   validator: (value) {
                     if (value.length > 150) {
-                      return "observação do event0 deve ter menos de 250 caracteres";
+                      return "observação do evento deve ter menos de 250 caracteres";
                     }
                     return null;
                   },
@@ -356,17 +356,18 @@ class _EventNewScreenState extends State<EventNewScreen> {
               SizedBox(height: 24),
               Align(
                 alignment: Alignment.center,
-                child: RaisedButton.icon(
+                child: ElevatedButton.icon(
                   onPressed: () {
                     Navigator.pushNamed(context, "/employees");
-                  },
-                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  }, 
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15)),
+                      primary: primaryColor,
+                      padding: EdgeInsets.all(8)
+                  ),
                   icon: Icon(Icons.search, size: 16),
                   label: Text("IR PRA TELA DE ESCOLHAS"),
-                  color: primaryColor,
-                  textColor: colorBg,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15)),
                 ),
               ),
               SizedBox(
@@ -447,6 +448,13 @@ class _EventNewScreenState extends State<EventNewScreen> {
       trailing: SizedBox(
         width: 50,
         child: TextFormField(
+          validator:(value) {
+            int numero = int.parse(value);
+            if(numero >= 0){
+                return null;
+            }
+            return "escolha um numero maior que 0";
+          },
           keyboardType: TextInputType.number,
           decoration: InputDecoration(
             hintText: "0",
