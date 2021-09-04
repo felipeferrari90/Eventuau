@@ -1,6 +1,7 @@
 import 'package:event_uau/components/paragraph_text.dart';
 import 'package:flutter/material.dart';
 import '../../../components/buttons.dart';
+
 import '../../../screens/contratante/home_screen.dart';
 
 class EmployeeApplicationPending extends StatelessWidget {

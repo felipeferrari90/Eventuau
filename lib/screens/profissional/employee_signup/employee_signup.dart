@@ -1,6 +1,9 @@
+
+import 'package:brasil_fields/brasil_fields.dart';
 import 'package:event_uau/components/editable_row.dart';
 import 'package:event_uau/components/paragraph_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import './employee_add_documents.dart';
 
@@ -53,6 +56,10 @@ class _EmployeeSignupScreenState extends State<EmployeeSignupScreen> {
     rebuildChipList();
   }
 
+  void _showShiftSelecionDialog() async {
+    await showDialog(context: context, child: ShiftSelection());
+  }
+
   void _handleSubmit() {
     //@TODO
     // 1. VALDATE IF USER HAS IMAGE AND HAS SELECTED AT LEAST 1 JOB
@@ -84,6 +91,7 @@ class _EmployeeSignupScreenState extends State<EmployeeSignupScreen> {
             children: [
               ParagraphText(
                   'Olá! Ficamos felizes em saber que você quer fazer parte do nosso time.'),
+              // IF HASNOPHOTO
               ParagraphText(
                   'Vimos que você ainda não tem foto, toque no avatar abaixo e escolha uma que mostre bem o seu rosto:'),
               Align(
@@ -132,14 +140,61 @@ class _EmployeeSignupScreenState extends State<EmployeeSignupScreen> {
                 child: Align(
                   alignment: Alignment.center,
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      EditableRow('Felipe Ferreira'),
-                      EditableRow('24 Anos'),
-                      EditableRow('Liberdade - SP')
+                      EditableRow(
+                          editableText:
+                              'Felipe Ferreira Marques da Silva Sauro'),
+                      EditableRow(
+                        editableText: '24',
+                        uneditableText: "Anos",
+                      ),
+                      EditableRow(editableText: 'Liberdade - SP'),
+                      OutlineButton(
+                        highlightedBorderColor: Theme.of(context).primaryColor,
+                        splashColor:
+                            Theme.of(context).primaryColor.withOpacity(0.2),
+                        borderSide: BorderSide(
+                          color: Theme.of(context).primaryColor,
+                        ),
+                        onPressed: _showShiftSelecionDialog,
+                        child: Text('Escala de Trabalho',
+                            style: TextStyle(
+                              color: Theme.of(context).primaryColor,
+                            )),
+                      )
                     ],
                   ),
                 ),
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Valor da Hora Trabalhada:',
+                    style: Theme.of(context)
+                        .textTheme
+                        .headline1
+                        .copyWith(fontSize: 16),
+                  ),
+                  TextFormField(
+                    keyboardType: TextInputType.number,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                      RealInputFormatter(centavos: true)
+                    ],
+                    decoration: InputDecoration(
+                        prefixStyle: TextStyle(color: Colors.black),
+                        prefixText: 'R\$ ',
+                        isDense: true,
+                        hintText:
+                            'Quanto você quer cobrar por hora? Ex: R\$20,00',
+                        floatingLabelBehavior: FloatingLabelBehavior.never),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 16,
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -157,8 +212,7 @@ class _EmployeeSignupScreenState extends State<EmployeeSignupScreen> {
                     style: TextStyle(fontSize: 16),
                     decoration: InputDecoration(
                         isDense: true,
-                        labelText: 'Filtrar especialidades...',
-                        contentPadding: EdgeInsets.zero,
+                        hintText: 'Filtrar especialidades...',
                         floatingLabelBehavior: FloatingLabelBehavior.never),
                   ),
                   Wrap(
