@@ -39,7 +39,7 @@ class EventUau extends StatelessWidget {
           ),
           dividerColor: primaryColor,
           primaryColor: primaryColor,
-          accentColor: secundaryColor,
+          secondaryHeaderColor: secundaryColor,
           visualDensity: VisualDensity.adaptivePlatformDensity,
           iconTheme: IconThemeData(size: 48),
           dividerTheme: DividerThemeData(

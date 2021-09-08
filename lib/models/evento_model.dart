@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:event_uau/models/contratante_model.dart';
+import 'package:event_uau/models/contrato_model.dart';
 import 'package:event_uau/models/funcionario_model.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 
@@ -17,14 +18,17 @@ class EventoModel {
   Duration tempoDuracaoMinimoPreDeterminado;
   Duration tempoDuracaoMaximoPreDeterminado;
   double valorEvento;
-  double valorEventoComHoraExcedente;
   String observacoes;
   StatusContratacaoEvento statusContratacaoEvento;
   bool estaVisivel;
-  List<FuncionarioModel> funcionariosContratados = [];
-  List<FuncionarioModel> funcionariosEmListaDeEspera = [];
-  List<FuncionarioModel> funcionariosQueCurtiram = [];
-
+  bool estaPago;
+  int numeroMaximoDeGarcons = 0;
+  int numeroMaximoDeAnimadores = 0;
+  int numeroMaximoDeBuffets = 0;
+  int numeroMaximoDeChurrasqueiros = 0;
+  List<ContratoModel> funcionariosContratados = List.empty();
+  List<FuncionarioModel> funcionariosEmListaDeEspera = List.empty();
+ 
   EventoModel({
     this.id,
     this.numeroEvento,
@@ -38,13 +42,16 @@ class EventoModel {
     this.tempoDuracaoMinimoPreDeterminado,
     this.tempoDuracaoMaximoPreDeterminado,
     this.valorEvento,
-    this.valorEventoComHoraExcedente,
     this.observacoes,
     this.statusContratacaoEvento,
     this.estaVisivel,
-    this.funcionariosContratados,
-    this.funcionariosEmListaDeEspera,
-    this.funcionariosQueCurtiram,
+    this.estaPago,
+    this.numeroMaximoDeGarcons,
+    this.numeroMaximoDeAnimadores,
+    this.numeroMaximoDeBuffets,
+    this.numeroMaximoDeChurrasqueiros,
+    funcionariosContratados, 
+    funcionariosEmListaDeEspera,
   });
 
   factory EventoModel.fromMap(Map<String, dynamic> json) => EventoModel(
@@ -59,13 +66,17 @@ class EventoModel {
       dataEHoraCriacaoEvento: json["dataCriacaoEvento"],
       dataEHorarioInicio: json["inicio"],
       valorEvento: json["valorTotal"],
-      valorEventoComHoraExcedente: json["valorEventoComHoraExcedente"],
       statusContratacaoEvento: EnumToString.fromString(
           StatusContratacaoEvento.values, json["statusContratacaoEvento"]),
       estaVisivel: json["estaVisivel"],
+      estaPago: json["estaPago"],
+      numeroMaximoDeGarcons: json["numeroMaximoDeGarcons"],
+      numeroMaximoDeAnimadores: json["numeroMaximoDeAnimadores"],
+      numeroMaximoDeBuffets: json["numeroMaximoDeBuffets"],
+      numeroMaximoDeChurrasqueiros: json["numeroMaximoDeChurrasqueiros"],
       funcionariosContratados: json["funcionariosContratados"],
       funcionariosEmListaDeEspera: json["funcionariosEmListaDeEspera"],
-      funcionariosQueCurtiram: json["funcionariosQueCurtiram"]);
+   );
 
   Map<String, dynamic> toMap() => {
         "id": this.id,
@@ -87,18 +98,24 @@ class EventoModel {
             this.tempoDuracaoMaximoPreDeterminado,
         "valorTotal": this.valorEvento,
         "estaVisivel": this.estaVisivel,
-        "valorEventoComHoraExcedente": this.valorEventoComHoraExcedente,
         "observacoes": this.observacoes,
         "funcionariosContratados": this.funcionariosContratados,
         "funcionariosEmListaDeEspera": this.funcionariosEmListaDeEspera,
-        "funcionariosQueCurtiram": this
-            .funcionariosQueCurtiram, //equivalente a uma lista de reserva de funcionarios (que nao foram contratados)
       };
 
   factory EventoModel.fromJson(String str) =>
       EventoModel.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
+
+  double pegarValorTotalEvento(){
+    double aux = 0;
+    for (var contrato in this.funcionariosContratados) {
+       aux += contrato.valorTotal;
+    }
+    return aux;
+  }
+
 }
 
 enum StatusEvento {

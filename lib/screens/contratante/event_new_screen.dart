@@ -1,6 +1,5 @@
 import 'package:event_uau/components/app_bar_eventual.dart';
 import 'package:event_uau/components/buttons.dart';
-import 'package:event_uau/components/input_form_eventual.dart';
 import 'package:brasil_fields/brasil_fields.dart';
 import 'package:event_uau/models/contratante_model.dart';
 import 'package:event_uau/models/evento_model.dart';
@@ -20,15 +19,15 @@ class EventNewScreen extends StatefulWidget {
 class _EventNewScreenState extends State<EventNewScreen> {
   int _valueDropdownStatusEvent = 1;
   bool _visivelPraFuncionarios = true;
-  bool _contratacaoEmergencia;
 
   final GlobalKey<FormState> _formKeyNewEvent = new GlobalKey<FormState>();
 
   EventoModel eventoModel = new EventoModel();
+  ContratanteModel contratanteModel = new ContratanteModel();
 
   void _onSubmit() {
     if (!_formKeyNewEvent.currentState.validate()) {
-      Scaffold.of(context).showSnackBar(SnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(
               "erro ao criar evento, verifique se os dados estão validos")));
     }
@@ -97,7 +96,7 @@ class _EventNewScreenState extends State<EventNewScreen> {
                 },
                 onSaved: (value) {
                   eventoModel.dataEHorarioInicio =
-                      DateFormat.yMd("pt_BR").parse(value as String);
+                      DateFormat.yMd("pt_BR").parse(value);
                 },
               ),
               TextFormField(
@@ -113,9 +112,10 @@ class _EventNewScreenState extends State<EventNewScreen> {
                       .hasMatch(value.toString())) {
                     return "digite uma Hora valida";
                   }
+                  return null;
                 },
                 onSaved: (value) {
-                  var _ponteiros = (value as String).split(":");
+                  var _ponteiros = (value).split(":");
                   eventoModel.dataEHorarioInicio.add(Duration(
                       hours: int.parse(_ponteiros[0]),
                       minutes: int.parse(_ponteiros[1])));
@@ -300,9 +300,10 @@ class _EventNewScreenState extends State<EventNewScreen> {
                   keyboardType: TextInputType.multiline,
                   maxLines: 7,
                   validator: (value) {
-                    if (value.toString().length > 150) {
-                      return "observação do event0 deve ter menos de 250 caracteres";
+                    if (value.length > 150) {
+                      return "observação do evento deve ter menos de 250 caracteres";
                     }
+                    return null;
                   },
                   onSaved: (value) {
                     eventoModel.observacoes = value;
@@ -325,17 +326,6 @@ class _EventNewScreenState extends State<EventNewScreen> {
                 onChanged: (bool value) {
                   setState(() {
                     _visivelPraFuncionarios = value;
-                  });
-                },
-              ),
-              SwitchListTile(
-                title: Text("Contratacao de emergencia"),
-                value: _contratacaoEmergencia,
-                activeColor: primaryColor,
-                inactiveTrackColor: colorBg,
-                onChanged: (bool value) {
-                  setState(() {
-                    _contratacaoEmergencia = value;
                   });
                 },
               ),
@@ -366,17 +356,18 @@ class _EventNewScreenState extends State<EventNewScreen> {
               SizedBox(height: 24),
               Align(
                 alignment: Alignment.center,
-                child: RaisedButton.icon(
+                child: ElevatedButton.icon(
                   onPressed: () {
                     Navigator.pushNamed(context, "/employees");
-                  },
-                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  }, 
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15)),
+                      primary: primaryColor,
+                      padding: EdgeInsets.all(8)
+                  ),
                   icon: Icon(Icons.search, size: 16),
                   label: Text("IR PRA TELA DE ESCOLHAS"),
-                  color: primaryColor,
-                  textColor: colorBg,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15)),
                 ),
               ),
               SizedBox(
@@ -427,7 +418,7 @@ class _EventNewScreenState extends State<EventNewScreen> {
                               fontSize: 16,
                               color: Colors.black,
                               fontWeight: FontWeight.w700)),
-                      Text("R\$ 420,00",
+                      Text("R\$ ${contratanteModel.valorEmCaixaDisponivel?? 'usuario não esta logado'}",
                           style: TextStyle(
                               fontSize: 24,
                               color: Colors.black,
@@ -457,6 +448,13 @@ class _EventNewScreenState extends State<EventNewScreen> {
       trailing: SizedBox(
         width: 50,
         child: TextFormField(
+          validator:(value) {
+            int numero = int.parse(value);
+            if(numero >= 0){
+                return null;
+            }
+            return "escolha um numero maior que 0";
+          },
           keyboardType: TextInputType.number,
           decoration: InputDecoration(
             hintText: "0",
