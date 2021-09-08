@@ -97,21 +97,21 @@ class UserDetails extends StatelessWidget {
           SizedBox(
             height: 4,
           ),
-          Row(
-            children: [
-              Icon(
-                Icons.watch_later,
-                color: primaryColor,
-                size: 26,
-              ),
-              Text(
-                'Jornada de Trabaho: Seg a Sáb - 8h as 18h',
-              )
-            ],
-          ),
-          SizedBox(
-            height: 4,
-          ),
+          // Row(
+          //   children: [
+          //     Icon(
+          //       Icons.watch_later,
+          //       color: primaryColor,
+          //       size: 26,
+          //     ),
+          //     Text(
+          //       'Jornada de Trabaho: Seg a Sáb - 8h as 18h',
+          //     )
+          //   ],
+          // ),
+          // SizedBox(
+          //   height: 4,
+          // ),
           Chip(
             shape: StadiumBorder(side: BorderSide(color: primaryColor)),
             backgroundColor: Theme.of(context).scaffoldBackgroundColor,

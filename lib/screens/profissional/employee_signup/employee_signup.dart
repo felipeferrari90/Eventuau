@@ -151,19 +151,19 @@ class _EmployeeSignupScreenState extends State<EmployeeSignupScreen> {
                         uneditableText: "Anos",
                       ),
                       EditableRow(editableText: 'Liberdade - SP'),
-                      OutlineButton(
-                        highlightedBorderColor: Theme.of(context).primaryColor,
-                        splashColor:
-                            Theme.of(context).primaryColor.withOpacity(0.2),
-                        borderSide: BorderSide(
-                          color: Theme.of(context).primaryColor,
-                        ),
-                        onPressed: _showShiftSelecionDialog,
-                        child: Text('Escala de Trabalho',
-                            style: TextStyle(
-                              color: Theme.of(context).primaryColor,
-                            )),
-                      )
+                      // OutlineButton(
+                      //   highlightedBorderColor: Theme.of(context).primaryColor,
+                      //   splashColor:
+                      //       Theme.of(context).primaryColor.withOpacity(0.2),
+                      //   borderSide: BorderSide(
+                      //     color: Theme.of(context).primaryColor,
+                      //   ),
+                      //   onPressed: _showShiftSelecionDialog,
+                      //   child: Text('Escala de Trabalho',
+                      //       style: TextStyle(
+                      //         color: Theme.of(context).primaryColor,
+                      //       )),
+                      // )
                     ],
                   ),
                 ),

@@ -13,6 +13,8 @@ import '../history_chat_screen.dart';
 class HomeScreenEmployee extends StatefulWidget {
   const HomeScreenEmployee({Key key}) : super(key: key);
 
+  static const routeName = "/employee/home";
+
   @override
   _HomeScreenEmployeeState createState() => _HomeScreenEmployeeState();
 }

@@ -1,4 +1,3 @@
-import 'package:event_uau/screens/profissional/employee_profile_screen.dart';
 import 'package:flutter/material.dart';
 import './screens/contract_screen.dart';
 import './screens/profissional/employee_myevents_screen.dart';
@@ -17,6 +16,7 @@ import './screens/contratante/signup_screen.dart';
 import './screens/profissional/employee_signup/employee_add_documents.dart';
 import './screens/profissional/employee_signup/employee_application_success.dart';
 import './screens/profissional/employee_signup/employee_application_pending.dart';
+import './screens/profissional/employee_profile_screen.dart';
 import './utils/colors.dart';
 
 void main() {
@@ -97,7 +97,7 @@ class EventUau extends StatelessWidget {
         EmployeeApplicationSuccess.routeName: (context) =>
             EmployeeApplicationSuccess(),
         EmployeeProfileScreen.routeName: (context) => EmployeeProfileScreen(),
-        "/employee/home": (context) => HomeScreenEmployee(),
+        HomeScreenEmployee.routeName: (context) => HomeScreenEmployee(),
         "/employee/id": (context) => ContractScreen(),
         "/employee/events/choice": (context) => EmployeeEventChoiceScreen(),
         "/employee/event/id": (context) => EmployeeEventScreenDescription(),
