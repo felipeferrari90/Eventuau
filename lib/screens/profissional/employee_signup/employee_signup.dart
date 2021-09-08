@@ -1,10 +1,11 @@
-
 import 'package:brasil_fields/brasil_fields.dart';
-import 'package:event_uau/components/editable_row.dart';
-import 'package:event_uau/components/paragraph_text.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../../../components/employee/signup/paragraph_text.dart';
+import '../../../components/employee/signup/editable_row.dart';
+import '../../../components/employee/signup/shift_selection.dart';
 import './employee_add_documents.dart';
 
 class EmployeeSignupScreen extends StatefulWidget {
