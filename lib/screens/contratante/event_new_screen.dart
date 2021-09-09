@@ -27,7 +27,7 @@ class _EventNewScreenState extends State<EventNewScreen> {
 
   void _onSubmit() {
     if (!_formKeyNewEvent.currentState.validate()) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      Scaffold.of(context).showSnackBar(SnackBar(
           content: Text(
               "erro ao criar evento, verifique se os dados estão validos")));
     }
@@ -359,13 +359,12 @@ class _EventNewScreenState extends State<EventNewScreen> {
                 child: ElevatedButton.icon(
                   onPressed: () {
                     Navigator.pushNamed(context, "/employees");
-                  }, 
+                  },
                   style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15)),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15)),
                       primary: primaryColor,
-                      padding: EdgeInsets.all(8)
-                  ),
+                      padding: EdgeInsets.all(8)),
                   icon: Icon(Icons.search, size: 16),
                   label: Text("IR PRA TELA DE ESCOLHAS"),
                 ),
@@ -418,7 +417,8 @@ class _EventNewScreenState extends State<EventNewScreen> {
                               fontSize: 16,
                               color: Colors.black,
                               fontWeight: FontWeight.w700)),
-                      Text("R\$ ${contratanteModel.valorEmCaixaDisponivel?? 'usuario não esta logado'}",
+                      Text(
+                          "R\$ ${contratanteModel.valorEmCaixaDisponivel ?? 'usuario não esta logado'}",
                           style: TextStyle(
                               fontSize: 24,
                               color: Colors.black,
@@ -448,10 +448,10 @@ class _EventNewScreenState extends State<EventNewScreen> {
       trailing: SizedBox(
         width: 50,
         child: TextFormField(
-          validator:(value) {
+          validator: (value) {
             int numero = int.parse(value);
-            if(numero >= 0){
-                return null;
+            if (numero >= 0) {
+              return null;
             }
             return "escolha um numero maior que 0";
           },

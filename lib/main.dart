@@ -55,6 +55,9 @@ class EventUau extends StatelessWidget {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15))),
           fontFamily: "Roboto",
+          primaryTextTheme: Theme.of(context).primaryTextTheme.copyWith(
+                headline6: TextStyle(fontSize: 18, color: primaryColor),
+              ),
           textTheme: TextTheme(
             headline1: TextStyle(
                 fontSize: 24, color: primaryColor, fontWeight: FontWeight.bold),
@@ -98,7 +101,7 @@ class EventUau extends StatelessWidget {
         EmployeeApplicationSuccess.routeName: (context) =>
             EmployeeApplicationSuccess(),
         EmployeeProfileScreen.routeName: (context) => EmployeeProfileScreen(),
-        HomeScreenEmployee.routeName: (context) => HomeScreenEmployee(),
+        EmployeeHomeScreen.routeName: (context) => EmployeeHomeScreen(),
         "/employee/id": (context) => ContractScreen(),
         "/employee/events/choice": (context) => EmployeeEventChoiceScreen(),
         "/employee/event/id": (context) => EmployeeEventScreenDescription(),

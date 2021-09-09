@@ -1,4 +1,5 @@
-import 'package:event_uau/screens/profissional/employee_profile_screen.dart';
+import './profissional/employee_home_screen.dart';
+import './profissional/employee_profile_screen.dart';
 import 'package:flutter/material.dart';
 
 import './profissional/employee_signup/employee_signup.dart';
@@ -51,7 +52,8 @@ class _InitScreenState extends State<InitScreen> {
                 top: 10,
                 left: 0,
                 child: PopupMenuButton(
-                  onSelected: (value) => Navigator.pushNamed(context, value as String),
+                  onSelected: (value) =>
+                      Navigator.pushReplacementNamed(context, value as String),
                   itemBuilder: (context) => [
                     PopupMenuItem(
                       child: Text('DEVELOPER MENU FOR QUICK SCREEN ROUTING'),
@@ -64,6 +66,10 @@ class _InitScreenState extends State<InitScreen> {
                     PopupMenuItem(
                       child: Text('Go to ${EmployeeProfileScreen.routeName}'),
                       value: EmployeeProfileScreen.routeName,
+                    ),
+                    PopupMenuItem(
+                      child: Text('Go to ${EmployeeHomeScreen.routeName}'),
+                      value: EmployeeHomeScreen.routeName,
                     )
                   ],
                 )),
