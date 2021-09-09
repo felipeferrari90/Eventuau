@@ -16,7 +16,7 @@ class EventUauAppBar extends StatelessWidget with PreferredSizeWidget {
       title: Text(
         title ?? "",
         style: TextStyle(
-            fontSize: 16.0,
+            fontSize: 18.0,
             color: Theme.of(context).primaryColor,
             fontWeight: FontWeight.bold),
       ),
@@ -48,9 +48,10 @@ class EventUauAppBar extends StatelessWidget with PreferredSizeWidget {
                     ))),
               )
             : Padding(
-              padding: EdgeInsets.all(16),
-              child: Text("fazer login", style: TextStyle(color: primaryColor)),
-            )
+                padding: EdgeInsets.all(16),
+                child:
+                    Text("fazer login", style: TextStyle(color: primaryColor)),
+              )
       ],
       iconTheme: IconThemeData(color: primaryColor, size: 16),
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,

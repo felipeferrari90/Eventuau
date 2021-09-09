@@ -1,5 +1,4 @@
-
-import 'package:event_uau/components/paragraph_text.dart';
+import '../../../components/employee/signup/paragraph_text.dart';
 
 import 'package:flutter/material.dart';
 
