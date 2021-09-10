@@ -15,11 +15,13 @@ class EventCard extends StatelessWidget {
           EventCardHeader(),
           EventCardBody(),
           Card(
-            color: Colors.black,
             child: ListTile(
-              // dense: true,
-              leading: CircleAvatar(
-                child: Text('FF'),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(50))),
+              tileColor: Color.fromRGBO(0, 0, 0, 0.05),
+              leading: Icon(
+                Icons.account_circle,
+                color: Theme.of(context).primaryColor,
               ),
               title: Text('Pedro Lemes, 24'),
               subtitle: Row(
@@ -31,7 +33,10 @@ class EventCard extends StatelessWidget {
                   SizedBox(
                     width: 8,
                   ),
-                  Text('4.89/5')
+                  Text(
+                    '4.89/5',
+                    style: TextStyle(color: Theme.of(context).primaryColor),
+                  )
                 ],
               ),
             ),
