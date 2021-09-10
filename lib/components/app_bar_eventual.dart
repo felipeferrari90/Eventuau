@@ -15,10 +15,6 @@ class EventUauAppBar extends StatelessWidget with PreferredSizeWidget {
     return AppBar(
       title: Text(
         title ?? "",
-        style: TextStyle(
-            fontSize: 18.0,
-            color: Theme.of(context).primaryColor,
-            fontWeight: FontWeight.bold),
       ),
       toolbarHeight: 70,
       elevation: 0,

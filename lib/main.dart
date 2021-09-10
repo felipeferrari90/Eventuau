@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
+import 'package:flutter/widgets.dart';
 import './screens/contract_screen.dart';
-import './screens/profissional/employee_myevents_screen.dart';
-import './screens/profissional/employee_events_choice_screen.dart';
+
+import './screens/event_detail_screen.dart';
 import './screens/profissional/employee_home_screen.dart';
 import './screens/contratante/employee_management_screen.dart';
 import './screens/contratante/employee_screen_description.dart';
 import 'screens/profissional/employee_signup/employee_signup.dart';
 import './screens/contratante/employees_screen.dart';
 import './screens/contratante/event_new_screen.dart';
-import './screens/profissional/employee_event_screen_description.dart';
+
 import './screens/contratante/event_screen_description.dart';
 import './screens/contratante/home_screen.dart';
 import './screens/init_screen.dart';
@@ -32,6 +34,8 @@ class EventUau extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
           appBarTheme: AppBarTheme(
+            titleTextStyle: TextStyle(
+                color: primaryColor, fontSize: 18, fontWeight: FontWeight.bold),
             shadowColor: Colors.transparent,
             elevation: 0,
             color: Theme.of(context).scaffoldBackgroundColor,
@@ -56,7 +60,10 @@ class EventUau extends StatelessWidget {
                   borderRadius: BorderRadius.circular(15))),
           fontFamily: "Roboto",
           primaryTextTheme: Theme.of(context).primaryTextTheme.copyWith(
-                headline6: TextStyle(fontSize: 18, color: primaryColor),
+                headline6: TextStyle(
+                    fontSize: 18,
+                    color: primaryColor,
+                    fontWeight: FontWeight.bold),
               ),
           textTheme: TextTheme(
             headline1: TextStyle(
@@ -74,6 +81,7 @@ class EventUau extends StatelessWidget {
             button: TextStyle(fontSize: 16, color: Colors.white),
           ),
           inputDecorationTheme: InputDecorationTheme(
+            isDense: true,
             alignLabelWithHint: false,
             labelStyle: TextStyle(
                 color: primaryColor, fontWeight: FontWeight.w300, fontSize: 18),
@@ -102,9 +110,8 @@ class EventUau extends StatelessWidget {
             EmployeeApplicationSuccess(),
         EmployeeProfileScreen.routeName: (context) => EmployeeProfileScreen(),
         EmployeeHomeScreen.routeName: (context) => EmployeeHomeScreen(),
+        EventDetailScreen.routeName: (context) => EventDetailScreen(),
         "/employee/id": (context) => ContractScreen(),
-        "/employee/events/choice": (context) => EmployeeEventChoiceScreen(),
-        "/employee/event/id": (context) => EmployeeEventScreenDescription(),
       },
     );
   }
