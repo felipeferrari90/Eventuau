@@ -10,7 +10,34 @@ class EventCard extends StatelessWidget {
     return Card(
       color: Colors.white,
       elevation: 2,
-      child: Column(children: [EventCardHeader(), EventCardBody()]),
+      child: Column(
+        children: [
+          EventCardHeader(),
+          EventCardBody(),
+          Card(
+            color: Colors.black,
+            child: ListTile(
+              // dense: true,
+              leading: CircleAvatar(
+                child: Text('FF'),
+              ),
+              title: Text('Pedro Lemes, 24'),
+              subtitle: Row(
+                children: [
+                  Text(
+                    'Garçom',
+                    style: TextStyle(color: Colors.black),
+                  ),
+                  SizedBox(
+                    width: 8,
+                  ),
+                  Text('4.89/5')
+                ],
+              ),
+            ),
+          )
+        ],
+      ),
     );
   }
 }
@@ -60,7 +87,7 @@ class EventCardBody extends StatelessWidget {
               )
             ],
           ),
-        )
+        ),
       ],
     );
   }

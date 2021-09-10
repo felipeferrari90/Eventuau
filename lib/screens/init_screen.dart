@@ -84,6 +84,7 @@ class _InitScreenState extends State<InitScreen> {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.baseline,
                   mainAxisAlignment: MainAxisAlignment.center,
+                  textBaseline: TextBaseline.alphabetic,
                   children: [
                     Text("Event",
                         style: Theme.of(context).textTheme.headline1.copyWith(
