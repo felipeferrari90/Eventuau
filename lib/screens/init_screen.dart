@@ -1,8 +1,14 @@
+import 'dart:async';
+import 'dart:io';
+
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
 import './profissional/employee_home_screen.dart';
 import './profissional/employee_profile_screen.dart';
-import 'package:flutter/material.dart';
-
 import './profissional/employee_signup/employee_signup.dart';
+
+import '../providers/auth.dart';
 
 import '../utils/colors.dart';
 import '../components/buttons.dart';
@@ -17,17 +23,35 @@ class InitScreen extends StatefulWidget {
 class _InitScreenState extends State<InitScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey();
   final _passwordFocusNode = FocusNode();
+
   Map<String, String> _authData = {
     'email': '',
     'password': '',
   };
 
-  void _onSubmit() {
+  var _hasError = false;
+  Timer _errorMessageTimer;
+
+  Future<void> _onSubmit() async {
     if (!_formKey.currentState.validate()) {
       return;
     }
 
     _formKey.currentState.save();
+
+    try {
+      throw HttpException('error from server');
+
+      Provider.of<Auth>(context, listen: false)
+          .login(_authData['email'], _authData['password']);
+    } on HttpException catch (e) {
+      setState(() => _hasError = true);
+
+      if (_errorMessageTimer.isActive == true) _errorMessageTimer.cancel();
+
+      _errorMessageTimer = new Timer(
+          Duration(seconds: 5), () => setState(() => _hasError = false));
+    }
   }
 
   @override
@@ -101,6 +125,35 @@ class _InitScreenState extends State<InitScreen> {
                 ),
               ),
               Column(children: <Widget>[
+                AnimatedContainer(
+                  duration: Duration(milliseconds: 300),
+                  curve: Curves.easeInOut,
+                  height: _hasError ? 40 : 0,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    color: Colors.redAccent,
+                  ),
+                  padding: const EdgeInsets.all(8),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(
+                        Icons.warning,
+                        color: Colors.white,
+                        size: 20,
+                      ),
+                      const SizedBox(
+                        width: 4,
+                      ),
+                      const Text(
+                        'An error has ocurred, please try again.',
+                        style: TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.w600),
+                      )
+                    ],
+                  ),
+                ),
                 Padding(
                   padding: EdgeInsets.only(left: 8, bottom: 1),
                   child: TextFormField(
