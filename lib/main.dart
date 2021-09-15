@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:event_uau/providers/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
@@ -24,6 +26,8 @@ import './screens/profissional/employee_profile_screen.dart';
 import './utils/colors.dart';
 
 void main() {
+  HttpOverrides.global = new MyHttpOverrides();
+
   runApp(EventUau());
 }
 
@@ -37,6 +41,9 @@ class EventUau extends StatelessWidget {
           title: 'EventUAU',
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
+            progressIndicatorTheme: ProgressIndicatorThemeData(
+              color: secundaryColor,
+            ),
             appBarTheme: AppBarTheme(
               titleTextStyle: TextStyle(
                   color: primaryColor,
@@ -134,5 +141,15 @@ class EventUau extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+// DEVELOPMENT CERTIFICATE WORKAROUND DO NOT COMMIT THIS TO PRODUCTION
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
   }
 }

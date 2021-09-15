@@ -29,7 +29,8 @@ class _InitScreenState extends State<InitScreen> {
     'password': '',
   };
 
-  var _hasError = false;
+  bool _hasError = false;
+  bool _isLoading = false;
   Timer _errorMessageTimer;
 
   Future<void> _onSubmit() async {
@@ -40,18 +41,23 @@ class _InitScreenState extends State<InitScreen> {
     _formKey.currentState.save();
 
     try {
-      throw HttpException('error from server');
+      setState(() {
+        _isLoading = true;
+      });
 
-      Provider.of<Auth>(context, listen: false)
+      await Provider.of<Auth>(context, listen: false)
           .login(_authData['email'], _authData['password']);
-    } on HttpException catch (e) {
+    } catch (e) {
       setState(() => _hasError = true);
 
-      if (_errorMessageTimer.isActive == true) _errorMessageTimer.cancel();
+      if (_errorMessageTimer?.isActive == true) _errorMessageTimer.cancel();
 
       _errorMessageTimer = new Timer(
           Duration(seconds: 5), () => setState(() => _hasError = false));
     }
+    setState(() {
+      _isLoading = false;
+    });
   }
 
   @override
@@ -97,118 +103,138 @@ class _InitScreenState extends State<InitScreen> {
                     )
                   ],
                 )),
-            Column(mainAxisAlignment: MainAxisAlignment.center, children: <
-                Widget>[
-              Padding(
-                padding: EdgeInsets.only(left: 40),
-                child: Image.asset("assets/images/logo-roxo.png", height: 200),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 16),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.baseline,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  textBaseline: TextBaseline.alphabetic,
-                  children: [
-                    Text("Event",
-                        style: Theme.of(context).textTheme.headline1.copyWith(
-                            color: Theme.of(context).primaryColor,
-                            fontSize: 36),
-                        textAlign: TextAlign.center),
-                    Text("uau",
-                        style: Theme.of(context)
-                            .textTheme
-                            .headline3
-                            .copyWith(color: accentColor, fontSize: 52),
-                        textAlign: TextAlign.center),
-                  ],
-                ),
-              ),
-              Column(children: <Widget>[
-                AnimatedContainer(
-                  duration: Duration(milliseconds: 300),
-                  curve: Curves.easeInOut,
-                  height: _hasError ? 40 : 0,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    color: Colors.redAccent,
+            Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.only(left: 40),
+                    child:
+                        Image.asset("assets/images/logo-roxo.png", height: 200),
                   ),
-                  padding: const EdgeInsets.all(8),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(
-                        Icons.warning,
-                        color: Colors.white,
-                        size: 20,
-                      ),
-                      const SizedBox(
-                        width: 4,
-                      ),
-                      const Text(
-                        'An error has ocurred, please try again.',
-                        style: TextStyle(
-                            color: Colors.white, fontWeight: FontWeight.w600),
-                      )
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(left: 8, bottom: 1),
-                  child: TextFormField(
-                    textInputAction: TextInputAction.next,
-                    onFieldSubmitted: (_) => _passwordFocusNode.requestFocus(),
-                    autocorrect: false,
-                    keyboardType: TextInputType.emailAddress,
-                    validator: (value) {
-                      if (value.isEmpty || !value.contains('@')) {
-                        return 'Email Inválido';
-                      }
-                      return null;
-                    },
-                    onSaved: (value) {
-                      _authData['email'] = value;
-                    },
-                    decoration: InputDecoration(
-                      labelText: "E-mail",
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: 16),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.baseline,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      textBaseline: TextBaseline.alphabetic,
+                      children: [
+                        Text("Event",
+                            style: Theme.of(context)
+                                .textTheme
+                                .headline1
+                                .copyWith(
+                                    color: Theme.of(context).primaryColor,
+                                    fontSize: 36),
+                            textAlign: TextAlign.center),
+                        Text("uau",
+                            style: Theme.of(context)
+                                .textTheme
+                                .headline3
+                                .copyWith(color: accentColor, fontSize: 52),
+                            textAlign: TextAlign.center),
+                      ],
                     ),
                   ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(left: 8, bottom: 1),
-                  child: TextFormField(
-                    focusNode: _passwordFocusNode,
-                    onFieldSubmitted: (_) => _onSubmit(),
-                    autocorrect: false,
-                    validator: (value) {
-                      if (value.isEmpty) {
-                        return 'Campo Obrigatório';
-                      }
-                      return null;
-                    },
-                    onSaved: (value) {
-                      _authData['password'] = value;
-                    },
-                    obscureText: true,
-                    keyboardType: TextInputType.visiblePassword,
-                    decoration: InputDecoration(
-                      labelText: "Senha",
+                  Column(children: <Widget>[
+                    AnimatedContainer(
+                      duration: Duration(milliseconds: 300),
+                      curve: Curves.easeInOut,
+                      height: _hasError ? 40 : 0,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        color: Colors.redAccent,
+                      ),
+                      padding: const EdgeInsets.all(8),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(
+                            Icons.warning,
+                            color: Colors.white,
+                            size: 20,
+                          ),
+                          const SizedBox(
+                            width: 4,
+                          ),
+                          const Text(
+                            'Ocorreu um erro, por favor tente novamente.',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600),
+                          )
+                        ],
+                      ),
                     ),
+                    Padding(
+                      padding: EdgeInsets.only(left: 8, bottom: 1),
+                      child: TextFormField(
+                        textInputAction: TextInputAction.next,
+                        onFieldSubmitted: (_) =>
+                            _passwordFocusNode.requestFocus(),
+                        autocorrect: false,
+                        keyboardType: TextInputType.emailAddress,
+                        validator: (value) {
+                          if (value.isEmpty || !value.contains('@')) {
+                            return 'Email Inválido';
+                          }
+                          return null;
+                        },
+                        onSaved: (value) {
+                          _authData['email'] = value;
+                        },
+                        decoration: InputDecoration(
+                          labelText: "E-mail",
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(left: 8, bottom: 1),
+                      child: TextFormField(
+                        focusNode: _passwordFocusNode,
+                        onFieldSubmitted: (_) => _onSubmit(),
+                        autocorrect: false,
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return 'Campo Obrigatório';
+                          }
+                          return null;
+                        },
+                        onSaved: (value) {
+                          _authData['password'] = value;
+                        },
+                        obscureText: true,
+                        keyboardType: TextInputType.visiblePassword,
+                        decoration: InputDecoration(
+                          labelText: "Senha",
+                        ),
+                      ),
+                    ),
+                  ]),
+                  SizedBox(
+                    height: 20,
                   ),
-                ),
-              ]),
-              setButton(
-                text: "Entrar",
-                function: _onSubmit,
-              ),
-              setButton(
-                  text: "Criar conta",
-                  outline: true,
-                  function: () {
-                    Navigator.pushNamed(context, "/signup");
-                  }),
-            ]),
+                  RaisedButton(
+                    padding: EdgeInsets.symmetric(vertical: 16),
+                    child: _isLoading
+                        ? Container(
+                            height: 20,
+                            width: 20,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 3,
+                            ),
+                          )
+                        : Text("Entrar"),
+                    onPressed: _onSubmit,
+                  ),
+                  setButton(
+                      text: "Criar conta",
+                      outline: true,
+                      function: () {
+                        Navigator.pushNamed(context, "/signup");
+                      }),
+                ]),
           ]),
         ),
       ),

@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:async';
 
-const baseUrl = 'https://localhost:6001';
+const baseUrl = 'https://10.0.2.2:6001';
 
 class Auth with ChangeNotifier {
   String _token;
@@ -16,29 +16,26 @@ class Auth with ChangeNotifier {
   }
 
   Future<void> login(String email, String senha) async {
-    // try {
-    //   final res = await http.post(
-    //     '$baseUrl/api/usuario/$email/login',
-    //     body: json.encode({'senha': senha}),
-    //   );
+    try {
+      final res = await http.post(
+        '$baseUrl/api/usuario/$email/login',
+        headers: {
+          "content-type": "application/json",
+        },
+        body: json.encode({'senha': senha}),
+      );
 
-    //   final responseData = json.decode(res.body);
+      final responseData = res.toString();
 
-    //   if (res.statusCode != 200) {
-    //     throw HttpException(responseData);
-    //   }
+      if (res.statusCode != 200) {
+        throw HttpException(responseData);
+      }
 
-    //   _token = 'ohwow'; // PASS THE TOKEN HERE XDDDDD
+      _token = responseData; // PASS THE TOKEN HERE XDDDDD
 
-    //   notifyListeners();
-    // } catch (e) {
-    //   throw e;
-    // }
-
-    await Future.delayed(Duration(seconds: 5), () {
-      _token = "HAHAHAHA";
-    });
-
-    notifyListeners();
+      notifyListeners();
+    } catch (e) {
+      throw e;
+    }
   }
 }
