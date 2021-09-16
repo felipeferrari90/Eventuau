@@ -1,11 +1,10 @@
-
 import 'package:brasil_fields/brasil_fields.dart';
-import 'package:event_uau/components/editable_row.dart';
-import 'package:event_uau/components/employee/signup/shift_selection.dart';
-import 'package:event_uau/components/paragraph_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../../../components/employee/signup/paragraph_text.dart';
+import '../../../components/employee/signup/editable_row.dart';
+import '../../../components/employee/signup/shift_selection.dart';
 import './employee_add_documents.dart';
 
 class EmployeeSignupScreen extends StatefulWidget {
@@ -58,9 +57,13 @@ class _EmployeeSignupScreenState extends State<EmployeeSignupScreen> {
   }
 
   void _showShiftSelecionDialog() async {
+<<<<<<< HEAD
     await showDialog(context: context, builder: (context){
       return ShiftSelection();
     });
+=======
+    await showDialog(context: context, builder: (context) => ShiftSelection());
+>>>>>>> 3e3a9e5ec4493608552af45a3ced3d38ee2abf09
   }
 
   void _handleSubmit() {
@@ -146,25 +149,26 @@ class _EmployeeSignupScreenState extends State<EmployeeSignupScreen> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       EditableRow(
-                          editableText:'Felipe Ferreira Marques da Silva Sauro'),
+                          editableText:
+                              'Felipe Ferreira Marques da Silva Sauro'),
                       EditableRow(
                         editableText: '24',
                         uneditableText: "Anos",
                       ),
                       EditableRow(editableText: 'Liberdade - SP'),
-                      OutlineButton(
-                        highlightedBorderColor: Theme.of(context).primaryColor,
-                        splashColor:
-                            Theme.of(context).primaryColor.withOpacity(0.2),
-                        borderSide: BorderSide(
-                          color: Theme.of(context).primaryColor,
-                        ),
-                        onPressed: _showShiftSelecionDialog,
-                        child: Text('Escala de Trabalho',
-                            style: TextStyle(
-                              color: Theme.of(context).primaryColor,
-                            )),
-                      )
+                      // OutlineButton(
+                      //   highlightedBorderColor: Theme.of(context).primaryColor,
+                      //   splashColor:
+                      //       Theme.of(context).primaryColor.withOpacity(0.2),
+                      //   borderSide: BorderSide(
+                      //     color: Theme.of(context).primaryColor,
+                      //   ),
+                      //   onPressed: _showShiftSelecionDialog,
+                      //   child: Text('Escala de Trabalho',
+                      //       style: TextStyle(
+                      //         color: Theme.of(context).primaryColor,
+                      //       )),
+                      // )
                     ],
                   ),
                 ),

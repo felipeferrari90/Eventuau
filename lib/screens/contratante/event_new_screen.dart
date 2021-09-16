@@ -29,7 +29,7 @@ class _EventNewScreenState extends State<EventNewScreen> {
   void _onSubmit() {
     
     if (!_formKeyNewEvent.currentState.validate()) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      Scaffold.of(context).showSnackBar(SnackBar(
           content: Text(
               "erro ao criar evento, verifique se os dados estão validos"))); 
     }
@@ -443,7 +443,6 @@ class _EventNewScreenState extends State<EventNewScreen> {
                     ),
                   ),
                 ),
-                
                 Divider(),
                 Padding(
                   padding: EdgeInsets.fromLTRB(8, 8, 0, 2),
@@ -500,6 +499,7 @@ class _EventNewScreenState extends State<EventNewScreen> {
                     label: Text("GERENCIADOR DE FUNCIONARIOS"),
                   ),
                 ),
+<<<<<<< HEAD
                 Divider(),
                 SizedBox(height: 24),
                 Padding(
@@ -546,9 +546,36 @@ class _EventNewScreenState extends State<EventNewScreen> {
                 )      
               ],
             ),
-          )
+          ),
         ),
       ),
     );
   }
+
+  Widget _setFieldTypeEmployeeSettings({String text}) => ListTile(
+      leading: Text(
+        text ?? "",
+        style: TextStyle(fontSize: 16, height: 1.5),
+        textAlign: TextAlign.center,
+      ),
+      trailing: SizedBox(
+        width: 50,
+        child: TextFormField(
+          validator: (value) {
+            int numero = int.parse(value);
+            if (numero >= 0) {
+              return null;
+            }
+            return "escolha um numero maior que 0";
+          },
+          keyboardType: TextInputType.number,
+          decoration: InputDecoration(
+            hintText: "0",
+            isCollapsed: true,
+            alignLabelWithHint: true,
+            contentPadding: EdgeInsets.symmetric(vertical: 4),
+            border: OutlineInputBorder(),
+          ),
+        ),
+      ));
 }
