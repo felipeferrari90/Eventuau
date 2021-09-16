@@ -1,12 +1,13 @@
 import 'dart:io';
 
-import 'package:event_uau/providers/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
-import './screens/contract_screen.dart';
 
+import './screens/contract_screen.dart';
+import './providers/auth.dart';
+import './screens/contratante/signup_success.dart';
 import './screens/event_detail_screen.dart';
 import './screens/profissional/employee_home_screen.dart';
 import './screens/contratante/employee_management_screen.dart';
@@ -14,7 +15,6 @@ import './screens/contratante/employee_screen_description.dart';
 import 'screens/profissional/employee_signup/employee_signup.dart';
 import './screens/contratante/employees_screen.dart';
 import './screens/contratante/event_new_screen.dart';
-
 import './screens/contratante/event_screen_description.dart';
 import './screens/contratante/home_screen.dart';
 import './screens/init_screen.dart';
@@ -112,8 +112,9 @@ class EventUau extends StatelessWidget {
             // "/": (context) => InitScreen(),
 
             /*ROTAS DO FLUXO APP CONTRATANTE*/
-            "/signup": (context) => SignUpScreen(),
+            SignUpScreen.routeName: (context) => SignUpScreen(),
             HomeScreen.routeName: (context) => HomeScreen(),
+            SignupSuccess.routeName: (context) => SignupSuccess(),
             "/event/new": (context) => EventNewScreen(),
             "/event/id": (context) => EventScreenDescription(),
             '/employees': (context) => EmployeeChoiceScreen(),
@@ -136,7 +137,8 @@ class EventUau extends StatelessWidget {
             "/employee/id": (context) => ContractScreen(),
           },
           onUnknownRoute: (route) {
-            return MaterialPageRoute(builder: (ctx) => HomeScreen());
+            return MaterialPageRoute(
+                builder: (ctx) => auth.isAuth ? HomeScreen() : InitScreen());
           },
         ),
       ),

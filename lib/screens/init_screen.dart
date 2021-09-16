@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -12,6 +11,7 @@ import '../providers/auth.dart';
 
 import '../utils/colors.dart';
 import '../components/buttons.dart';
+import '../components/error_toast.dart';
 
 class InitScreen extends StatefulWidget {
   const InitScreen({Key key}) : super(key: key);
@@ -48,6 +48,7 @@ class _InitScreenState extends State<InitScreen> {
       await Provider.of<Auth>(context, listen: false)
           .login(_authData['email'], _authData['password']);
     } catch (e) {
+      print(e);
       setState(() => _hasError = true);
 
       if (_errorMessageTimer?.isActive == true) _errorMessageTimer.cancel();
@@ -137,35 +138,9 @@ class _InitScreenState extends State<InitScreen> {
                     ),
                   ),
                   Column(children: <Widget>[
-                    AnimatedContainer(
-                      duration: Duration(milliseconds: 300),
-                      curve: Curves.easeInOut,
-                      height: _hasError ? 40 : 0,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        color: Colors.redAccent,
-                      ),
-                      padding: const EdgeInsets.all(8),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Icon(
-                            Icons.warning,
-                            color: Colors.white,
-                            size: 20,
-                          ),
-                          const SizedBox(
-                            width: 4,
-                          ),
-                          const Text(
-                            'Ocorreu um erro, por favor tente novamente.',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w600),
-                          )
-                        ],
-                      ),
+                    ErrorToast(
+                      hasError: _hasError,
+                      text: 'Ocorreu um erro, por favor tente novamente.',
                     ),
                     Padding(
                       padding: EdgeInsets.only(left: 8, bottom: 1),

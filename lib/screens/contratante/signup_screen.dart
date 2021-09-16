@@ -1,14 +1,21 @@
 import 'package:brasil_fields/brasil_fields.dart';
-import 'package:event_uau/components/app_bar_eventual.dart';
-import 'package:event_uau/components/buttons.dart';
-import 'package:event_uau/components/input_form_eventual.dart';
-import 'package:event_uau/models/contratante_model.dart';
+import '../../components/app_bar_eventual.dart';
+import '../../components/buttons.dart';
+import '../../components/error_toast.dart';
+
+import './signup_success.dart';
+import 'package:event_uau/models/signup_model.dart';
+import 'package:event_uau/providers/auth.dart';
 import 'package:event_uau/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+import '../../utils/dateValidation.dart' as dateValidator;
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({Key key}) : super(key: key);
+
+  static const routeName = "/signup";
 
   @override
   _SignUpScreenState createState() => _SignUpScreenState();
@@ -25,6 +32,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final FocusNode _confirPasswordFocusNode = new FocusNode();
 
   bool contractChecked = false;
+  bool hasError = false;
 
   TextEditingController _passwordController = new TextEditingController();
 
@@ -48,14 +56,39 @@ class _SignUpScreenState extends State<SignUpScreen> {
     super.dispose();
   }
 
-  void _onSubmit() {
+  void _onSubmit() async {
     if (!_formKey.currentState.validate() || !contractChecked) {
+      if (!contractChecked)
+        setState(() {
+          hasError = true;
+        });
+
       return;
     }
 
+    setState(() {
+      hasError = false;
+    });
+
     _formKey.currentState.save();
 
-    print(_formValues);
+    var signupFields = SignupModel(
+      birthDate: _formValues['birthDate'],
+      cpf: _formValues['name'],
+      password: _formValues['password'],
+      email: _formValues['email'],
+      name: _formValues['name'],
+      phone: _formValues['phone'],
+    );
+
+    try {
+      await Provider.of<Auth>(context, listen: false).signup(signupFields);
+
+      Navigator.of(context).pushReplacementNamed(SignupSuccess.routeName);
+    } catch (e) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('Erro ao cadastrar usuário')));
+    }
   }
 
   @override
@@ -141,6 +174,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       validator: (value) {
                         if (value.isEmpty) {
                           return "Campo Obrigatório";
+                        }
+
+                        if (!dateValidator.isDateTypeAndBeforeNow(value)) {
+                          return "Data Inválida";
                         }
 
                         return null;
@@ -232,6 +269,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     SizedBox(
                       height: 15,
                     ),
+                    ErrorToast(
+                      hasError: hasError,
+                      text: 'Voce deve aceitar os termos e condições',
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
                     Row(
                       children: [
                         Checkbox(
@@ -241,6 +285,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             onChanged: (bool value) {
                               setState(() {
                                 contractChecked = value;
+                                if (value == true) hasError = false;
                               });
                             }),
                         Text(
@@ -249,7 +294,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               color: primaryColor,
                               fontWeight: FontWeight.w300,
                               fontSize: 16),
-                        )
+                        ),
                       ],
                     ),
                   ],
