@@ -14,6 +14,8 @@ class EmployeeHomeScreen extends StatefulWidget {
 }
 
 class _EmployeeHomeScreenState extends State<EmployeeHomeScreen> {
+  List<String> _tabs = ['Todos', 'Solicitações', 'Confirmados', 'Finalizados'];
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -42,42 +44,32 @@ class _EmployeeHomeScreenState extends State<EmployeeHomeScreen> {
                     style: TextStyle(color: Colors.black),
                   ),
                 ),
-                onPressed: () {})
+                onPressed: () {
+                  print('open user options menu');
+                })
           ],
           title: Text(
             'Meus Eventos',
-            style: TextStyle(fontWeight: FontWeight.bold),
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+            ),
           ),
           bottom: TabBar(
-            isScrollable: true,
-            labelColor: Theme.of(context).primaryColor,
-            labelStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-            tabs: <Widget>[
-              TabWithUnreadIndicator(label: 'Todos'),
-              TabWithUnreadIndicator(label: 'Solicitações', amountUnread: 2),
-              TabWithUnreadIndicator(label: 'Confirmados', amountUnread: 1),
-              TabWithUnreadIndicator(
-                label: 'Finalizados',
-              ),
-            ],
-          ),
+              isScrollable: true,
+              labelColor: Theme.of(context).primaryColor,
+              labelStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+              tabs:
+                  _tabs.map((e) => TabWithUnreadIndicator(label: e)).toList()),
         ),
         body: TabBarView(
-          children: <Widget>[
-            Column(
-              children: [EventCard()],
-            ),
-            Center(
-              child: Text("Solicitações"),
-            ),
-            Center(
-              child: Text("Confirmados"),
-            ),
-            Center(
-              child: Text("Finalizados"),
-            ),
-          ],
-        ),
+            children: _tabs
+                .map(
+                  (e) => Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(children: [EventCard()]),
+                  ),
+                )
+                .toList()),
       ),
     );
   }
