@@ -30,7 +30,6 @@ class ContratanteModel {
     this.dataCriacaoConta,
     this.valorEmCaixaDisponivel,
     this.valorBloqueado,
-    this.notificacoes
     //this.fotos
   });
 
@@ -48,7 +47,6 @@ class ContratanteModel {
             DateTime.fromMillisecondsSinceEpoch(json["dataCriacaoConta"]),
         valorEmCaixaDisponivel: json["valorEmCaixa"],
         valorBloqueado: json["valorBloqueado"],
-        notificacoes: json["notificacoes"],
       );
 
   Map<String, dynamic> toMap() => {
@@ -62,7 +60,6 @@ class ContratanteModel {
     "dataCriacaoConta": this.dataCriacaoConta.millisecondsSinceEpoch,
     "valorEmCaixaDisponivel": this.valorEmCaixaDisponivel,
     "valorBloqueado": this.valorBloqueado,
-    "notificacoes" : this.notificacoes,
   };
 
   factory ContratanteModel.fromJson(String str) =>

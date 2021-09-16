@@ -2,11 +2,10 @@ import 'dart:convert';
 
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:event_uau/models/funcionario_model.dart';
-
 import 'evento_model.dart';
 
 class ContratoModel{
-  int idContrato;
+  int id;
   EventoModel evento;
   FuncionarioModel funcionario;
   int notaFuncionario;
@@ -17,10 +16,9 @@ class ContratoModel{
   Duration horaExtra;
   double precoAhoraCombinado;
   double valorTotal;
-  bool funcionarioAceitou = false;
 
   ContratoModel({
-    this.idContrato,
+    this.id,
     this.evento,
     this.funcionario,
     this.notaFuncionario,
@@ -31,11 +29,10 @@ class ContratoModel{
     this.horaExtra,
     this.precoAhoraCombinado,
     this.valorTotal,
-    this.funcionarioAceitou,
   });
 
   factory ContratoModel.fromMap(Map<String, dynamic> json) => ContratoModel(
-    idContrato: json["idContrato"],
+    id: json["idContrato"],
     evento: json["evento"],
     funcionario: json["funcionario"],
     notaFuncionario: json["notaFuncionario"],
@@ -45,11 +42,10 @@ class ContratoModel{
     horaSaidaFuncionario: DateTime.fromMillisecondsSinceEpoch(json["horaSaidaFuncionario"]),
     horaExtra: json["valorExcedente"],
     valorTotal: json["valorTotal"],
-    funcionarioAceitou: json["funcionarioAceitou"],
   );
 
   Map<String, dynamic> toMap() => {
-    "idContrato": this.idContrato,
+    "idContrato": this.id,
     "evento": this.evento,
     "funcionario": this.funcionario,
     "notaFuncionario": this.notaFuncionario,
@@ -77,10 +73,11 @@ class ContratoModel{
 }
 
 enum StatusFuncionario{
-  NAO_CONTRATADO,    // proposta pendente que o funcionario nao aceitou
-  EM_ESPERA,   //status que perdura até a data do evento
+  PROPOSTA_ENVIADA,   //funcionario recebeu a proposta e ainda nao deu feedback
+  RECUSADO,    //proposta que o funcionario recusou
+  ACEITADO,   //status que perdura até a data do evento
   PRESENTE,   //quando o funcionario chegou no local e esta trabalhando
   ATRASADO,   //quando o funcionario ainda nao chegou ao local mas contrato esta ativo
   AUSENTE,    //quando o funcionario nao comparece ao evento marcado
-  DEMITIDO    //funcionario demitido 
+  DEMITIDO    //contrato encerrado
 }

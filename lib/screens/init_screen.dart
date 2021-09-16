@@ -1,3 +1,4 @@
+import 'package:event_uau/screens/contratante/home_screen.dart';
 import 'package:event_uau/screens/profissional/employee_profile_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -16,17 +17,20 @@ class InitScreen extends StatefulWidget {
 class _InitScreenState extends State<InitScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey();
   final _passwordFocusNode = FocusNode();
+
   Map<String, String> _authData = {
     'email': '',
     'password': '',
   };
 
   void _onSubmit() {
-    if (!_formKey.currentState.validate()) {
+    if(!_formKey.currentState.validate()) {
       return;
     }
-
     _formKey.currentState.save();
+    Navigator.push(context, MaterialPageRoute(
+      builder: (context) => HomeScreen() ,
+    ));
   }
 
   @override
@@ -39,7 +43,8 @@ class _InitScreenState extends State<InitScreen> {
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
     return Scaffold(
-        body: SingleChildScrollView(
+      backgroundColor: colorBg,
+      body: SingleChildScrollView(
       child: Container(
         height: deviceSize.height,
         width: deviceSize.width,
@@ -76,7 +81,6 @@ class _InitScreenState extends State<InitScreen> {
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 16),
                 child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.baseline,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text("Event",

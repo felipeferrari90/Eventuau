@@ -1,6 +1,9 @@
 import 'package:event_uau/components/card_event.dart';
+import 'package:event_uau/models/evento_model.dart';
+import 'package:event_uau/repository/evento_repository.dart';
 import 'package:event_uau/utils/colors.dart';
 import 'package:flutter/material.dart';
+
 
 class DashBoardScreenEvents extends StatefulWidget {
   const DashBoardScreenEvents({ Key key }) : super(key: key);
@@ -10,6 +13,14 @@ class DashBoardScreenEvents extends StatefulWidget {
 }
 
 class _DashBoardScreenEventsState extends State<DashBoardScreenEvents> {
+
+  
+ EventoRepository eventosRepository = new EventoRepository();
+ 
+
+
+  
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -58,18 +69,48 @@ class _DashBoardScreenEventsState extends State<DashBoardScreenEvents> {
               ),
               Container(
                 child: Expanded(
-                  child:  SingleChildScrollView(
-                    child: Column(
+                  child:SingleChildScrollView(
+                    child:  FutureBuilder<List<EventoModel>>(
+                      future: eventosRepository.getAllEventosByIdContratante(), 
+                      builder: (context, snapshot){
+                        
+                          if(snapshot.hasData){
+                            snapshot.data.map((element) => {
+                            setCardEvent(context, eventoModel:element)}); 
+                          } else{
+                            return Center(
+                               child: CircularProgressIndicator()
+                          );
+                          }
+                          if(snapshot.data.length == 0){
+                              return Container(
+                                child: Text("você não possui eventos criados\ncrie um evento para contratar funcionarios",textAlign: TextAlign.center , style: TextStyle(fontSize: 16, color: Colors.black54,))
+                              );
+                          }
+                          return Center(
+                            child: CircularProgressIndicator(
+                              
+                            )
+                          );
+            
+                      },
+                    ),
+                  )
+                 
+                  /*child: listaEventos.length == 0 ?  Container(
+                      child: Text("você não possui eventos criados\ncrie um evento para contratar funcionarios",textAlign: TextAlign.center , style: TextStyle(fontSize: 16, color: Colors.black54,))
+                    ): SingleChildScrollView(
+                    child: Column( 
+                      mainAxisAlignment: listaEventos.length == 0? MainAxisAlignment.center : MainAxisAlignment.center ,
                       children:[
-                          setCardEvent(context),
-                          setCardEvent(context),
-                          setCardEvent(context),
-                          setCardEvent(context),
-                          setCardEvent(context),
-                          setCardEvent(context),
+                         listaEventos.length == 0 ? Center(
+                           child: Container(
+                             child: Text("você não possui eventos criados\ncrie um evento para contratar funcionarios",textAlign: TextAlign.center , style: TextStyle(fontSize: 16, color: Colors.black54,))
+                           )
+                         ) : listaEventos.map((element) => setCardEvent(context, eventoModel: element))
                       ]
                     ),
-                  ),
+                  )*/,
                 )
               ),
             ],

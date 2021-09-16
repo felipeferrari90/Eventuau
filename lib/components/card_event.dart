@@ -1,9 +1,12 @@
+import 'package:enum_to_string/enum_to_string.dart';
+import 'package:event_uau/models/evento_model.dart';
 import 'package:event_uau/utils/colors.dart';
 import 'package:event_uau/utils/icons.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
-Widget setCardEvent(context) => Card(
+Widget setCardEvent(context , {EventoModel eventoModel}) => Card(
   shape: RoundedRectangleBorder(
     borderRadius: BorderRadius.circular(15),
   ),
@@ -26,14 +29,14 @@ Widget setCardEvent(context) => Card(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Churrasco na brasilandia" , maxLines: 3, style: TextStyle(color: primaryColor, fontSize:  16, fontWeight: FontWeight.w700,),),
+              Text(eventoModel.nome?? "Sem Título" , maxLines: 3, style: TextStyle(color: primaryColor, fontSize:  16, fontWeight: FontWeight.w700,),),
               SizedBox(height: 5),
               Row(
                 children: [
                   Padding(padding: EdgeInsets.only(right: 8),
                     child: Icon(Icons.calendar_today, color: primaryColor, size: 16,),
                   ),
-                  Text("12 Agosto 2020 - 8:00", style: Theme.of(context).textTheme.headline5 )
+                  Text("${DateFormat.yMMMMd('pt_BR').format(eventoModel.dataEHorarioInicio)?? "Sem data e horario marcados"} - ${DateFormat.Hm('pt_BR').format(eventoModel.dataEHorarioInicio)?? ""}", style: Theme.of(context).textTheme.headline5 )
                 ]
               )
             ],
@@ -76,12 +79,12 @@ Widget setCardEvent(context) => Card(
                                               children: [
                                                 Icon(EventuauIcons2.handshake, size: 16, color: primaryColor,),
                                                 SizedBox(width: 4,),
-                                                Text("120/150", style: TextStyle(fontSize: 14, color:  Colors.black54 ),)
+                                                Text("36/${ eventoModel.numeroMaximoDeAnimadores + eventoModel.numeroMaximoDeBuffets + eventoModel.numeroMaximoDeChurrasqueiros + eventoModel.numeroMaximoDeGarcons}", style: TextStyle(fontSize: 14, color:  Colors.black54 ),)
                                               ],
                                             ),
                                           )
                                         ) ,
-                                       Container(
+                                       /*Container(
                                          width:  MediaQuery.of(context).size.width / 4.6,
                                           child: Align (
                                             alignment: Alignment.center,
@@ -93,7 +96,7 @@ Widget setCardEvent(context) => Card(
                                               ],
                                             ),
                                           )
-                                        ) ,
+                                        )*/ 
                                     ],
                                 ),
                                Spacer(flex: 2),
@@ -105,7 +108,7 @@ Widget setCardEvent(context) => Card(
                                               children: [
                                                 Icon(Icons.hourglass_empty, size: 16, color: primaryColor,),
                                                 SizedBox(width: 4,),
-                                                Text("12 até 16 horas", style: TextStyle(fontSize: 14, color:  Colors.black54),)
+                                                Text("${eventoModel.tempoDuracaoMinimoPreDeterminado.inHours} até ${eventoModel.tempoDuracaoMaximoPreDeterminado.inHours} horas", style: TextStyle(fontSize: 14, color:  Colors.black54),)
                                               ],
                                             ),
                                           )
@@ -121,7 +124,7 @@ Widget setCardEvent(context) => Card(
                                               children: [
                                                 Icon(Icons.assignment_ind, size: 16, color: primaryColor,),
                                                 SizedBox(width: 4,),
-                                                Text(": em contratação", style: TextStyle(fontSize: 14, color:  Colors.black54),)
+                                                Text("${EnumToString.convertToString(eventoModel.statusContratacaoEvento)}", style: TextStyle(fontSize: 14, color:  Colors.black54),)
                                               ],
                                             ),
                                           )
@@ -135,7 +138,7 @@ Widget setCardEvent(context) => Card(
                                               children: [
                                                 Text("status: ", style: TextStyle(fontSize: 14, color: Colors.black54),),
                                                 SizedBox(width: 4,),
-                                                Text("AGENDADO".toString(), style: TextStyle(fontSize: 14, color: primaryColor, fontWeight: FontWeight.w700),)
+                                                Text("${EnumToString.convertToString(eventoModel.statusEvento)}", style: TextStyle(fontSize: 14, color: primaryColor, fontWeight: FontWeight.w700),)
                                               ],
                                             ),
                                           )

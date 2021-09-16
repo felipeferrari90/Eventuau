@@ -51,18 +51,20 @@ class _HomeScreenState extends State<HomeScreen> {
         selectedItemColor: primaryColor,
         items: [
           BottomNavigationBarItem(
-              icon: Icon(Icons.calendar_view_day), title: Text("Eventos")),
+            icon: Icon(Icons.calendar_view_day), 
+            label: "Eventos",
+          ),
           BottomNavigationBarItem(
             icon: Icon(Icons.monetization_on),
-            title: Text(" Carteira"),
+            label: "Carteira",
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.chat_bubble_outline),
-            title: Text("Conversas"),
+            label: "Conversas",
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.notifications),
-            title: Text("Notificacoes"),
+            label: "Notificacoes",
           ),
         ],
         onTap: _updateIndex,

@@ -7,7 +7,7 @@ import 'package:enum_to_string/enum_to_string.dart';
 
 class EventoModel {
   int id;
-  int numeroEvento;
+  int numeroDeEvento;
   String nome;
   String descricao;
   String endereco;
@@ -26,12 +26,11 @@ class EventoModel {
   int numeroMaximoDeAnimadores = 0;
   int numeroMaximoDeBuffets = 0;
   int numeroMaximoDeChurrasqueiros = 0;
-  List<ContratoModel> funcionariosContratados = List.empty();
-  List<FuncionarioModel> funcionariosEmListaDeEspera = List.empty();
+  
  
   EventoModel({
     this.id,
-    this.numeroEvento,
+    this.numeroDeEvento,
     this.nome,
     this.descricao,
     this.endereco,
@@ -50,13 +49,11 @@ class EventoModel {
     this.numeroMaximoDeAnimadores,
     this.numeroMaximoDeBuffets,
     this.numeroMaximoDeChurrasqueiros,
-    funcionariosContratados, 
-    funcionariosEmListaDeEspera,
   });
 
   factory EventoModel.fromMap(Map<String, dynamic> json) => EventoModel(
       id: json["id"],
-      numeroEvento: json["numeroEvento"],
+      numeroDeEvento: json["numeroDeEvento"],
       nome: json["nome"],
       descricao: json["descricao"],
       endereco: json["endereco"],
@@ -74,13 +71,11 @@ class EventoModel {
       numeroMaximoDeAnimadores: json["numeroMaximoDeAnimadores"],
       numeroMaximoDeBuffets: json["numeroMaximoDeBuffets"],
       numeroMaximoDeChurrasqueiros: json["numeroMaximoDeChurrasqueiros"],
-      funcionariosContratados: json["funcionariosContratados"],
-      funcionariosEmListaDeEspera: json["funcionariosEmListaDeEspera"],
    );
 
   Map<String, dynamic> toMap() => {
         "id": this.id,
-        "numeroEvento": this.numeroEvento,
+        "numeroEvento": this.numeroDeEvento,
         "descricao": this.descricao,
         "nome": this.nome,
         "endereco": this.endereco,
@@ -99,22 +94,21 @@ class EventoModel {
         "valorTotal": this.valorEvento,
         "estaVisivel": this.estaVisivel,
         "observacoes": this.observacoes,
-        "funcionariosContratados": this.funcionariosContratados,
-        "funcionariosEmListaDeEspera": this.funcionariosEmListaDeEspera,
-      };
+  };
 
   factory EventoModel.fromJson(String str) =>
       EventoModel.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
+  /*
   double pegarValorTotalEvento(){
     double aux = 0;
     for (var contrato in this.funcionariosContratados) {
        aux += contrato.valorTotal;
     }
     return aux;
-  }
+  }*/
 
 }
 
