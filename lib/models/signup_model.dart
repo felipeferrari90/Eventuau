@@ -17,10 +17,12 @@ class SignupModel {
       @required this.password,
       @required this.phone});
 
-  Map<String, dynamic> get signUpIntegrationPayload {
+  Map<String, String> get signUpIntegrationPayload {
+    var splitName = name.split(' ');
+
     return {
-      'nome': name,
-      'sobreNome': name.split(' ').last,
+      'nome': '${splitName[0]} ${splitName[1]}',
+      'sobreNome': splitName.last,
       'email': email,
       'cpf': cpf,
       'senha': password,
