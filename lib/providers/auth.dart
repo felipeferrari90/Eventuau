@@ -31,7 +31,7 @@ class Auth with ChangeNotifier {
       throw HttpException(res.body);
     }
 
-    final responseData = res.toString();
+    final responseData = res.body.toString();
 
     _token = responseData; // PASS THE TOKEN HERE XDDDDD
 
