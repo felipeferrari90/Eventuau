@@ -74,7 +74,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
     var signupFields = SignupModel(
       birthDate: _formValues['birthDate'],
-      cpf: _formValues['name'],
+      cpf: _formValues['cpf'],
       password: _formValues['password'],
       email: _formValues['email'],
       name: _formValues['name'],
@@ -86,16 +86,43 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
       Navigator.of(context).pushReplacementNamed(SignupSuccess.routeName);
     } catch (e) {
+      print(e);
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text('Erro ao cadastrar usuário')));
     }
+  }
+
+  String isPasswordCompliant(String password,
+      [int minLength = 8, int maxLength = 15]) {
+    if (password == null || password.isEmpty) {
+      return "Campo Obrigatório";
+    }
+    if (password.length < minLength || password.length > maxLength) {
+      return "A senha precisa conter entre 8 e 15 caracteres";
+    }
+    if (!password.contains(new RegExp(r'[A-Z]'))) {
+      return 'A senha precisa ter uma letra maiúscula';
+    }
+    if (!password.contains(new RegExp(r'[0-9]'))) {
+      return 'A senha precisa ter um número';
+    }
+    if (!password.contains(new RegExp(r'[a-z]'))) {
+      return 'A senha precisa contar uma letra minúscula';
+    }
+    if (!password.contains(new RegExp(r'[!@#$%^&*(),.?":{}|<>]'))) {
+      return 'A senha precisa ter um caractere especial';
+    }
+
+    return null;
   }
 
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
     return Scaffold(
-      appBar: EventUauAppBar(),
+      appBar: AppBar(
+        title: Text('Cadastro'),
+      ),
       backgroundColor: colorBg,
       body: Container(
         height: (mediaQuery.size.height -
@@ -229,22 +256,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                     TextFormField(
                       obscureText: true,
-                      decoration:
-                          InputDecoration(labelText: 'Escolha uma Senha'),
+                      decoration: InputDecoration(
+                          labelText: 'Escolha uma Senha',
+                          helperMaxLines: 2,
+                          helperText:
+                              'A senha deve ter entre 8 e 15 caracteres, um número, uma letra minúscula, uma letra maiúscula, um caractere especial.'),
                       controller: _passwordController,
                       textInputAction: TextInputAction.next,
                       onFieldSubmitted: (_) =>
                           _passwordFocusNode.requestFocus(),
-                      validator: (value) {
-                        if (value.isEmpty) {
-                          return "Campo Obrigatório";
-                        }
-                        if (value.length < 6) {
-                          return "A senha precisa conter no mínimo 6 dígitos";
-                        }
-
-                        return null;
-                      },
+                      validator: (value) => isPasswordCompliant(value),
                       onSaved: (value) {
                         _formValues['password'] = value;
                       },
