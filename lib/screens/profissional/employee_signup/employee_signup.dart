@@ -57,13 +57,7 @@ class _EmployeeSignupScreenState extends State<EmployeeSignupScreen> {
   }
 
   void _showShiftSelecionDialog() async {
-<<<<<<< HEAD
-    await showDialog(context: context, builder: (context){
-      return ShiftSelection();
-    });
-=======
     await showDialog(context: context, builder: (context) => ShiftSelection());
->>>>>>> 3e3a9e5ec4493608552af45a3ced3d38ee2abf09
   }
 
   void _handleSubmit() {
