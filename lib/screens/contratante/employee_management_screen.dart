@@ -53,28 +53,28 @@ class _EmployeesManagementState extends State<EmployeesManagement> {
   }
 
   setCardManagementEmployee(BuildContext context,
-          {Function f, bool estaPresente}) =>
+    {Function f, bool estaPresente}) =>
       Card(
-          child: SwitchListTile(
-              contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              title: Text("presente:",
-                  style: TextStyle(color: Colors.black54),
-                  textAlign: TextAlign.right),
-              value: estaPresente ?? false,
-              activeColor: primaryColor,
-              inactiveTrackColor: colorBg,
-              autofocus: true,
-              onChanged: (bool value) {
-                setState(() {
-                  estaPresente = value;
-                });
+        child: SwitchListTile(
+          contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            title: Text("presente:",
+                style: TextStyle(color: Colors.black54),
+                textAlign: TextAlign.right),
+            value: estaPresente ?? false,
+            activeColor: primaryColor,
+            inactiveTrackColor: colorBg,
+            autofocus: true,
+            onChanged: (bool value) {
+              setState(() {
+                estaPresente = value;
+              });
+            },
+            secondary: InkWell(
+              onTap: () {
+                Navigator.pushNamed(context, "/contract/id");
               },
-              secondary: InkWell(
-                onTap: () {
-                  Navigator.pushNamed(context, "/contract/id");
-                },
-                child: Text("Pedro Lemes\nRG\: 12345678-9\t",
-                    style: Theme.of(context).textTheme.headline5),
+              child: Text("Pedro Lemes\nRG\: 12345678-9\t",
+                style: Theme.of(context).textTheme.headline5),
               ),
-              controlAffinity: ListTileControlAffinity.trailing));
+            controlAffinity: ListTileControlAffinity.trailing));
 }

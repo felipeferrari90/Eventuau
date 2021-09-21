@@ -12,6 +12,7 @@ import '../providers/auth.dart';
 import '../utils/colors.dart';
 import '../components/buttons.dart';
 import '../components/error_toast.dart';
+import 'contratante/home_screen.dart';
 
 class InitScreen extends StatefulWidget {
   const InitScreen({Key key}) : super(key: key);
@@ -102,6 +103,10 @@ class _InitScreenState extends State<InitScreen> {
                     PopupMenuItem(
                       child: Text('Go to ${EmployeeHomeScreen.routeName}'),
                       value: EmployeeHomeScreen.routeName,
+                    ),
+                    PopupMenuItem(
+                      child: Text('Go to ${HomeScreen.routeName}'),
+                      value: HomeScreen.routeName,
                     )
                   ],
                 )),

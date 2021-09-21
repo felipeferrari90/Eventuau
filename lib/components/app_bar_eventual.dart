@@ -1,3 +1,4 @@
+import 'package:event_uau/providers/auth.dart';
 import 'package:flutter/material.dart';
 import '../utils/colors.dart';
 
@@ -19,6 +20,19 @@ class EventUauAppBar extends StatelessWidget with PreferredSizeWidget {
       toolbarHeight: 70,
       elevation: 0,
       actions: <Widget>[
+        username != null ?
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pushReplacementNamed("/");
+              },
+              child: Text(
+                'Área do Parceiro',
+                style: TextStyle(
+                    decoration: TextDecoration.underline,
+                    fontSize: 14,
+                    color: Theme.of(context).primaryColor),
+              ),
+            ) : null,
         username != null
             ? GestureDetector(
                 child: Container(
@@ -47,7 +61,8 @@ class EventUauAppBar extends StatelessWidget with PreferredSizeWidget {
                 padding: EdgeInsets.all(16),
                 child:
                     Text("fazer login", style: TextStyle(color: primaryColor)),
-              )
+              ),
+            
       ],
       iconTheme: IconThemeData(color: primaryColor, size: 16),
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,

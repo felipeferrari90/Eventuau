@@ -7,7 +7,7 @@ import 'dart:io';
 
 import '../models/signup_model.dart';
 
-const baseUrl = 'https://10.0.2.2:6001/api';
+const baseUrl = 'https://localhost:6001/api';
 
 const Map<String, String> headers = {
   "Content-Type": "application/json",
@@ -15,9 +15,14 @@ const Map<String, String> headers = {
 
 class Auth with ChangeNotifier {
   String _token;
+  String _userName;
 
   bool get isAuth {
     return _token != null;
+  }
+
+  String get username{
+    return _userName;
   }
 
   Future<void> login(String email, String senha) async {
@@ -34,6 +39,7 @@ class Auth with ChangeNotifier {
     final responseData = res.body.toString();
 
     _token = responseData; // PASS THE TOKEN HERE XDDDDD
+    _userName = jsonDecode(res.body).toMap()['name'];
 
     notifyListeners();
   }
@@ -47,5 +53,9 @@ class Auth with ChangeNotifier {
     if (res.statusCode != 200) {
       throw json.decode(res.body);
     }
+
+    
   }
+
+  
 }

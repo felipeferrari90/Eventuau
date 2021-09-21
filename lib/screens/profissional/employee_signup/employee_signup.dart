@@ -231,7 +231,7 @@ class _EmployeeSignupScreenState extends State<EmployeeSignupScreen> {
                               handleChipSelection(isSelected, e);
                             },
                             labelStyle: Theme.of(context).textTheme.headline2,
-                          ))
+                      ))
                     ],
                   )
                 ],
