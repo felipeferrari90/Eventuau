@@ -1,15 +1,16 @@
+import 'package:event_uau/utils/colors.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:brasil_fields/brasil_fields.dart';
+
 import '../../components/app_bar_eventual.dart';
 import '../../components/buttons.dart';
 import '../../components/error_toast.dart';
 
 import './signup_success.dart';
-import 'package:event_uau/models/signup_model.dart';
-import 'package:event_uau/providers/auth.dart';
-import 'package:event_uau/utils/colors.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
+import '../../service/auth_service.dart';
+import '../../models/signup_model.dart';
+
 import '../../utils/dateValidation.dart' as dateValidator;
 
 class SignUpScreen extends StatefulWidget {
@@ -82,7 +83,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
 
     try {
-      await Provider.of<Auth>(context, listen: false).signup(signupFields);
+      AuthService.signup(signupFields);
 
       Navigator.of(context).pushReplacementNamed(SignupSuccess.routeName);
     } catch (e) {

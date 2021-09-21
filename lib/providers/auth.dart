@@ -1,3 +1,4 @@
+import 'package:event_uau/service/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -26,6 +27,7 @@ class Auth with ChangeNotifier {
   }
 
   Future<void> login(String email, String senha) async {
+<<<<<<< HEAD
     final res = await http.post(
       '$baseUrl/usuario/$email/login',
       headers: headers,
@@ -57,5 +59,9 @@ class Auth with ChangeNotifier {
     
   }
 
-  
+    await AuthService.login(email, senha);
+
+    notifyListeners();
+  }
+
 }

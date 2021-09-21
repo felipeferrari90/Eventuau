@@ -55,6 +55,7 @@ class _EmployeeAddDocumentsState extends State<EmployeeAddDocuments> {
 
   Future<File> _cropImage(image) {
     return ImageCropper.cropImage(
+      compressQuality: 70,
       sourcePath: image.path,
       aspectRatioPresets: Platform.isAndroid
           ? [
