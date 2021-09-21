@@ -1,3 +1,4 @@
+import 'package:event_uau/service/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -21,31 +22,8 @@ class Auth with ChangeNotifier {
   }
 
   Future<void> login(String email, String senha) async {
-    final res = await http.post(
-      '$baseUrl/usuario/$email/login',
-      headers: headers,
-      body: json.encode({'senha': senha}),
-    );
-
-    if (res.statusCode != 200) {
-      throw HttpException(res.body);
-    }
-
-    final responseData = res.body.toString();
-
-    _token = responseData; // PASS THE TOKEN HERE XDDDDD
+    await AuthService.login(email, senha);
 
     notifyListeners();
-  }
-
-  Future<void> signup(SignupModel signupInfo) async {
-    var url = '$baseUrl/usuario';
-    var body = jsonEncode(signupInfo.signUpIntegrationPayload);
-
-    final res = await http.post(url, headers: headers, body: body);
-
-    if (res.statusCode != 200) {
-      throw json.decode(res.body);
-    }
   }
 }

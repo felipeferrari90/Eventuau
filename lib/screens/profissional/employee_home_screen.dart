@@ -1,7 +1,5 @@
-import 'package:event_uau/components/app_bar_eventual.dart';
-import 'package:event_uau/components/card_event_dismissible.dart';
-import 'package:event_uau/components/card_event_to_employee.dart';
-import 'package:event_uau/components/employee/event_card.dart';
+import '../../components/employee/event_card.dart';
+import '../../screens/profissional/employee_profile_screen.dart';
 import 'package:flutter/material.dart';
 
 class EmployeeHomeScreen extends StatefulWidget {
@@ -36,17 +34,23 @@ class _EmployeeHomeScreenState extends State<EmployeeHomeScreen> {
                     color: Theme.of(context).primaryColor),
               ),
             ),
-            IconButton(
-                icon: CircleAvatar(
-                  backgroundColor: Theme.of(context).accentColor,
-                  child: Text(
-                    'FF',
-                    style: TextStyle(color: Colors.black),
-                  ),
+            PopupMenuButton(
+              onSelected: (value) =>
+                  Navigator.pushNamed(context, value as String),
+              itemBuilder: (context) => [
+                PopupMenuItem(
+                  child: Text('Meu Perfil'),
+                  value: EmployeeProfileScreen.routeName,
                 ),
-                onPressed: () {
-                  print('open user options menu');
-                })
+              ],
+              icon: CircleAvatar(
+                backgroundColor: Theme.of(context).accentColor,
+                child: Text(
+                  'FF',
+                  style: TextStyle(color: Colors.black),
+                ),
+              ),
+            )
           ],
           title: Text(
             'Meus Eventos',
