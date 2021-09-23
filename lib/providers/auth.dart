@@ -22,7 +22,9 @@ class Auth with ChangeNotifier {
   }
 
   Future<void> login(String email, String senha) async {
-    await AuthService.login(email, senha);
+    final response = await AuthService.login(email, senha);
+
+    _token = response['token'];
 
     notifyListeners();
   }
