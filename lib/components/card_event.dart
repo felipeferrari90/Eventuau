@@ -108,7 +108,7 @@ Widget setCardEvent(context , {EventoModel eventoModel}) => Card(
                                               children: [
                                                 Icon(Icons.hourglass_empty, size: 16, color: primaryColor,),
                                                 SizedBox(width: 4,),
-                                                Text("${eventoModel.tempoDuracaoMinimoPreDeterminado.inHours} até ${eventoModel.tempoDuracaoMaximoPreDeterminado.inHours} horas", style: TextStyle(fontSize: 14, color:  Colors.black54),)
+                                                Text("${eventoModel.duracaoMinima.inHours} até ${eventoModel.duracaoMaxima.inHours} horas", style: TextStyle(fontSize: 14, color:  Colors.black54),)
                                               ],
                                             ),
                                           )
@@ -124,7 +124,7 @@ Widget setCardEvent(context , {EventoModel eventoModel}) => Card(
                                               children: [
                                                 Icon(Icons.assignment_ind, size: 16, color: primaryColor,),
                                                 SizedBox(width: 4,),
-                                                Text("${EnumToString.convertToString(eventoModel.statusContratacaoEvento)}", style: TextStyle(fontSize: 14, color:  Colors.black54),)
+                                                Text("${EnumToString.convertToString(eventoModel.status )}", style: TextStyle(fontSize: 14, color:  Colors.black54),)
                                               ],
                                             ),
                                           )
@@ -138,7 +138,7 @@ Widget setCardEvent(context , {EventoModel eventoModel}) => Card(
                                               children: [
                                                 Text("status: ", style: TextStyle(fontSize: 14, color: Colors.black54),),
                                                 SizedBox(width: 4,),
-                                                Text("${EnumToString.convertToString(eventoModel.statusEvento)}", style: TextStyle(fontSize: 14, color: primaryColor, fontWeight: FontWeight.w700),)
+                                                Text("${EnumToString.convertToString(eventoModel.status)}", style: TextStyle(fontSize: 14, color: primaryColor, fontWeight: FontWeight.w700),)
                                               ],
                                             ),
                                           )
@@ -149,7 +149,7 @@ Widget setCardEvent(context , {EventoModel eventoModel}) => Card(
                                       spacing: 24,
                                       clipBehavior: Clip.hardEdge,
                                       children: [
-                                       RaisedButton(
+                                        RaisedButton(
                                           child: Icon(Icons.person_add, color: primaryColor, size: 24), 
                                           onPressed: (){
                                             Navigator.pushNamed(context, "/employees");

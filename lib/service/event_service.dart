@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:event_uau/providers/event.dart';
 import 'package:http/http.dart' as http;
 
 const baseUrl = 'https://10.0.2.2:6011/api';
@@ -17,7 +16,7 @@ class EventService {
 
     return json.decode(res.body);
   }
-
+  /*
   Future<void> createEvent(EventItem event) async {
     var body = json.encode({
       'numero': event.id,
@@ -35,5 +34,6 @@ class EventService {
     if (res.statusCode != 200) throw res;
 
     return json.decode(res.body);
-  }
+  }*/
 }
+

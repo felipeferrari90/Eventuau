@@ -6,12 +6,14 @@ import 'package:http/http.dart' as http;
 
 class EventoService {
 
-  String _endPoint = "https://localhost:6011/api/eventos";
+
+  String _baseUrl = "https://192.168.0.14:6011/api";
+  String _endPoint = "/eventos";
 
   Future<int> create(EventoModel eventoModel) async {
     try {
       http.Response response = await http.post(
-        Uri.parse(_endPoint),
+        Uri.parse("$_baseUrl$_endPoint"),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
@@ -26,12 +28,13 @@ class EventoService {
       print("Service Error: $error ");
       throw error;
     }
+    return null;
   }
 
   Future<List<EventoModel>> getAllbyContratante() async {
     List<EventoModel> lista = new List.empty();
     try {
-      http.Response response = await http.get(Uri.parse(_endPoint));
+      http.Response response = await http.get(Uri.parse("$_baseUrl$_endPoint"));
       if (response.statusCode == 200) {
         (json.decode(response.body) as List<EventoModel>).forEach((value) {
           lista.add(EventoModel.fromMap(value as Map<String, dynamic>));
@@ -45,7 +48,7 @@ class EventoService {
 
   Future<EventoModel> getById(int id) async {
     try {
-      http.Response response = await http.get(Uri.parse("$_endPoint/$id"));
+      http.Response response = await http.get(Uri.parse("$_baseUrl$_endPoint/$id"));
       if (response.statusCode == 200) {
         return EventoModel.fromJson(response.body);
       }
@@ -58,7 +61,7 @@ class EventoService {
   Future<int> update(EventoModel eventoModel) async {
     try {
       http.Response response = await http.put(
-        Uri.parse("$_endPoint/${eventoModel.id}"),
+        Uri.parse("$_baseUrl$_endPoint/${eventoModel.id}"),
         body: eventoModel.toJson(),
       );
       if (response.statusCode == 200) {
@@ -76,7 +79,7 @@ class EventoService {
   Future<void> delete(EventoModel eventoModel) async {
     try {
       http.Response response =
-          await http.delete(Uri.parse("$_endPoint/${eventoModel.id}"));
+          await http.delete(Uri.parse("$_baseUrl$_endPoint/${eventoModel.id}"));
       if (response.statusCode == 206) {
         throw Exception("Não foi possível excluir seu evento!");
       }

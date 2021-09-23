@@ -84,7 +84,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
     try {
       AuthService.signup(signupFields);
-
+      debugPrint("CADASTRADO COM SUCESSO");
+      debugPrint(signupFields.toString());
       Navigator.of(context).pushReplacementNamed(SignupSuccess.routeName);
     } catch (e) {
       print(e);
@@ -167,7 +168,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       decoration: InputDecoration(labelText: 'Nome Completo'),
                       textInputAction: TextInputAction.next,
                       onFieldSubmitted: (_) =>
-                          _birthDateFocusNode.requestFocus(),
+                          _nameFocusNode.requestFocus(),
                       validator: (value) {
                         if (value.isEmpty) {
                           return "Campo Obrigatório";
@@ -191,8 +192,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                     TextFormField(
                       keyboardType: TextInputType.datetime,
-                      decoration:
-                          InputDecoration(labelText: 'Data de Nascimento'),
+                      decoration: InputDecoration(labelText: 'Data de Nascimento'),
                       inputFormatters: [
                         FilteringTextInputFormatter.digitsOnly,
                         DataInputFormatter()

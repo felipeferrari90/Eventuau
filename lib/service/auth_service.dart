@@ -1,17 +1,19 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
 import '../models/signup_model.dart';
 
-const baseUrl = 'https://10.0.2.2:6001/api';
+const baseUrl = 'https://192.168.0.14:6001/api';
 
 const Map<String, String> headers = {
   "Content-Type": "application/json",
 };
 
 class AuthService {
-  static Future<void> login(String email, String senha) async {
+
+  static Future<String> login(String email, String senha) async {
     final res = await http.post(
       '$baseUrl/usuario/$email/login',
       headers: headers,
@@ -19,11 +21,12 @@ class AuthService {
     );
 
     if (res.statusCode != 200) {
+      debugPrint("ERRO NA LISTAGEM");                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
       throw HttpException(res.body);
     }
 
     final responseData = res.body.toString();
-
+    debugPrint(responseData);
     return responseData;
   }
 
@@ -32,11 +35,12 @@ class AuthService {
     var body = jsonEncode(signupInfo.signUpIntegrationPayload);
 
     final res = await http.post(url, headers: headers, body: body);
-
-    if (res.statusCode != 200) {
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
+    if (res.statusCode != 200 || res.statusCode != 201) {
+      debugPrint("ERRO NA CRIACAO");    
       throw json.decode(res.body);
     }
-
+    debugPrint("FOI CRIADO COM SUCESSO");
     return res;
   }
 }
