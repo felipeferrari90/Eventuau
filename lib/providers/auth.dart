@@ -22,13 +22,10 @@ class Auth with ChangeNotifier {
     return _token != null;
   }
 
-  String get username{
-    return _userName;
-  }
 
   Future<void> login(String email, String senha) async {
-    _token = await AuthService.login(email,senha);
-    notifyListeners();
+    final response = await AuthService.login(email, senha);
+    _token = response['token'];
   }
 
   
