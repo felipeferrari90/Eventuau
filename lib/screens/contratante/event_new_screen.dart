@@ -1,14 +1,18 @@
 import 'package:event_uau/components/app_bar_eventual.dart';
 import 'package:event_uau/components/buttons.dart';
 import 'package:brasil_fields/brasil_fields.dart';
+import 'package:event_uau/components/error_toast.dart';
 import 'package:event_uau/models/contratante_model.dart';
 import 'package:event_uau/models/evento_model.dart';
+import 'package:event_uau/providers/auth.dart';
 import 'package:event_uau/repository/evento_repository.dart';
+import 'package:event_uau/service/evento_service.dart';
 import 'package:event_uau/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class EventNewScreen extends StatefulWidget {
   const EventNewScreen({Key key}) : super(key: key);
@@ -19,7 +23,7 @@ class EventNewScreen extends StatefulWidget {
 }
 
 class _EventNewScreenState extends State<EventNewScreen> {
-  StatusContratacaoEvento _valueDropdownStatusEvent = StatusContratacaoEvento.CONTRATANDO_FUNCIONARIOS;
+  StatusEvento _valueDropdownStatusEvent = StatusEvento.PENDENTE;
   
   final GlobalKey<FormState> _formKeyNewEvent = new GlobalKey<FormState>();
 
@@ -34,15 +38,15 @@ class _EventNewScreenState extends State<EventNewScreen> {
               "erro ao criar evento, verifique se os dados estão validos"))); 
     }
     _formKeyNewEvent.currentState.save();
-    EventoRepository eventoRepository = new EventoRepository();
-    eventoRepository.insert(eventoModel);
+    EventoService eventoService = new EventoService();
+    eventoService.create(eventoModel);
     Navigator.pop(context);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: EventUauAppBar(title: "Criar Evento", username: "Antonio conceicao"),
+      appBar: EventUauAppBar(title: "Criar Evento", username: Provider.of<Auth>(context).username),
       body: Container(
         padding: EdgeInsets.all(16.0),
         child: SingleChildScrollView(
@@ -62,12 +66,10 @@ class _EventNewScreenState extends State<EventNewScreen> {
                   },
                   onSaved: (value) {
                     setState(() {
-                          eventoModel.nome = value?? "Sem titulo";
-                          debugPrint(eventoModel.nome);
+                        eventoModel.nome = value?? "Sem titulo";
                     });
                   },
                 ),
-                /*
                 TextFormField(
                     keyboardType: TextInputType.multiline,
                     maxLines: 7, 
@@ -87,189 +89,177 @@ class _EventNewScreenState extends State<EventNewScreen> {
                     },
                     onSaved: (value) {
                       setState(() {
-                        this._eventoModel.descricao = value.toString();
-                        debugPrint(this._eventoModel.descricao);
+                        eventoModel.descricao = value.toString();
                       });   
                     }),
-                TextFormField(
-                  keyboardType: TextInputType.datetime,
-                  decoration: InputDecoration(labelText: 'Data do evento'),
-                  textInputAction: TextInputAction.next,
-                  inputFormatters: [
-                    FilteringTextInputFormatter.digitsOnly,
-                    DataInputFormatter(),
-                  ],
-                  validator: (value) {
-                    if (value.isEmpty) {
-                      return "Campo Obrigatório";
-                    }
-                    return null;
-                  },
-                  onSaved: (value) {
-                    setState(() {
-                        this._eventoModel.dataEHorarioInicio =
-                        DateFormat.yMd("pt_BR").parse(value);
-                        debugPrint(this._eventoModel.dataEHorarioInicio.toString());
-                    });
-                  },
-                ),
-                TextFormField(
-                  keyboardType: TextInputType.datetime,
-                  decoration: InputDecoration(labelText: 'Hora do evento'),
-                  textInputAction: TextInputAction.next,
-                  inputFormatters: [
-                    FilteringTextInputFormatter.digitsOnly,
-                    HoraInputFormatter()
-                  ],
-                  validator: (value) {
-                    /*
-                    if (!RegExp(r"/^[0-2]?[0-9]:[0-5][0-9]$/")
-                        .hasMatch(value.toString())) {
-                         debugPrint(value);
-                      return "digite uma Hora valida";
-                    }*/
-                    if(value.isEmpty){
-                      return "digite uma hora valida";
-                    }
-                    return null;
-                  },
-                  onSaved: (value) {
-                    setState(() {
-                      var _ponteiros = (value).split(":");
-                      this._eventoModel.dataEHorarioInicio.add(Duration(
-                        hours: int.parse(_ponteiros[0]),
-                        minutes: int.parse(_ponteiros[1])));
-                    });
-                    debugPrint(this._eventoModel.dataEHorarioInicio.toString());
-                  },
-                ),
-                TextFormField(
-                  keyboardType: TextInputType.datetime,
-                  decoration: InputDecoration(labelText: 'Duracao Minima'),
-                  textInputAction: TextInputAction.next,
-                  inputFormatters: [
-                    FilteringTextInputFormatter.digitsOnly,
-                    HoraInputFormatter(),
-                  ],
-                  validator: (value) {
-                    /*
-                    if (!RegExp(r"/^(02[0-3]):([0-5][0-9])$/")
-                        .hasMatch(value)) {
-                      return "digite um tempo valido";
-                    }*/
-                    DateTime tempo =
-                        DateFormat.Hm("pt_BR").parse(value);
-                    if (tempo.hour > 20 || tempo.hour < 1) {
-                      return "evento deve ter um tempo minimo entre 1 a 23 horas";
-                    }
-                    return null;
-                  },
-                  onSaved: (value) {
-                    setState(() {
-                      var _ponteiros = (value).split(":");
-                      this._eventoModel.tempoDuracaoMinimoPreDeterminado = Duration(
-                        hours: int.parse(_ponteiros[0]),
-                        minutes: int.parse(_ponteiros[1]));
-                      if ( this._eventoModel.tempoDuracaoMaximoPreDeterminado == null) {
-                        this._eventoModel.tempoDuracaoMaximoPreDeterminado =
-                        this._eventoModel.tempoDuracaoMinimoPreDeterminado;
-                      }
-                      debugPrint(this._eventoModel.tempoDuracaoMaximoPreDeterminado.toString());
-                    });
-                  
-                  },
-                ),
-                TextFormField(
-                  keyboardType: TextInputType.datetime,
-                  decoration: InputDecoration(labelText: 'Duracao Maxima'),
-                  textInputAction: TextInputAction.next,
-                  inputFormatters: [
-                    FilteringTextInputFormatter.digitsOnly,
-                    HoraInputFormatter(),
-                  ],
-                  validator: (value) {
-                    /*
-                    if ( this._eventoModel.tempoDuracaoMinimoPreDeterminado == null) {
-                      return "digite primeiro o tempo minimo";
-                    }
-                    if (!RegExp(r"/^(02[0-3]):([0-5][0-9])$/")
-                        .hasMatch(value.toString())) {
-                      return "digite um tempo valido";
-                    }
-                    DateTime tempo =
-                        DateFormat.Hm("pt_BR").parse(value);
-                    if (tempo.hour > 20 || tempo.hour < 1) {
-                      return "evento deve ter um tempo maximo entre 1 a 22 horas";
-                    }
-                    if ( this._eventoModel.tempoDuracaoMinimoPreDeterminado == null) {
-                      return "digite primeiro o tempo minimo";
-                    }
-                    if (tempo.microsecondsSinceEpoch <
-                        this._eventoModel
-                            .tempoDuracaoMinimoPreDeterminado.inMicroseconds) {
-                      return "tempo maximo deve ser maior que o tempo minimo";
-                    }*/
-                    return null;
-                  },
-                  onSaved: (value) {
-                    setState(() {
-                        var _ponteiros = value.toString().split(":");
-                        this._eventoModel.tempoDuracaoMinimoPreDeterminado = Duration(
-                        hours: int.parse(_ponteiros[0]),
-                        minutes: int.parse(_ponteiros[1]));
-                        debugPrint(this._eventoModel.tempoDuracaoMaximoPreDeterminado.toString());
-                    });
-                  },
-                ),
-                ListTile(
-                  leading: Text(
-                    "Status Contratacao: ",
-                    style: TextStyle(fontSize: 16),
-                  ),
-                  title: DropdownButton(
-                      value: _valueDropdownStatusEvent,
-                      dropdownColor: Color.fromRGBO(255, 255, 255, 1.0),
-                      style: TextStyle(
-                          fontSize: 12,
-                          color: primaryColor,
-                          fontWeight: FontWeight.w700),
-                      focusColor: primaryColor,
-                      itemHeight: 50,
-                      elevation: 12,
-
-                      items: [
-                        DropdownMenuItem(
-                          child: Text(
-                            "SEM CONTRATAR",
-                            style: TextStyle(fontSize: 12),
-                            overflow: TextOverflow.clip,
-                          ),
-                          value: StatusContratacaoEvento.SEM_CONTRATAR,
-                        ),
-                        DropdownMenuItem(
-                          child: Text(
-                            "CONTRATANDO",
-                            style: TextStyle(fontSize: 12),
-                            overflow: TextOverflow.clip,
-                          ),
-                          value: StatusContratacaoEvento.CONTRATANDO_FUNCIONARIOS,
-                        ),
-                        DropdownMenuItem(
-                          child: Text(
-                            "TODOS JA CONTRATADOS",
-                            overflow: TextOverflow.clip,
-                            style: TextStyle(fontSize: 12),
-                          ),
-                          value: StatusContratacaoEvento.FUNCIONARIOS_CONTRATADOS,
-                        ),
+                    TextFormField(
+                      keyboardType: TextInputType.datetime,
+                      decoration: InputDecoration(labelText: 'Data do evento'),
+                      textInputAction: TextInputAction.next,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                        DataInputFormatter(),
                       ],
-                      onChanged: (value) {
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          return "Campo Obrigatório";
+                        }
+                        return null;
+                      },
+                      onSaved: (value) {
                         setState(() {
-                          this._eventoModel.statusContratacaoEvento = value;
-                           debugPrint(this._eventoModel.statusContratacaoEvento.toString());
+                            eventoModel.dataEHorarioInicio =
+                            DateFormat.yMd("pt_BR").parse(value);
+                            debugPrint(eventoModel.dataEHorarioInicio.toString());
                         });
-                      }),
-                ),
+                      },
+                    ),
+                    TextFormField(
+                      keyboardType: TextInputType.datetime,
+                      decoration: InputDecoration(labelText: 'Hora do evento'),
+                      textInputAction: TextInputAction.next,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                        HoraInputFormatter()
+                      ],
+                      validator: (value) {
+                        /*
+                        if (!RegExp(r"/^[0-2]?[0-9]:[0-5][0-9]$/")
+                            .hasMatch(value.toString())) {
+                            debugPrint(value);
+                          return "digite uma Hora valida";
+                        }*/
+                        if(value.isEmpty){
+                          return "digite uma hora valida";
+                        }
+                        return null;
+                      },
+                      onSaved: (value) {
+                        setState(() {
+                          var _ponteiros = (value).split(":");
+                          eventoModel.dataEHorarioInicio.add(Duration(
+                            hours: int.parse(_ponteiros[0]),
+                            minutes: int.parse(_ponteiros[1])));
+                        });
+                        debugPrint(eventoModel.dataEHorarioInicio.toString());
+                      },
+                    ),
+                    TextFormField(
+                      keyboardType: TextInputType.datetime,
+                      decoration: InputDecoration(labelText: 'Duracao Minima(em horas)'),
+                      textInputAction: TextInputAction.next,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                      ],
+                      validator: (value) {
+                        /*
+                        if (!RegExp(r"/^(02[0-3]):([0-5][0-9])$/")
+                            .hasMatch(value)) {
+                          return "digite um tempo valido";
+                        }*/
+                       
+                        if (value as double> 20 || value as double < 0.5) {
+                          return "evento deve ter um tempo minimo entre 1 a 23 horas";
+                        }
+                        return null;
+                      },
+                      onSaved: (value) {
+                        setState(() {       
+                          eventoModel.duracaoMinima = Duration(
+                            hours: (double.parse(value) / 1) as int,
+                            minutes: ((double.parse(value) % 1)*60).round()
+                          );
+                          if ( eventoModel.duracaoMaxima  == null) {
+                            eventoModel.duracaoMaxima =
+                            eventoModel.duracaoMinima;
+                          }
+                          debugPrint(eventoModel.duracaoMaxima.toString());
+                        });
+                      },
+                    ),
+                    TextFormField(
+                      keyboardType: TextInputType.datetime,
+                      decoration: InputDecoration(labelText: 'Duracao Maxima(em horas)'),
+                      textInputAction: TextInputAction.next,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                        HoraInputFormatter(),
+                      ],
+                      validator: (value) {
+                        /*
+                        if ( this._eventoModel.tempoDuracaoMinimoPreDeterminado == null) {
+                          return "digite primeiro o tempo minimo";
+                        }
+                        if (!RegExp(r"/^(02[0-3]):([0-5][0-9])$/")
+                            .hasMatch(value.toString())) {
+                          return "digite um tempo valido";
+                        }
+                        DateTime tempo =
+                            DateFormat.Hm("pt_BR").parse(value);
+                        if (tempo.hour > 20 || tempo.hour < 1) {
+                          return "evento deve ter um tempo maximo entre 1 a 22 horas";
+                        }
+                        if ( this._eventoModel.tempoDuracaoMinimoPreDeterminado == null) {
+                          return "digite primeiro o tempo minimo";
+                        }
+                        if (tempo.microsecondsSinceEpoch <
+                            this._eventoModel
+                                .tempoDuracaoMinimoPreDeterminado.inMicroseconds) {
+                          return "tempo maximo deve ser maior que o tempo minimo";
+                        }*/
+                        return null;
+                      },
+                      onSaved: (value) {
+                        setState(() {
+                            eventoModel.duracaoMaxima = Duration(
+                              hours: (double.parse(value) / 1) as int,
+                              minutes: ((double.parse(value) % 1)*60).round()
+                            );
+                            debugPrint(eventoModel.duracaoMaxima.toString());
+                        });
+                      },
+                    ),
+                    ListTile(
+                      leading: Text(
+                        "Status Contratacao: ",
+                        style: TextStyle(fontSize: 16),
+                      ),
+                      title: DropdownButton(
+                          value: _valueDropdownStatusEvent,
+                          dropdownColor: Color.fromRGBO(255, 255, 255, 1.0),
+                          style: TextStyle(
+                              fontSize: 12,
+                              color: primaryColor,
+                              fontWeight: FontWeight.w700),
+                          focusColor: primaryColor,
+                          itemHeight: 50,
+                          elevation: 12,
+
+                          items: [
+                            DropdownMenuItem(
+                              child: Text(
+                                "SEM CONTRATAR",
+                                style: TextStyle(fontSize: 12),
+                                overflow: TextOverflow.clip,
+                              ),
+                              value: StatusEvento.CONTRATANDO,
+                            ),
+                            DropdownMenuItem(
+                              child: Text(
+                                "CONTRATANDO",
+                                style: TextStyle(fontSize: 12),
+                                overflow: TextOverflow.clip,
+                              ),
+                              value: StatusEvento.FECHADO,
+                            ),
+                          ],
+                          onChanged: (value) {
+                            setState(() {
+                              eventoModel.status = value;
+                              debugPrint(eventoModel.status.toString());
+                            });
+                          }),
+                    ),
                 Divider(),
                 Padding(
                   padding: EdgeInsets.fromLTRB(8, 8, 0, 2),
@@ -308,8 +298,8 @@ class _EventNewScreenState extends State<EventNewScreen> {
                         },
                         onSaved: (value){
                           setState(() {
-                            this._eventoModel.numeroMaximoDeGarcons = value as int;
-                             debugPrint(this._eventoModel.numeroMaximoDeGarcons.toString());
+                             eventoModel.numeroMaximoDeGarcons = value as int;
+                             debugPrint(eventoModel.numeroMaximoDeGarcons.toString());
                           });
                         },
                         keyboardType: TextInputType.number,
@@ -341,8 +331,8 @@ class _EventNewScreenState extends State<EventNewScreen> {
                         },
                         onSaved: (value){
                           setState(() {
-                              this._eventoModel.numeroMaximoDeAnimadores = value as int;
-                               debugPrint(this._eventoModel.numeroMaximoDeAnimadores.toString());
+                               eventoModel.numeroMaximoDeAnimadores = value as int;
+                               debugPrint(eventoModel.numeroMaximoDeAnimadores.toString());
                           });
                         },
                         keyboardType: TextInputType.number,
@@ -374,8 +364,8 @@ class _EventNewScreenState extends State<EventNewScreen> {
                         },
                         onSaved: (value){
                           setState(() {
-                                this._eventoModel.numeroMaximoDeBuffets = value as int;
-                                 debugPrint(this._eventoModel.numeroMaximoDeBuffets.toString());
+                                 eventoModel.numeroMaximoDeBuffets = value as int;
+                                 debugPrint(eventoModel.numeroMaximoDeBuffets.toString());
                           });
                         },
                         keyboardType: TextInputType.number,
@@ -407,8 +397,8 @@ class _EventNewScreenState extends State<EventNewScreen> {
                         },
                         onSaved: (value){
                           setState(() {
-                            this._eventoModel.numeroMaximoDeChurrasqueiros = value as int;
-                             debugPrint(this._eventoModel.numeroMaximoDeChurrasqueiros.toString());
+                             eventoModel.numeroMaximoDeChurrasqueiros = value as int;
+                             debugPrint(eventoModel.numeroMaximoDeChurrasqueiros.toString());
                           });
                         },
                         keyboardType: TextInputType.number,
@@ -468,8 +458,8 @@ class _EventNewScreenState extends State<EventNewScreen> {
                     },
                     onSaved: (value) {
                       setState(() {
-                        this._eventoModel.observacoes = value?? "sem observacoes";
-                         debugPrint(this._eventoModel.observacoes);
+                         eventoModel.observacoes = value?? "sem observacoes";
+                         debugPrint(eventoModel.observacoes);
                       });
                     },
                     decoration: InputDecoration(
@@ -499,7 +489,6 @@ class _EventNewScreenState extends State<EventNewScreen> {
                     label: Text("GERENCIADOR DE FUNCIONARIOS"),
                   ),
                 ),
-<<<<<<< HEAD
                 Divider(),
                 SizedBox(height: 24),
                 Padding(
@@ -537,7 +526,6 @@ class _EventNewScreenState extends State<EventNewScreen> {
                                 fontWeight: FontWeight.w700)),
                       ]),
                 ),
-                */
                 SizedBox(height: 24),
                 setButton(
                     text: "Publicar evento",

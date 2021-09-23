@@ -1,10 +1,12 @@
 import 'package:event_uau/components/app_bar_eventual.dart';
+import 'package:event_uau/providers/auth.dart';
 import 'package:event_uau/screens/history_chat_screen.dart';
 import 'package:event_uau/screens/notifications_screen.dart';
 import 'package:event_uau/screens/wallet_screen.dart';
 
 import 'package:event_uau/utils/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'dashboard_events_screen.dart';
 
@@ -31,10 +33,11 @@ class _HomeScreenState extends State<HomeScreen> {
     NotificationScreen(),
   ];
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: EventUauAppBar(username: "Felipe Ferreira Marques"),
+      appBar: EventUauAppBar(username: Provider.of<Auth>(context).username),
       backgroundColor: colorBg,
       drawer: Drawer(),
       body: _screens[_currentIndex],

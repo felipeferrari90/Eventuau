@@ -31,4 +31,6 @@ class SignupModel {
       'dataNascimento': birthDate.split('/').reversed.join('-')
     };
   }
+ 
+
 }
