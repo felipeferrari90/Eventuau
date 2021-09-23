@@ -11,7 +11,7 @@ const Map<String, String> headers = {
 };
 
 class AuthService {
-  static Future<void> login(String email, String senha) async {
+  static Future<Map> login(String email, String senha) async {
     final res = await http.post(
       '$baseUrl/usuario/$email/login',
       headers: headers,
@@ -22,9 +22,7 @@ class AuthService {
       throw HttpException(res.body);
     }
 
-    final responseData = res.body.toString();
-
-    return responseData;
+    return json.decode(res.body);    
   }
 
   static Future<void> signup(SignupModel signupInfo) async {
