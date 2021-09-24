@@ -1,10 +1,12 @@
 import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
 import '../../../components/employee/signup/paragraph_text.dart';
 import '../../../components/employee/signup/editable_row.dart';
 import '../../../components/employee/signup/shift_selection.dart';
+import '../../../providers/auth.dart';
 import './employee_add_documents.dart';
 
 class EmployeeSignupScreen extends StatefulWidget {
@@ -26,7 +28,7 @@ class _EmployeeSignupScreenState extends State<EmployeeSignupScreen> {
   ];
 
   List<String> jobList = [];
-  List<String> selectedJobs = [];
+  List<String> selectedJobs = [];  
 
   @override
   void initState() {
@@ -71,6 +73,7 @@ class _EmployeeSignupScreenState extends State<EmployeeSignupScreen> {
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
+    final userData = Provider.of<Auth>(context).user;
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -144,9 +147,11 @@ class _EmployeeSignupScreenState extends State<EmployeeSignupScreen> {
                     children: [
                       EditableRow(
                           editableText:
-                              'Felipe Ferreira Marques da Silva Sauro'),
+                              userData.name),
                       EditableRow(
-                        editableText: '24',
+                        editableText: userData.birthDate
+                            .difference(DateTime.now())
+                            .toString(),
                         uneditableText: "Anos",
                       ),
                       EditableRow(editableText: 'Liberdade - SP'),

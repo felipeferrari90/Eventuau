@@ -37,7 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: EventUauAppBar(username: Provider.of<Auth>(context).username),
+      appBar: EventUauAppBar(username: Provider.of<Auth>(context).user.name),
       backgroundColor: colorBg,
       drawer: Drawer(),
       body: _screens[_currentIndex],

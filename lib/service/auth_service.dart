@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 
 import '../models/signup_model.dart';
 
-const baseUrl = 'https://192.168.0.14:6001/api';
+const baseUrl = 'https://10.0.2.2:6001/api';
 
 const Map<String, String> headers = {
   "Content-Type": "application/json",

@@ -46,7 +46,9 @@ class _EventNewScreenState extends State<EventNewScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: EventUauAppBar(title: "Criar Evento", username: Provider.of<Auth>(context).username),
+      appBar: EventUauAppBar(
+          title: "Criar Evento",
+          username: Provider.of<Auth>(context).user.name),
       body: Container(
         padding: EdgeInsets.all(16.0),
         child: SingleChildScrollView(

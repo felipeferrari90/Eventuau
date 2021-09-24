@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 class SignupModel {
   String name;
-
   String email;
   String cpf;
   String password;
