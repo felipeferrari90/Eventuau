@@ -1,4 +1,4 @@
-import 'package:event_uau/service/auth_service.dart';
+import 'package:event_uau/service/auth_service.dart' as AuthService;
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 

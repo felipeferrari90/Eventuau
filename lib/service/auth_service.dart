@@ -11,8 +11,8 @@ const Map<String, String> headers = {
   "Content-Type": "application/json",
 };
 
-class AuthService {
-  static Future<Map> login(String email, String senha) async {
+
+   Future<Map> login(String email, String senha) async {
     final res = await http.post(
       '$baseUrl/usuario/$email/login',
       headers: headers,
@@ -27,7 +27,7 @@ class AuthService {
 
   }
 
-  static Future<void> signup(SignupModel signupInfo) async {
+   Future<void> signup(SignupModel signupInfo) async {
     var url = '$baseUrl/usuario';
     var body = jsonEncode(signupInfo.signUpIntegrationPayload);
 
@@ -40,4 +40,4 @@ class AuthService {
     debugPrint("FOI CRIADO COM SUCESSO");
     return res;
   }
-}
+

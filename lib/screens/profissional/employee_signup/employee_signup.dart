@@ -1,12 +1,13 @@
 import 'package:brasil_fields/brasil_fields.dart';
+import 'package:event_uau/components/address_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../../../components/employee/signup/paragraph_text.dart';
 import '../../../components/employee/signup/editable_row.dart';
-import '../../../components/employee/signup/shift_selection.dart';
 import '../../../providers/auth.dart';
+
 import './employee_add_documents.dart';
 
 class EmployeeSignupScreen extends StatefulWidget {
@@ -28,7 +29,8 @@ class _EmployeeSignupScreenState extends State<EmployeeSignupScreen> {
   ];
 
   List<String> jobList = [];
-  List<String> selectedJobs = [];  
+  List<String> selectedJobs = [];
+  String address = 'Rua Aimbere';
 
   @override
   void initState() {
@@ -58,10 +60,6 @@ class _EmployeeSignupScreenState extends State<EmployeeSignupScreen> {
     rebuildChipList();
   }
 
-  void _showShiftSelecionDialog() async {
-    await showDialog(context: context, builder: (context) => ShiftSelection());
-  }
-
   void _handleSubmit() {
     //@TODO
     // 1. VALDATE IF USER HAS IMAGE AND HAS SELECTED AT LEAST 1 JOB
@@ -73,7 +71,7 @@ class _EmployeeSignupScreenState extends State<EmployeeSignupScreen> {
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
-    final userData = Provider.of<Auth>(context).user;
+    final userData = Provider.of<Auth>(context, listen: false).user;
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -105,7 +103,8 @@ class _EmployeeSignupScreenState extends State<EmployeeSignupScreen> {
                       radius: 75,
                       backgroundColor: Theme.of(context).accentColor,
                       child: Text(
-                        'FF',
+                        userData.name.split(' ').reduce((value, element) =>
+                            value.characters.first + element.characters.first),
                         style: Theme.of(context).textTheme.headline3.copyWith(
                             fontSize: 48,
                             color: Theme.of(context).primaryColor),
@@ -147,27 +146,59 @@ class _EmployeeSignupScreenState extends State<EmployeeSignupScreen> {
                     children: [
                       EditableRow(
                           editableText:
-                              userData.name),
+                              userData.name), //TODO IMPLEMENT UPDATE USER INFO
                       EditableRow(
-                        editableText: userData.birthDate
-                            .difference(DateTime.now())
-                            .toString(),
+                        // TODO IMPLEMENT UPDATE USER INFO
+                        editableText:
+                            (DateTime.now().year - userData.birthDate.year)
+                                .toString(),
                         uneditableText: "Anos",
                       ),
-                      EditableRow(editableText: 'Liberdade - SP'),
-                      // OutlineButton(
-                      //   highlightedBorderColor: Theme.of(context).primaryColor,
-                      //   splashColor:
-                      //       Theme.of(context).primaryColor.withOpacity(0.2),
-                      //   borderSide: BorderSide(
-                      //     color: Theme.of(context).primaryColor,
-                      //   ),
-                      //   onPressed: _showShiftSelecionDialog,
-                      //   child: Text('Escala de Trabalho',
-                      //       style: TextStyle(
-                      //         color: Theme.of(context).primaryColor,
-                      //       )),
-                      // )
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          ConstrainedBox(
+                            constraints: BoxConstraints(
+                                maxWidth:
+                                    MediaQuery.of(context).size.width * 0.8),
+                            child: Text(
+                              userData.address ?? address ?? 'Rua Aimb',
+                              textAlign: TextAlign.center,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline1
+                                  .copyWith(
+                                    fontSize: 18,
+                                  ),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          InkWell(
+                            child: Icon(
+                              Icons.edit,
+                              size: 24,
+                              color: Theme.of(context).primaryColor,
+                            ),
+                            onTap: () async {
+                              final newAddress =
+                                  await Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => AddressSearch(
+                                    initialValue: address,
+                                  ),
+                                ),
+                              );
+
+                              if (newAddress != null)
+                                setState(() {
+                                  address = newAddress;
+                                });
+                            },
+                          ),
+                        ],
+                      )
                     ],
                   ),
                 ),
@@ -236,7 +267,7 @@ class _EmployeeSignupScreenState extends State<EmployeeSignupScreen> {
                               handleChipSelection(isSelected, e);
                             },
                             labelStyle: Theme.of(context).textTheme.headline2,
-                      ))
+                          ))
                     ],
                   )
                 ],

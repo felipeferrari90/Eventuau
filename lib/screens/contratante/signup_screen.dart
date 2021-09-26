@@ -8,7 +8,7 @@ import '../../components/buttons.dart';
 import '../../components/error_toast.dart';
 
 import './signup_success.dart';
-import '../../service/auth_service.dart';
+import '../../service/auth_service.dart' as AuthService;
 import '../../models/signup_model.dart';
 
 import '../../utils/dateValidation.dart' as dateValidator;
