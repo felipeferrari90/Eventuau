@@ -12,6 +12,7 @@ class ErrorToast extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnimatedContainer(
+
       duration: Duration(milliseconds: 300),
       curve: Curves.easeInOut,
       height: _hasError ? 40 : 0,
@@ -24,10 +25,12 @@ class ErrorToast extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Icon(
-            Icons.warning,
-            color: Colors.white,
-            size: 20,
+          FittedBox(
+            child: const Icon(
+              Icons.warning,
+              color: Colors.white,
+              size: 20,
+            ),
           ),
           const SizedBox(
             width: 4,

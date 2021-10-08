@@ -1,4 +1,5 @@
 import 'package:event_uau/providers/auth.dart';
+import 'package:event_uau/screens/profissional/employee_signup/employee_signup.dart';
 import 'package:flutter/material.dart';
 import '../utils/colors.dart';
 
@@ -23,7 +24,8 @@ class EventUauAppBar extends StatelessWidget with PreferredSizeWidget {
         username != null ?
             TextButton(
               onPressed: () {
-                Navigator.of(context).pushReplacementNamed("/");
+                Navigator.of(context)
+                      .pushNamed(EmployeeSignupScreen.routeName);
               },
               child: Text(
                 'Área do Parceiro',

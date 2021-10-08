@@ -1,35 +1,73 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
+import 'package:url_launcher/url_launcher.dart';
 
 class AddressSearch extends StatefulWidget {
   const AddressSearch({Key key, this.initialValue}) : super(key: key);
 
-  final String initialValue;
+  final Map<String, dynamic> initialValue;
 
   @override
   _AddressSearchState createState() => _AddressSearchState();
 }
 
 class _AddressSearchState extends State<AddressSearch> {
-  TextEditingController queryController;
+  GlobalKey<FormState> _formKey = new GlobalKey();
+  TextEditingController cepController;
   bool _isLoading = false;
-  Map<String, String> addressData;
+  Map<String, dynamic> addressData;
 
-  Future<void> getAddressFromCEP(String cep) async {
+  @override
+  void initState() {
+    // TODO: implement initState
+
+    if (widget.initialValue != null) {
+      setState(() {
+        cepController =
+            new TextEditingController(text: widget.initialValue['cep']);
+        addressData = widget.initialValue;
+      });
+    } else
+      cepController = new TextEditingController();
+
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    cepController.dispose();
+    super.dispose();
+  }
+
+  Future<void> getAddressFromCEP() async {
     setState(() {
       _isLoading = true;
     });
+
     try {
-      final res = await http.get('https://viacep.com.br/ws/$cep/json/');
+      final res = await http
+          .get('https://viacep.com.br/ws/${cepController.text}/json/');
 
       if (res.statusCode != 200) throw res;
 
-      setState(() => addressData = jsonDecode(res.body));
+      final responseBody = jsonDecode(res.body);
+
+      setState(() {
+        addressData = {
+          "cep": responseBody['cep'],
+          "logradouro": responseBody['logradouro'],
+          "bairro": responseBody['bairro'],
+          "localidade": responseBody['localidade'],
+          "uf": responseBody['uf'],
+        };
+      });
     } catch (e) {
       print(e);
     }
@@ -39,61 +77,205 @@ class _AddressSearchState extends State<AddressSearch> {
     });
   }
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    queryController = new TextEditingController(text: widget.initialValue);
-    super.initState();
-  }
+  Future<void> _openLink(String url) async =>
+      await canLaunch(url) ? await launch(url) : false;
 
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    queryController.dispose();
-    super.dispose();
+  void _onSubmit() {
+    if (!_formKey.currentState.validate()) {
+      return;
+    }
+
+    _formKey.currentState.save();
+
+    Navigator.of(context).pop(addressData);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: Text('Adicionar endereço'),
-          actions: [
-            IconButton(
-              onPressed: () {},
-              icon: Icon(
-                Icons.done,
-                color: Colors.green,
-              ),
-            )
-          ],
-        ),
-        body: _isLoading
-            ? Center(
-                child: CircularProgressIndicator(),
-              )
-            : Form(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
-                  child: Column(
-                    children: [
-                      Row(
-                        children: [
-                          Flexible(
-                            flex: 1,
-                            child: TextFormField(
-                              inputFormatters: [
-                                FilteringTextInputFormatter.digitsOnly,
-                                CepInputFormatter(ponto: false)
-                              ],
-                              decoration: InputDecoration(labelText: 'CEP'),
-                            ),
-                          ),
-                        ],
-                      )
-                    ],
+    return Padding(
+      padding:
+          EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+      child: Form(
+        key: _formKey,
+        child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Row(
+                children: [
+                  Flexible(
+                    flex: 1,
+                    child: TextFormField(
+                      autofocus: true,
+                      onChanged: (_) => setState(() => addressData = null),
+                      controller: cepController,
+                      textInputAction: TextInputAction.search,
+                      onEditingComplete: getAddressFromCEP,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                        CepInputFormatter(ponto: false)
+                      ],
+                      decoration: InputDecoration(
+                        labelText: 'CEP',
+                        suffix: Padding(
+                          padding: const EdgeInsets.only(right: 12.0),
+                          child: SizedBox(
+                              child: _isLoading
+                                  ? CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                    )
+                                  : IconButton(
+                                      padding: EdgeInsets.zero,
+                                      icon: Icon(Icons.search),
+                                      onPressed: _isLoading
+                                          ? () {}
+                                          : getAddressFromCEP,
+                                    ),
+                              height: 24,
+                              width: 24),
+                        ),
+                      ),
+                    ),
                   ),
+                  SizedBox(
+                    width: 12,
+                  ),
+                  GestureDetector(
+                    child: Text(
+                      'Não sabe seu CEP?',
+                      style: Theme.of(context)
+                          .textTheme
+                          .headline2
+                          .copyWith(decoration: TextDecoration.underline),
+                    ),
+                    onTap: () => _openLink(
+                        'https://buscacepinter.correios.com.br/app/localidade_logradouro/index.php'),
+                  )
+                ],
+              ),
+              if (addressData != null) ...[
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Flexible(
+                      child: TextFormField(
+                        enabled: false,
+                        onSaved: (value) => addressData['logradouro'] = value,
+                        initialValue: addressData['logradouro'],
+                        decoration: InputDecoration(
+                          labelText: 'Rua',
+                        ),
+                      ),
+                      flex: 2,
+                    ),
+                    SizedBox(
+                      width: 12,
+                    ),
+                    Flexible(
+                      child: TextFormField(
+                        onSaved: (value) => addressData['numero'] = value,
+                        initialValue: addressData['numero'] ?? '',
+                        validator: (value) =>
+                            value.isEmpty ? 'Campo Obrigatório' : null,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                        ],
+                        decoration: InputDecoration(
+                          labelText: 'Numero',
+                        ),
+                      ),
+                      flex: 1,
+                    ),
+                  ],
                 ),
-              ));
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Flexible(
+                      child: TextFormField(
+                        onSaved: (value) => addressData['complemento'] = value,
+                        initialValue: addressData['complemento'] ?? '',
+                        decoration: InputDecoration(
+                          labelText: 'Complemento',
+                        ),
+                      ),
+                      flex: 2,
+                    ),
+                    SizedBox(
+                      width: 12,
+                    ),
+                    Flexible(
+                      child: TextFormField(
+                        enabled: false,
+                        onSaved: (value) => addressData['bairro'] = value,
+                        initialValue: addressData['bairro'] ?? '',
+                        decoration: InputDecoration(
+                          labelText: 'Bairro',
+                        ),
+                      ),
+                      flex: 3,
+                    ),
+                  ],
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Flexible(
+                      child: TextFormField(
+                        enabled: false,
+                        onSaved: (value) => addressData['localidade'] = value,
+                        initialValue: addressData['localidade'] ?? '',
+                        decoration: InputDecoration(
+                          labelText: 'Cidade',
+                        ),
+                      ),
+                      flex: 2,
+                    ),
+                    SizedBox(
+                      width: 12,
+                    ),
+                    Flexible(
+                      child: TextFormField(
+                        onSaved: (value) => addressData['uf'] = value,
+                        initialValue: addressData['uf'] ?? '',
+                        enabled: false,
+                        maxLength: 2,
+                        decoration: InputDecoration(
+                          labelText: 'UF',
+                        ),
+                      ),
+                      flex: 1,
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    TextButton(
+                        onPressed: () => Navigator.of(context).pop(),
+                        child: Text(
+                          'Cancelar',
+                          style: TextStyle(color: Colors.black87),
+                        )),
+                    TextButton(
+                      onPressed: () => _isLoading ? null : _onSubmit(),
+                      child: Text(
+                        'Confirmar Endereço',
+                        style: Theme.of(context)
+                            .textTheme
+                            .headline5
+                            .copyWith(fontWeight: FontWeight.w600),
+                      ),
+                    )
+                  ],
+                )
+              ]
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
