@@ -1,6 +1,5 @@
-import '../../../components/employee/signup/paragraph_text.dart';
-
 import 'package:flutter/material.dart';
+import '../../../screens/profissional/employee_home_screen.dart';
 
 class EmployeeApplicationSuccess extends StatelessWidget {
   const EmployeeApplicationSuccess({Key key}) : super(key: key);
@@ -11,7 +10,7 @@ class EmployeeApplicationSuccess extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Column(
+        child: Column(          
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
@@ -21,10 +20,20 @@ class EmployeeApplicationSuccess extends StatelessWidget {
             SizedBox(
               height: 12,
             ),
-            ParagraphText('Agora você pode receber propostas.'),
-            ElevatedButton(
-              onPressed: () {},
-              child: Text('Ir para o Meu Perfil'),
+            Text(
+              'Agora você pode receber propostas.',
+              style: TextStyle(fontSize: 16),
+            ),
+            SizedBox(
+              height: 12,
+            ),
+            RaisedButton(
+              onPressed: () => Navigator.of(context)
+                  .pushReplacementNamed(EmployeeHomeScreen.routeName),
+              child: Text(
+                'Continuar para Área do Parceiro',
+                // style: TextStyle(decoration: TextDecoration.underline),
+              ),
             )
           ],
         ),
