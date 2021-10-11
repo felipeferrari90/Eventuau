@@ -34,11 +34,9 @@ Future<void> signup(SignupModel signupInfo) async {
 
   final res = await http.post(url, headers: headers, body: body);
 
-  if (res.statusCode != 200 || res.statusCode != 201) {
-    debugPrint("ERRO NA CRIACAO");
+  if (res.statusCode != 200 && res.statusCode != 201)
     throw json.decode(res.body);
-  }
-  debugPrint("FOI CRIADO COM SUCESSO");
+  
   return res;
 }
 

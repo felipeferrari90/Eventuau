@@ -1,9 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 class ProfilePicture extends StatefulWidget {
   const ProfilePicture({Key key, @required this.imageList}) : super(key: key);
 
-  final List<String> imageList;
+  final List<File> imageList;
 
   @override
   PprofilePictureState createState() => PprofilePictureState();
@@ -19,20 +21,23 @@ class PprofilePictureState extends State<ProfilePicture> {
   void _previousImage() =>
       _imageIndex > 0 ? setState(() => _imageIndex--) : false;
 
+
+
+
   @override
   Widget build(BuildContext context) {
     return Container(
       height: 360,
       child: Stack(
         fit: StackFit.expand,
-        children: [
-          Image.network(widget.imageList[_imageIndex],
-              fit: BoxFit.fitHeight,
+        children: widget.imageList.length > 0
+              ? [
+                  Image.file(
+                    widget.imageList[_imageIndex],
+                    fit: BoxFit.fitWidth,
               alignment: Alignment.topCenter,
-              loadingBuilder: (context, child, loadingProgress) =>
-                  loadingProgress == null
-                      ? child
-                      : Center(child: CircularProgressIndicator())),
+              ),
+           
           Positioned(
             width: MediaQuery.of(context).size.width,
             bottom: 5,
@@ -59,14 +64,14 @@ class PprofilePictureState extends State<ProfilePicture> {
           ),
           Row(
             children: [
-              InkWell(
+              GestureDetector(
                 onTap: _previousImage,
                 child: Container(
                   height: double.infinity,
                   width: MediaQuery.of(context).size.width * 0.5,
                 ),
               ),
-              InkWell(
+              GestureDetector(
                 onTap: _nextImage,
                 child: Container(
                   height: double.infinity,
@@ -74,8 +79,14 @@ class PprofilePictureState extends State<ProfilePicture> {
                 ),
               )
             ],
-          )
-        ],
+          ),
+                ]
+              : [
+                  Icon(
+                    Icons.no_photography,
+                    color: Colors.grey[500],
+                  )
+                ]
       ),
     );
   }

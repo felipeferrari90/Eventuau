@@ -1,13 +1,18 @@
+import 'package:event_uau/providers/auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class UserDetails extends StatelessWidget {
-  const UserDetails({
-    Key key,
-  }) : super(key: key);
+  const UserDetails({Key key, this.userData}) : super(key: key);
+
+  final User userData;
+
+  
 
   @override
   Widget build(BuildContext context) {
     final Color primaryColor = Theme.of(context).primaryColor;
+    print(userData.address.toString());
     return Container(
       alignment: Alignment.topLeft,
       padding: EdgeInsets.all(16),
@@ -19,11 +24,12 @@ class UserDetails extends StatelessWidget {
               style: Theme.of(context).textTheme.headline4,
               children: [
                 TextSpan(
-                    text: 'Sacha Baron Cohen',
+                    text: userData.name,
                     style: TextStyle(fontWeight: FontWeight.bold)),
                 TextSpan(text: " "),
                 TextSpan(
-                  text: '49',
+                  text: (DateTime.now().year - userData.birthDate.year)
+                      .toString(),
                 )
               ],
             ),
@@ -40,9 +46,7 @@ class UserDetails extends StatelessWidget {
                     color: primaryColor,
                     size: 26,
                   ),
-                  Text(
-                    '4.8',
-                  )
+                  Text(userData.partnerData?.grade ?? 'Novo!')
                 ],
               ),
               Row(
@@ -56,7 +60,7 @@ class UserDetails extends StatelessWidget {
                     size: 26,
                   ),
                   Text(
-                    'R\$20.00/h',
+                    'R\$${userData.partnerData.valorHora.toStringAsFixed(2)}/h',
                   )
                 ],
               ),
@@ -82,42 +86,32 @@ class UserDetails extends StatelessWidget {
           SizedBox(
             height: 4,
           ),
-          Row(
-            children: [
-              Icon(
-                Icons.location_pin,
-                color: primaryColor,
-                size: 26,
-              ),
-              Text(
-                'A 20km de distância. Vila Mariana - São Paulo',
+          if (userData.address != null) ...[
+            Row(
+              children: [
+                Icon(
+                  Icons.location_pin,
+                  color: primaryColor,
+                  size: 26,
+                ),
+                Text(
+                    '${userData.address.bairro} - ${userData.address.cidade}/${userData.address.estado}')
+              ],
+            ),
+            SizedBox(
+              height: 4,
+            ),
+          ],
+          ...userData.partnerData.especialidades
+              .map(
+                (e) => Chip(
+                  shape: StadiumBorder(side: BorderSide(color: primaryColor)),
+                  backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                  label: Text(e.descricao),
+                  labelStyle: Theme.of(context).textTheme.headline2,
+                ),
               )
-            ],
-          ),
-          SizedBox(
-            height: 4,
-          ),
-          // Row(
-          //   children: [
-          //     Icon(
-          //       Icons.watch_later,
-          //       color: primaryColor,
-          //       size: 26,
-          //     ),
-          //     Text(
-          //       'Jornada de Trabaho: Seg a Sáb - 8h as 18h',
-          //     )
-          //   ],
-          // ),
-          // SizedBox(
-          //   height: 4,
-          // ),
-          Chip(
-            shape: StadiumBorder(side: BorderSide(color: primaryColor)),
-            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-            label: Text('Animador'),
-            labelStyle: Theme.of(context).textTheme.headline2,
-          ),
+              .toList(),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 16.0),
             child: Text(
@@ -126,7 +120,11 @@ class UserDetails extends StatelessWidget {
             ),
           ),
           Text(
-              'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer congue tempus dui, ac rutrum tortor sollicitudin et. Duis eleifend bibendum lobortis. Maecenas cursus nulla nec rhoncus accumsan. Sed congue blandit tempor. Donec pretium eros sit amet efficitur rutrum. Maecenas finibus elementum odio eu efficitur. Sed posuere ipsum at lacus semper, a bibendum neque tincidunt.'),
+            userData.aboutMe ?? 'Não há nada aqui, ainda...',
+            style: userData.aboutMe == null
+                ? TextStyle(color: Colors.grey[500])
+                : null,
+          ),
           SizedBox(
             height: 80,
           ),
