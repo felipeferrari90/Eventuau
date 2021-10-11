@@ -21,7 +21,7 @@ import './screens/contratante/signup_screen.dart';
 import './screens/profissional/employee_signup/employee_add_documents.dart';
 import './screens/profissional/employee_signup/employee_application_success.dart';
 import './screens/profissional/employee_signup/employee_application_pending.dart';
-import './screens/profissional/employee_profile_screen.dart';
+import './screens/profile_screen.dart';
 import './utils/colors.dart';
 
 void main() {
@@ -134,15 +134,17 @@ class EventUau extends StatelessWidget {
                             EmployeeApplicationPending(),
                         EmployeeApplicationSuccess.routeName: (context) =>
                             EmployeeApplicationSuccess(),
-                        EmployeeProfileScreen.routeName: (context) =>
-                            EmployeeProfileScreen(),
+                        ProfileScreen.routeName: (context) => ProfileScreen(),
                     EmployeeHomeScreen.routeName: (context) =>
                             EmployeeHomeScreen(),
                         EventDetailScreen.routeName: (context) =>
                             EventDetailScreen(),
                         "/employee/id": (context) => ContractScreen(),
                 }
-                    : {},
+                    : {
+                        SignUpScreen.routeName: (context) => SignUpScreen(),
+                        SignupSuccess.routeName: (context) => SignupSuccess(),
+                      },
                 onUnknownRoute: (route) {
                   return MaterialPageRoute(
                     builder: (ctx) =>

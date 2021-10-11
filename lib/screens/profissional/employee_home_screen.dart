@@ -1,6 +1,11 @@
-import '../../components/employee/event_card.dart';
-import '../../screens/profissional/employee_profile_screen.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
+
+import '../../components/employee/event_card.dart';
+
+import '../profile_screen.dart';
+
+import '../../providers/auth.dart';
 
 class EmployeeHomeScreen extends StatefulWidget {
   const EmployeeHomeScreen({Key key}) : super(key: key);
@@ -35,12 +40,20 @@ class _EmployeeHomeScreenState extends State<EmployeeHomeScreen> {
               ),
             ),
             PopupMenuButton(
-              onSelected: (value) =>
-                  Navigator.pushNamed(context, value as String),
+              onSelected: (value) {
+                if (value == '/') {
+                  Provider.of<Auth>(context, listen: false).signout();
+                } else
+                  Navigator.pushNamed(context, value as String);
+              },
               itemBuilder: (context) => [
                 PopupMenuItem(
                   child: Text('Meu Perfil'),
-                  value: EmployeeProfileScreen.routeName,
+                  value: ProfileScreen.routeName,
+                ),
+                PopupMenuItem(
+                  child: Text('Sair'),
+                  value: '/',
                 ),
               ],
               icon: CircleAvatar(

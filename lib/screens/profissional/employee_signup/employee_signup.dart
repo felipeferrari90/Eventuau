@@ -1,10 +1,3 @@
-import 'dart:async';
-import 'dart:io';
-
-import 'package:brasil_fields/brasil_fields.dart';
-import 'package:event_uau/components/address_search.dart';
-import 'package:event_uau/screens/profissional/employee_signup/employee_application_success.dart';
-import '../../../service/contratado_service.dart' as ContratadoService;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -12,19 +5,24 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:brasil_fields/brasil_fields.dart';
 
+import 'dart:async';
+import 'dart:io';
+
+import '../../../models/address_model.dart';
+import '../../../models/contratado_model.dart';
+
+import '../../../components/address_search.dart';
 import '../../../components/employee/signup/paragraph_text.dart';
 import '../../../components/employee/signup/editable_row.dart';
+
+import '../../../screens/profissional/employee_signup/employee_application_success.dart';
+
 import '../../../providers/auth.dart';
 
 import '../../../service/upload_service.dart' as UploadService;
-
-class JobItem {
-  int id;
-  String descricao;
-
-  JobItem({this.id, this.descricao});
-}
+import '../../../service/contratado_service.dart' as ContratadoService;
 
 class EmployeeSignupScreen extends StatefulWidget {
   static const routeName = '/employee/signup/personaldata';
@@ -39,7 +37,7 @@ class _EmployeeSignupScreenState extends State<EmployeeSignupScreen> {
   TextEditingController _jobFilter = new TextEditingController();
   List<JobItem> jobList = [];
   List<JobItem> selectedJobs = [];
-  Map<String, dynamic> address;
+  AddressModel address;
   File profilePicture;
   String enderecoText;
   double hourlyRate;
@@ -134,8 +132,7 @@ class _EmployeeSignupScreenState extends State<EmployeeSignupScreen> {
 
   void _handleSubmit() async {
     var _hasError = false;
-    final userAddress = Provider.of<Auth>(context, listen: false).user.address;
-    //@TODO
+    final userAddress = Provider.of<Auth>(context, listen: false).user.address;    
     // 1. VALDATE IF USER HAS IMAGE AND HAS SELECTED AT LEAST 1 JOB + HOURLYRATE
 
     if (profilePicture == null) {
@@ -162,9 +159,18 @@ class _EmployeeSignupScreenState extends State<EmployeeSignupScreen> {
           profilePicture;
       //3. SUBMIT PARTNER DATA
       await ContratadoService.signup(hourlyRate, selectedJobs);
+      Provider.of<Auth>(context, listen: false)
+          .setContratanteInfo(hourlyRate, selectedJobs);
 
-      // 4. NAVIGATE TO NEXT PAGE
-      Navigator.of(context).pushReplacementNamed(EmployeeApplicationSuccess.routeName);
+      //4. ADD ADDRESS IF THE USER DON`T HAVE ONE
+      if (userAddress == null) {
+        address.setTipoEnd = 1;
+        await Provider.of<Auth>(context, listen: false).createAddress(address);
+      }
+
+      // 5. NAVIGATE TO NEXT PAGE
+      Navigator.of(context)
+          .pushReplacementNamed(EmployeeApplicationSuccess.routeName);
     } catch (e) {
       print(e);
       ScaffoldMessenger.of(context).showSnackBar(
@@ -417,8 +423,7 @@ class _EmployeeSignupScreenState extends State<EmployeeSignupScreen> {
                                 if (newAddress != null)
                                   setState(() {
                                     address = newAddress;
-                                    enderecoText =
-                                        '${newAddress['logradouro']} ${newAddress['numero']} ${newAddress['complemento']}, ${newAddress['cep']} - ${newAddress['bairro']} ${newAddress['localidade']} - ${newAddress['uf']}';
+                                    enderecoText = newAddress.toString();
                                   });
                               },
                             ),
