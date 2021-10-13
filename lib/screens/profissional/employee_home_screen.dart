@@ -2,6 +2,8 @@ import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
 import '../../components/employee/event_card.dart';
+import '../../providers/employee_events.dart';
+import '../../screens/profissional/employee_wallet.dart';
 
 import '../profile_screen.dart';
 
@@ -11,7 +13,6 @@ class EmployeeHomeScreen extends StatefulWidget {
   const EmployeeHomeScreen({Key key}) : super(key: key);
 
   static const routeName = '/employee/home';
-
   @override
   _EmployeeHomeScreenState createState() => _EmployeeHomeScreenState();
 }
@@ -21,6 +22,7 @@ class _EmployeeHomeScreenState extends State<EmployeeHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final _events = Provider.of<EmployeeEvents>(context).events;
     return DefaultTabController(
       initialIndex: 0,
       length: 4,
@@ -52,6 +54,10 @@ class _EmployeeHomeScreenState extends State<EmployeeHomeScreen> {
                   value: ProfileScreen.routeName,
                 ),
                 PopupMenuItem(
+                  child: Text('Minha carteira'),
+                  value: EmployeeWallet.routeName,
+                ),
+                PopupMenuItem(
                   child: Text('Sair'),
                   value: '/',
                 ),
@@ -78,15 +84,37 @@ class _EmployeeHomeScreenState extends State<EmployeeHomeScreen> {
               tabs:
                   _tabs.map((e) => TabWithUnreadIndicator(label: e)).toList()),
         ),
-        body: TabBarView(
-            children: _tabs
-                .map(
-                  (e) => Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(children: [EventCard()]),
-                  ),
-                )
-                .toList()),
+        body: FutureBuilder(
+            future: Provider.of<EmployeeEvents>(context, listen: false)
+                .fetchEmployeeEvents(),
+            builder: (context, snapshot) {
+              return snapshot.connectionState == ConnectionState.waiting
+                  ? Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : TabBarView(
+                      children: _tabs
+                          .map(
+                            (_) => Padding(
+                              // height: double.infinity,
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                children: [
+                                  _events.length > 0
+                                      ? Text(
+                                          'We got ${_events.length} events to show!')
+                                      : Expanded(
+                                          child: Center(
+                                            child: (Text(
+                                                'Nenhuma solicitação por aqui ainda.')),
+                                          ),
+                                        )
+                                ],
+                              ),
+                            ),
+                          )
+                          .toList());
+            }),
       ),
     );
   }

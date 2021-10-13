@@ -391,7 +391,7 @@ class _EmployeeSignupScreenState extends State<EmployeeSignupScreen> {
                                   maxWidth:
                                       MediaQuery.of(context).size.width * 0.8),
                               child: Text(
-                                userData.address ??
+                                userData?.address?.toString() ??
                                     enderecoText ??
                                     'Adicione um endereço',
                                 textAlign: TextAlign.center,

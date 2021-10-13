@@ -25,7 +25,7 @@ class EventUauAppBar extends StatelessWidget with PreferredSizeWidget {
             TextButton(
               onPressed: () {
                 Navigator.of(context)
-                      .pushNamed(EmployeeSignupScreen.routeName);
+                      .pushReplacementNamed(EmployeeSignupScreen.routeName);
               },
               child: Text(
                 'Área do Parceiro',
