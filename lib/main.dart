@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:event_uau/providers/employee_events.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
@@ -21,6 +22,7 @@ import './screens/contratante/signup_screen.dart';
 import './screens/profissional/employee_signup/employee_add_documents.dart';
 import './screens/profissional/employee_signup/employee_application_success.dart';
 import './screens/profissional/employee_signup/employee_application_pending.dart';
+import './screens/profissional/employee_wallet.dart';
 import './screens/profile_screen.dart';
 import './utils/colors.dart';
 
@@ -36,6 +38,10 @@ class EventUau extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => Auth()),
+        ChangeNotifierProxyProvider<Auth, EmployeeEvents>(
+          create: (_) => EmployeeEvents(null),
+          update: (context, value, previous) => EmployeeEvents(value.token),
+        )
       ],
       child: Consumer<Auth>(
         builder: (ctx, auth, _) => MaterialApp(
@@ -140,6 +146,7 @@ class EventUau extends StatelessWidget {
                         EventDetailScreen.routeName: (context) =>
                             EventDetailScreen(),
                         "/employee/id": (context) => ContractScreen(),
+                        EmployeeWallet.routeName: (context) => EmployeeWallet(),
                 }
                     : {
                         SignUpScreen.routeName: (context) => SignUpScreen(),

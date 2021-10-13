@@ -15,7 +15,7 @@ class ProfileScreen extends StatefulWidget {
   _ProfileScreenState createState() => _ProfileScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> {
+class _ProfileScreenState extends State<ProfileScreen> {  
   @override
   Widget build(BuildContext context) {
     final userData = Provider.of<Auth>(context).user;

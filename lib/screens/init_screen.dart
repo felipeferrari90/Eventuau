@@ -79,38 +79,7 @@ class _InitScreenState extends State<InitScreen> {
             padding: EdgeInsets.all(16.0),
             child: Form(
               key: _formKey,
-              child: Stack(children: [
-                Positioned(
-                    top: 10,
-                    left: 0,
-                    child: PopupMenuButton(
-                      onSelected: (value) => Navigator.pushReplacementNamed(
-                          context, value as String),
-                      itemBuilder: (context) => [
-                        PopupMenuItem(
-                          child:
-                              Text('DEVELOPER MENU FOR QUICK SCREEN ROUTING'),
-                          enabled: false,
-                        ),
-                        PopupMenuItem(
-                          child:
-                              Text('Go to ${EmployeeSignupScreen.routeName}'),
-                          value: EmployeeSignupScreen.routeName,
-                        ),
-                        PopupMenuItem(
-                          child: Text('Go to ${ProfileScreen.routeName}'),
-                          value: ProfileScreen.routeName,
-                        ),
-                        PopupMenuItem(
-                          child: Text('Go to ${EmployeeHomeScreen.routeName}'),
-                          value: EmployeeHomeScreen.routeName,
-                        ),
-                        PopupMenuItem(
-                          child: Text('Go to ${HomeScreen.routeName}'),
-                          value: HomeScreen.routeName,
-                        )
-                      ],
-                    )),
+              child: Stack(children: [                
                 Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
