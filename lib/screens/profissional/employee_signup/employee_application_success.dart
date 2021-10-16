@@ -28,8 +28,8 @@ class EmployeeApplicationSuccess extends StatelessWidget {
               height: 12,
             ),
             RaisedButton(
-              onPressed: () => Navigator.of(context)
-                  .pushReplacementNamed(EmployeeHomeScreen.routeName),
+              onPressed: () => Navigator.of(context).pushNamedAndRemoveUntil(
+                  EmployeeHomeScreen.routeName, (route) => false),                  
               child: Text(
                 'Continuar para Área do Parceiro',
                 // style: TextStyle(decoration: TextDecoration.underline),

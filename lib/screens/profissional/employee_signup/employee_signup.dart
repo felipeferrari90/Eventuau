@@ -150,6 +150,12 @@ class _EmployeeSignupScreenState extends State<EmployeeSignupScreen> {
       isLoading = true;
     });
     try {
+
+      if (userAddress == null) {
+        address.setTipoEnd = 1;
+        await Provider.of<Auth>(context, listen: false).createAddress(address);
+      }
+
       // 2. UPLOAD IMAGE
       await UploadService.uploadImage(
           fileType: UploadService.FileTypes.profilePicture,
@@ -161,13 +167,7 @@ class _EmployeeSignupScreenState extends State<EmployeeSignupScreen> {
       await ContratadoService.signup(hourlyRate, selectedJobs);
       Provider.of<Auth>(context, listen: false)
           .setContratanteInfo(hourlyRate, selectedJobs);
-
-      //4. ADD ADDRESS IF THE USER DON`T HAVE ONE
-      if (userAddress == null) {
-        address.setTipoEnd = 1;
-        await Provider.of<Auth>(context, listen: false).createAddress(address);
-      }
-
+  
       // 5. NAVIGATE TO NEXT PAGE
       Navigator.of(context)
           .pushReplacementNamed(EmployeeApplicationSuccess.routeName);

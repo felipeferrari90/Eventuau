@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../components/employee/event_card.dart';
 import '../../providers/employee_events.dart';
-import '../../screens/profissional/employee_wallet.dart';
+import 'wallet/employee_wallet.dart';
 
 import '../profile_screen.dart';
 
@@ -45,6 +45,8 @@ class _EmployeeHomeScreenState extends State<EmployeeHomeScreen> {
               onSelected: (value) {
                 if (value == '/') {
                   Provider.of<Auth>(context, listen: false).signout();
+                  Navigator.pushNamedAndRemoveUntil(
+                      context, '/', (route) => false);
                 } else
                   Navigator.pushNamed(context, value as String);
               },

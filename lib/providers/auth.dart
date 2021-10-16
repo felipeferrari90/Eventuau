@@ -98,13 +98,12 @@ class Auth with ChangeNotifier {
       cpf: _userData['cpf'],
       phone: _userData['telefone'],
       status: _userData['status'],
-    );
+    );    
 
-    notifyListeners();
-
+    getProfilePicture();
     await getPartnerInfo();
     await getAddress();
-    getProfilePicture();
+    
   }
 
   void signout() {

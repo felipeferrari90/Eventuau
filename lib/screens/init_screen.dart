@@ -1,18 +1,12 @@
 import 'dart:async';
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import './profissional/employee_home_screen.dart';
-import 'profile_screen.dart';
-import './profissional/employee_signup/employee_signup.dart';
-
 import '../providers/auth.dart';
-
 import '../utils/colors.dart';
 import '../components/buttons.dart';
 import '../components/error_toast.dart';
-import 'contratante/home_screen.dart';
+
 
 class InitScreen extends StatefulWidget {
   const InitScreen({Key key}) : super(key: key);
@@ -46,7 +40,7 @@ class _InitScreenState extends State<InitScreen> {
       });
       await Provider.of<Auth>(context, listen: false)
           .login(_authData['email'], _authData['password']);
-    } catch (e) {       
+    } catch (e) {
       print(e);
       setState(() => _hasError = true);
 
@@ -55,7 +49,7 @@ class _InitScreenState extends State<InitScreen> {
       _errorMessageTimer = new Timer(
           Duration(seconds: 5), () => setState(() => _hasError = false));
 
-     setState(() {
+      setState(() {
         _isLoading = false;
       });
     }
@@ -79,7 +73,7 @@ class _InitScreenState extends State<InitScreen> {
             padding: EdgeInsets.all(16.0),
             child: Form(
               key: _formKey,
-              child: Stack(children: [                
+              child: Stack(children: [
                 Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
