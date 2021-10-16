@@ -38,8 +38,8 @@ class EventUau extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => Auth()),
       ],
       child: Consumer<Auth>(
-        builder: (ctx, auth, _) => MaterialApp(
-            title: 'EventUAU',
+          builder: (ctx, auth, _) => MaterialApp(
+                title: 'EventUAU',
                 debugShowCheckedModeBanner: false,
                 theme: ThemeData(
                   progressIndicatorTheme: ProgressIndicatorThemeData(
@@ -125,8 +125,8 @@ class EventUau extends StatelessWidget {
                         "/employee/events": (context) => HomeScreen(),
                         "/contract/id": (context) => ContractScreen(),
 
-                    /*ROTAS DO FLUXO APP FUNCIONARIO*/
-                    EmployeeSignupScreen.routeName: (context) =>
+                        /*ROTAS DO FLUXO APP FUNCIONARIO*/
+                        EmployeeSignupScreen.routeName: (context) =>
                             EmployeeSignupScreen(),
                         EmployeeAddDocuments.routeName: (context) =>
                             EmployeeAddDocuments(),
@@ -136,24 +136,22 @@ class EventUau extends StatelessWidget {
                             EmployeeApplicationSuccess(),
                         EmployeeProfileScreen.routeName: (context) =>
                             EmployeeProfileScreen(),
-                    EmployeeHomeScreen.routeName: (context) =>
+                        EmployeeHomeScreen.routeName: (context) =>
                             EmployeeHomeScreen(),
                         EventDetailScreen.routeName: (context) =>
                             EventDetailScreen(),
                         "/employee/id": (context) => ContractScreen(),
-                }
+                      }
                     : {},
                 onUnknownRoute: (route) {
                   return MaterialPageRoute(
-                    builder: (ctx) =>
+                      builder: (ctx) =>
                           auth.isAuth ? HomeScreen() : InitScreen());
                 },
-
-            onGenerateRoute: auth.isAuth
+                onGenerateRoute: auth.isAuth
                     ? null
                     : (_) => MaterialPageRoute(builder: (ctx) => InitScreen()),
-              )
-      ),
+              )),
     );
   }
 }

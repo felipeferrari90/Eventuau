@@ -17,8 +17,9 @@ class EventService {
 
     return json.decode(res.body);
   }
+
   static Future<void> postEvent(EventItem event) async {
-    var body = json.encode({      
+    var body = json.encode({
       'nome': event.name,
       'descricao': event.description,
       'dataInicio': event.startDate.toIso8601String(),
@@ -27,11 +28,11 @@ class EventService {
       'duracaoMaxima': event.maxDuration
     });
 
-    final res = await http.post('$baseUrl/eventos', body: body, headers: headers);
+    final res =
+        await http.post('$baseUrl/eventos', body: body, headers: headers);
 
     if (res.statusCode != 200) throw res;
 
     return json.decode(res.body);
   }
 }
-

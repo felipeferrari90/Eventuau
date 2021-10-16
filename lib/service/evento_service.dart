@@ -1,43 +1,47 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 import 'package:event_uau/models/contratante_model.dart';
 import 'package:event_uau/models/evento_model.dart';
+import 'package:event_uau/providers/auth.dart';
 import 'package:http/http.dart' as http;
 
+final userData = Auth();
+
 class EventoService {
-
-
-  String _baseUrl = "https://192.168.0.14:6011/api";
+  String _baseUrl = "https://10.0.2.2:6011/api";
   String _endPoint = "/eventos";
 
-  Future<int> create(EventoModel eventoModel) async {
+  final _headers = {
+    HttpHeaders.authorizationHeader: 'Bearer ${userData.token ?? 'none'}',
+    HttpHeaders.contentTypeHeader: 'application/json'
+  };
+
+  Future<void> create(EventoModel eventoModel) async {
     try {
       http.Response response = await http.post(
         Uri.parse("$_baseUrl$_endPoint"),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
+        headers: _headers,
         body: eventoModel.toJson(),
       );
       if (response.statusCode == 201) {
         Map<String, dynamic> jsonResponse = json.decode(response.body);
-        int idRetornado = jsonResponse["id"];
-        return idRetornado;
+        eventoModel.id = jsonResponse["id"];
       }
     } catch (error) {
-      print("Service Error: $error ");
+      print("Service Error: $error");
       throw error;
     }
-    return null;
   }
 
-  Future<List<EventoModel>> getAllbyContratante() async {
-    List<EventoModel> lista = new List.empty();
+  Future<List<EventoModel>> getAllEvents() async {
+    List<EventoModel> lista = [];
     try {
-      http.Response response = await http.get(Uri.parse("$_baseUrl$_endPoint"));
+      http.Response response =
+          await http.get(Uri.parse("$_baseUrl$_endPoint"), headers: _headers);
       if (response.statusCode == 200) {
-        (json.decode(response.body) as List<EventoModel>).forEach((value) {
-          lista.add(EventoModel.fromMap(value as Map<String, dynamic>));
+        json.decode(response.body)['resultados'].forEach((value) {
+          lista.add(EventoModel.fromMap(value));
         });
       }
     } catch (error) {
@@ -48,7 +52,8 @@ class EventoService {
 
   Future<EventoModel> getById(int id) async {
     try {
-      http.Response response = await http.get(Uri.parse("$_baseUrl$_endPoint/$id"));
+      http.Response response =
+          await http.get(Uri.parse("$_baseUrl$_endPoint/$id"));
       if (response.statusCode == 200) {
         return EventoModel.fromJson(response.body);
       }
@@ -88,4 +93,3 @@ class EventoService {
     }
   }
 }
-

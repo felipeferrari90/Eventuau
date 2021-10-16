@@ -65,12 +65,11 @@ class Auth with ChangeNotifier {
   Auth._internal();
 
   String get token {
-    print(_token);
-
     return _token;
   }
 
   bool get isAuth {
+    _token != null ? print(_token) : print("nao tem token");
     return _token != null;
   }
 
@@ -124,7 +123,6 @@ class Auth with ChangeNotifier {
 
   set userProfilePicture(File profilePicture) {
     user.profilePicture = profilePicture;
-
     notifyListeners();
   }
 }

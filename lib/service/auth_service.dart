@@ -16,7 +16,7 @@ final userData = Auth();
 
 Future<Map> login(String email, String senha) async {
   final res = await http.post(
-    '$baseUrl/usuario/$email/login',
+    Uri.parse('$baseUrl/usuario/$email/login'),
     headers: headers,
     body: json.encode({'senha': senha}),
   );
@@ -38,6 +38,7 @@ Future<void> signup(SignupModel signupInfo) async {
     debugPrint("ERRO NA CRIACAO");
     throw json.decode(res.body);
   }
+
   debugPrint("FOI CRIADO COM SUCESSO");
   return res;
 }
@@ -51,6 +52,5 @@ Future<Map<String, dynamic>> updateUser(Map<String, dynamic> payload) async {
       body: json.encode(payload));
 
   if (res.statusCode != 200) throw res;
-
   return json.decode(res.body);
 }

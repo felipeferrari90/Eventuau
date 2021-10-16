@@ -4,8 +4,9 @@ import 'package:event_uau/models/contratante_model.dart';
 import 'package:event_uau/models/contrato_model.dart';
 import 'package:event_uau/models/funcionario_model.dart';
 import 'package:enum_to_string/enum_to_string.dart';
+import 'package:flutter/cupertino.dart';
 
-class EventoModel {
+class EventoModel with ChangeNotifier {
   int id;
   int numeroDeEvento;
   String nome;
@@ -13,39 +14,33 @@ class EventoModel {
   String endereco;
   StatusEvento status;
   ContratanteModel organizador;
-  DateTime dataEHoraCriacaoEvento;
+  DateTime dataEHoraCriacaoEvento = DateTime.now();
   DateTime dataEHorarioInicio;
-  Duration duracaoMinima;
-  Duration duracaoMaxima;
-  double valorEvento;
+  DateTime dataEHorarioTermino;
+  int duracaoMinima;
+  int duracaoMaxima;
+  double valorEvento = 0.0;
   String observacoes;
   bool estaPago;
-  int numeroMaximoDeGarcons = 0;
-  int numeroMaximoDeAnimadores = 0;
-  int numeroMaximoDeBuffets = 0;
-  int numeroMaximoDeChurrasqueiros = 0;
-  
- 
-  EventoModel({
-    this.id,
-    this.numeroDeEvento,
-    this.nome,
-    this.descricao,
-    this.endereco,
-    this.status,
-    this.organizador,
-    this.dataEHoraCriacaoEvento,
-    this.dataEHorarioInicio,
-    this.duracaoMinima,
-    this.duracaoMaxima,
-    this.valorEvento,
-    this.observacoes,
-    this.estaPago,
-    this.numeroMaximoDeGarcons,
-    this.numeroMaximoDeAnimadores,
-    this.numeroMaximoDeBuffets,
-    this.numeroMaximoDeChurrasqueiros,
-  });
+  List<FuncionarioModel> funcionarios = List.empty();
+
+  EventoModel(
+      {this.id,
+      this.numeroDeEvento,
+      this.nome,
+      this.descricao,
+      this.endereco,
+      this.status,
+      this.organizador,
+      this.dataEHoraCriacaoEvento,
+      this.dataEHorarioInicio,
+      this.dataEHorarioTermino,
+      this.duracaoMinima,
+      this.duracaoMaxima,
+      this.valorEvento,
+      this.observacoes,
+      this.estaPago,
+      this.funcionarios});
 
   factory EventoModel.fromMap(Map<String, dynamic> json) => EventoModel(
       id: json["id"],
@@ -56,17 +51,14 @@ class EventoModel {
       status:
           EnumToString.fromString(StatusEvento.values, json["statusEvento"]),
       organizador: json["organizador"],
-      dataEHoraCriacaoEvento: json["dataCriacaoEvento"],
-      dataEHorarioInicio: json["inicio"],
+      dataEHoraCriacaoEvento: DateTime(json["dataCriacaoEvento"]),
+      dataEHorarioInicio: DateTime(json["dataEHorarioInicio"]),
+      dataEHorarioTermino: DateTime(json["dataEHorarioTermino"]),
       duracaoMinima: json["duracao minima"],
       duracaoMaxima: json["duracao maxima"],
       valorEvento: json["valorTotal"],
       estaPago: json["estaPago"],
-      numeroMaximoDeGarcons: json["numeroMaximoDeGarcons"],
-      numeroMaximoDeAnimadores: json["numeroMaximoDeAnimadores"],
-      numeroMaximoDeBuffets: json["numeroMaximoDeBuffets"],
-      numeroMaximoDeChurrasqueiros: json["numeroMaximoDeChurrasqueiros"],
-   );
+      funcionarios: json["funcionarios"]);
 
   Map<String, dynamic> toMap() => {
         "id": this.id,
@@ -74,24 +66,26 @@ class EventoModel {
         "descricao": this.descricao,
         "nome": this.nome,
         "endereco": this.endereco,
-        "statusEvento":
-            EnumToString.convertToString(this.status , camelCase: false),
-        "organizador": this.organizador,
-        "dataCriacaoEvento": this.dataEHoraCriacaoEvento,
-        "inicio": this.dataEHorarioInicio,
-        "duracaoMinima":
-            this.duracaoMinima,
-        "duracaoMaxima":
-            this.duracaoMaxima,
+        "status": EnumToString.convertToString(
+            this.status ?? StatusEvento.PENDENTE,
+            camelCase: false),
+        "dataCriacao":
+            (this.dataEHoraCriacaoEvento ?? DateTime.now()).toIso8601String(),
+        "dataInicio":
+            (this.dataEHorarioInicio ?? DateTime.now()).toIso8601String(),
+        "dataTermino":
+            (this.dataEHorarioTermino ?? DateTime.now()).toIso8601String(),
+        "duracaoMinima": this.duracaoMinima,
         "valorTotal": this.valorEvento,
-        "observacoes": this.observacoes,
-  };
+        "observacao": this.observacoes,
+        "funcionariosContratados": this.funcionarios,
+      };
 
   factory EventoModel.fromJson(String str) =>
       EventoModel.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
-  
+
   /*
   double pegarValorTotalEvento(){
     double aux = 0;
@@ -104,13 +98,10 @@ class EventoModel {
 }
 
 enum StatusEvento {
-  CRIADO, // evento apenas foi pago e criado, mas nenhuma proposta foi enviada
-  CONTRATANDO, // quando propostas ja são enviadas a funcionarios
+  PENDENTE, // evento foi criado apenas, sem funcionarios contratados
+  CONTRATANDO,
   FECHADO, //todas as vagas ja foram ocupadas porem funcionarios que aceitaram a proposta podem aparecer na lista de espera
-  PENDENTE, // quando esta faltando dinheiro em caixa para pagar funcionarios  
   ACONTECENDO, // evento em questão esta acontecendo no momento
   TERMINADO, // evento acabou, nao aparece mais na tela principal de eventos
   CANCELADO // evento cancelado antes do termino estipulado,
 }
-
-
