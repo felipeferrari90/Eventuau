@@ -1,6 +1,9 @@
 import 'package:event_uau/components/employee/employee_event_card.dart';
+import 'package:event_uau/providers/employee_events.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class EventDetailScreen extends StatelessWidget {
   const EventDetailScreen({Key key}) : super(key: key);
@@ -10,6 +13,8 @@ class EventDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final id = ModalRoute.of(context).settings.arguments as int;
+    final eventData = Provider.of<EmployeeEvents>(context).getById(id);
     return Scaffold(
       appBar: AppBar(
         title: Text('Resumo do evento'),
@@ -22,7 +27,7 @@ class EventDetailScreen extends StatelessWidget {
           children: [
             Field(
               label: 'Nome do Evento',
-              value: 'Churrasco na Brasilândia',
+              value: eventData.name,
             ),
             Row(
               children: [
@@ -30,14 +35,14 @@ class EventDetailScreen extends StatelessWidget {
                   flex: 1,
                   child: Field(
                     label: 'Data de Inicio',
-                    value: '31/12/2021',
+                    value: DateFormat('dd/M/yyyy').format(eventData.startDate),
                   ),
                 ),
                 Flexible(
                   flex: 1,
                   child: Field(
                     label: 'Data de Término',
-                    value: '31/12/2021',
+                    value: DateFormat('dd/M/yyyy').format(eventData.endDate),
                   ),
                 )
               ],
@@ -48,22 +53,22 @@ class EventDetailScreen extends StatelessWidget {
                   flex: 1,
                   child: Field(
                     label: 'Horário de Inicio',
-                    value: '11:30',
+                    value: DateFormat.Hm('pt_BR').format(eventData.startDate),
                   ),
                 ),
                 Flexible(
                   flex: 1,
                   child: Field(
                     label: 'Horário de Término',
-                    value: '16:30',
+                    value: DateFormat.Hm('pt_BR').format(eventData.endDate),
                   ),
                 )
               ],
             ),
             Field(
-              label: 'Endereço',
-              value: 'Rua das Abóboras 4600, Brasilândia - São Paulo - SP',
-            ),
+                label: 'Endereço',
+                value:
+                    '${eventData.address.cep} - ${eventData.address.bairro}, ${eventData.address.cidade}'),
             Center(
               child: Text(
                 'falta add o google maps',
@@ -72,11 +77,70 @@ class EventDetailScreen extends StatelessWidget {
             SizedBox(
               height: 12,
             ),
-            Title('Assistentes selecionados'),
+            Text('PROPOSTA',
+                style: Theme.of(context)
+                    .textTheme
+                    .headline5
+                    .copyWith(fontWeight: FontWeight.bold)),
             SizedBox(
-              height: 12,
+              height: 8,
             ),
-            EventCardEmployee(trailing: null),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [Text('Preço por hora:'), Text('R\$70,00')],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('Tempo de Evento:'),
+                Text(
+                    '${eventData.startDate.hour - eventData.endDate.hour} Horas')
+              ],
+            ),
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Subtotal:',
+                ),
+                Text(
+                  'R\$${((eventData.startDate.hour - eventData.endDate.hour) * 70.00).toStringAsFixed(2)}',
+                )
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Taxa EventUau (15%):',
+                ),
+                Text(
+                  'R\$${(((eventData.startDate.hour - eventData.endDate.hour) * 70.00) * 0.15).toStringAsFixed(2)}',
+                )
+              ],
+            ),
+            SizedBox(
+              height: 6,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Subtotal:',
+                  style: Theme.of(context).textTheme.headline5,
+                ),
+                Text(
+                  'R\$${((eventData.startDate.hour - eventData.endDate.hour) * 70.00).toStringAsFixed(2)}',
+                  style: Theme.of(context).textTheme.headline5,
+                )
+              ],
+            ),
+            // Title('Assistentes Selecionados'),
+            // SizedBox(
+            //   height: 12,
+            // ),
+            // EventCardEmployee(trailing: null),
             SizedBox(
               height: 12,
             ),

@@ -1,6 +1,8 @@
 import 'package:event_uau/providers/auth.dart';
+import 'package:event_uau/screens/profissional/employee_home_screen.dart';
 import 'package:event_uau/screens/profissional/employee_signup/employee_signup.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../utils/colors.dart';
 
 class EventUauAppBar extends StatelessWidget with PreferredSizeWidget {
@@ -14,6 +16,7 @@ class EventUauAppBar extends StatelessWidget with PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bool _isPartner = Provider.of<Auth>(context).user.isPartner;
     return AppBar(
       title: Text(
         title ?? "",
@@ -21,20 +24,22 @@ class EventUauAppBar extends StatelessWidget with PreferredSizeWidget {
       toolbarHeight: 70,
       elevation: 0,
       actions: <Widget>[
-        username != null ?
-            TextButton(
-              onPressed: () {
-                Navigator.of(context)
-                      .pushReplacementNamed(EmployeeSignupScreen.routeName);
-              },
-              child: Text(
-                'Área do Parceiro',
-                style: TextStyle(
-                    decoration: TextDecoration.underline,
-                    fontSize: 14,
-                    color: Theme.of(context).primaryColor),
-              ),
-            ) : null,
+        username != null
+            ? TextButton(
+                onPressed: () => !_isPartner
+                    ? Navigator.of(context)
+                        .pushNamed(EmployeeSignupScreen.routeName)
+                    : Navigator.of(context)
+                        .pushReplacementNamed(EmployeeHomeScreen.routeName),
+                child: Text(
+                  'Área do Parceiro',
+                  style: TextStyle(
+                      decoration: TextDecoration.underline,
+                      fontSize: 14,
+                      color: Theme.of(context).primaryColor),
+                ),
+              )
+            : null,
         username != null
             ? GestureDetector(
                 child: Container(
@@ -64,7 +69,6 @@ class EventUauAppBar extends StatelessWidget with PreferredSizeWidget {
                 child:
                     Text("fazer login", style: TextStyle(color: primaryColor)),
               ),
-            
       ],
       iconTheme: IconThemeData(color: primaryColor, size: 16),
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,

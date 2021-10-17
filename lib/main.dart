@@ -1,12 +1,13 @@
 import 'dart:io';
-
-import 'package:event_uau/providers/employee_events.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
-import './screens/contract_screen.dart';
+
 import './providers/auth.dart';
+import './providers/employee_events.dart';
+
+import './screens/contract_screen.dart';
 import './screens/contratante/signup_success.dart';
 import './screens/event_detail_screen.dart';
 import './screens/profissional/employee_home_screen.dart';
@@ -22,13 +23,16 @@ import './screens/contratante/signup_screen.dart';
 import './screens/profissional/employee_signup/employee_add_documents.dart';
 import './screens/profissional/employee_signup/employee_application_success.dart';
 import './screens/profissional/employee_signup/employee_application_pending.dart';
-import './screens/profissional/employee_wallet.dart';
+import './screens/profissional/wallet/add_bank_screen.dart';
+import './screens/profissional/wallet/employee_wallet.dart';
 import './screens/profile_screen.dart';
 import './utils/colors.dart';
 
+import 'package:intl/date_symbol_data_local.dart';
+
 void main() {
   HttpOverrides.global = new MyHttpOverrides();
-
+  initializeDateFormatting('pt_BR', null);
   runApp(EventUau());
 }
 
@@ -147,6 +151,7 @@ class EventUau extends StatelessWidget {
                             EventDetailScreen(),
                         "/employee/id": (context) => ContractScreen(),
                         EmployeeWallet.routeName: (context) => EmployeeWallet(),
+                        AddBankScreen.routeName: (context) => AddBankScreen(),
                 }
                     : {
                         SignUpScreen.routeName: (context) => SignUpScreen(),
@@ -157,7 +162,6 @@ class EventUau extends StatelessWidget {
                     builder: (ctx) =>
                           auth.isAuth ? HomeScreen() : InitScreen());
                 },
-
             onGenerateRoute: auth.isAuth
                     ? null
                     : (_) => MaterialPageRoute(builder: (ctx) => InitScreen()),

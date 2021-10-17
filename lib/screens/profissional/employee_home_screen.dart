@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 
 import '../../components/employee/event_card.dart';
 import '../../providers/employee_events.dart';
+import '../../providers/auth.dart';
+
 import 'wallet/employee_wallet.dart';
 
 import '../profile_screen.dart';
-
-import '../../providers/auth.dart';
 
 class EmployeeHomeScreen extends StatefulWidget {
   const EmployeeHomeScreen({Key key}) : super(key: key);
@@ -19,10 +19,29 @@ class EmployeeHomeScreen extends StatefulWidget {
 
 class _EmployeeHomeScreenState extends State<EmployeeHomeScreen> {
   List<String> _tabs = ['Todos', 'Solicitações', 'Confirmados', 'Finalizados'];
+  Future<void> _fetchDataRef;
+
+  @override
+  void initState() {
+    print('initstate');
+    _fetchDataRef = Provider.of<EmployeeEvents>(context, listen: false)
+        .fetchEmployeeEvents();
+    super.initState();
+  }
+
+  @override
+  void didUpdateWidget(covariant EmployeeHomeScreen oldWidget) {
+    print('didChange');
+    if (Provider.of<EmployeeEvents>(context, listen: false).events.length == 0)
+      _fetchDataRef = Provider.of<EmployeeEvents>(context, listen: false)
+          .fetchEmployeeEvents();
+    super.didUpdateWidget(oldWidget);
+  }
 
   @override
   Widget build(BuildContext context) {
     final _events = Provider.of<EmployeeEvents>(context).events;
+    final userInitials = Provider.of<Auth>(context).user.initials;
     return DefaultTabController(
       initialIndex: 0,
       length: 4,
@@ -58,7 +77,7 @@ class _EmployeeHomeScreenState extends State<EmployeeHomeScreen> {
                 PopupMenuItem(
                   child: Text('Minha carteira'),
                   value: EmployeeWallet.routeName,
-                ),
+                ),                
                 PopupMenuItem(
                   child: Text('Sair'),
                   value: '/',
@@ -67,7 +86,7 @@ class _EmployeeHomeScreenState extends State<EmployeeHomeScreen> {
               icon: CircleAvatar(
                 backgroundColor: Theme.of(context).accentColor,
                 child: Text(
-                  'FF',
+                  userInitials,
                   style: TextStyle(color: Colors.black),
                 ),
               ),
@@ -87,35 +106,47 @@ class _EmployeeHomeScreenState extends State<EmployeeHomeScreen> {
                   _tabs.map((e) => TabWithUnreadIndicator(label: e)).toList()),
         ),
         body: FutureBuilder(
-            future: Provider.of<EmployeeEvents>(context, listen: false)
-                .fetchEmployeeEvents(),
+            future: _fetchDataRef,
             builder: (context, snapshot) {
-              return snapshot.connectionState == ConnectionState.waiting
-                  ? Center(
-                      child: CircularProgressIndicator(),
-                    )
-                  : TabBarView(
-                      children: _tabs
-                          .map(
-                            (_) => Padding(
-                              // height: double.infinity,
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                children: [
-                                  _events.length > 0
-                                      ? Text(
-                                          'We got ${_events.length} events to show!')
-                                      : Expanded(
-                                          child: Center(
-                                            child: (Text(
-                                                'Nenhuma solicitação por aqui ainda.')),
-                                          ),
-                                        )
-                                ],
-                              ),
-                            ),
-                          )
-                          .toList());
+              if (snapshot.connectionState == ConnectionState.waiting)
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              return TabBarView(
+                  children: _tabs
+                      .map(
+                        (_) => RefreshIndicator(
+                          color: Theme.of(context).accentColor,
+                          onRefresh: Provider.of<EmployeeEvents>(context,
+                                  listen: false)
+                              .fetchEmployeeEvents,
+                          child: _events.length <= 0
+                              ? ListView(
+                                  shrinkWrap: true,
+                                  padding: const EdgeInsets.all(20.0),
+                                  children: [
+                                    Center(
+                                      child: Text(
+                                        'Nenhum evento aqui ainda.',
+                                        style: TextStyle(color: Colors.grey),
+                                      ),
+                                    ),
+                                    Center(
+                                      child: Text(
+                                        'Arraste para baixo para atualizar',
+                                        style: TextStyle(color: Colors.grey),
+                                      ),
+                                    )
+                                  ],
+                                )
+                              : ListView.builder(
+                                  itemBuilder: (context, index) =>
+                                      EventCard(id: _events[index].id),
+                                  itemCount: _events.length,
+                                ),
+                        ),
+                      )
+                      .toList());
             }),
       ),
     );

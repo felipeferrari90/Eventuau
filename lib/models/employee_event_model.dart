@@ -1,3 +1,4 @@
+import 'package:event_uau/models/address_model.dart';
 import 'package:flutter/material.dart';
 
 class EmployeeEventModel {
@@ -8,6 +9,8 @@ class EmployeeEventModel {
   DateTime endDate;
   int minDuration;
   int maxDuration;
+  String status;
+  AddressModel address;
 
   EmployeeEventModel(
       {@required this.id,
@@ -16,5 +19,7 @@ class EmployeeEventModel {
       @required this.startDate,
       @required this.endDate,
       @required this.maxDuration,
-      @required this.minDuration});
+      @required this.minDuration,
+      @required this.status,
+      @required this.address});
 }

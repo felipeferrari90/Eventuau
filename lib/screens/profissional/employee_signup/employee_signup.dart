@@ -319,10 +319,7 @@ class _EmployeeSignupScreenState extends State<EmployeeSignupScreen> {
                           backgroundColor: Theme.of(context).accentColor,
                           child: profilePicture == null
                               ? Text(
-                                  userData.name.split(' ').reduce(
-                                      (value, element) =>
-                                          value.characters.first +
-                                          element.characters.first),
+                                  userData.initials,
                                   style: Theme.of(context)
                                       .textTheme
                                       .headline3
