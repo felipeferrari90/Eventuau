@@ -17,6 +17,10 @@ class AddressModel {
   String estado;
   AddressType tipoEnd;
 
+  get latitudeValue => double.parse(latitude);
+
+  get longitudeValue => double.parse(longitude);
+
   AddressModel(
       {@required this.id,
       @required this.latitude,

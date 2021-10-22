@@ -19,23 +19,18 @@ class EventCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final EmployeeEventModel event =
         Provider.of<EmployeeEvents>(context, listen: false).getById(id);
-    return InkWell(
-      onTap: () => Navigator.of(context)
-          .pushNamed(EventDetailScreen.routeName, arguments: id),
-      onLongPress: () => print('open options menu'),
-      child: Card(
-        color: Colors.white,
-        elevation: 2,
-        child: Column(
-          children: [
-            EventCardHeader(
-              event: event,
-            ),
-            EventCardBody(
-              event: event,
-            ),
-          ],
-        ),
+    return Card(
+      color: Colors.white,
+      elevation: 2,
+      child: Column(
+        children: [
+          EventCardHeader(
+            event: event,
+          ),
+          EventCardBody(
+            event: event,
+          ),
+        ],
       ),
     );
   }
@@ -46,12 +41,17 @@ class EventCardBody extends StatelessWidget {
 
   final EmployeeEventModel event;
 
-  void showOptionsDialog() {}
+  void _navigateToDetails(BuildContext context, Function callback) async {
+    await Navigator.of(context)
+        .pushNamed(EventDetailScreen.routeName, arguments: event.id);
 
-  void navigateToEvenetDetails() {}
+    callback();
+  }
 
-  @override
   Widget build(BuildContext context) {
+    final refreshEventsList =
+        Provider.of<EmployeeEvents>(context, listen: false).fetchEmployeeEvents;
+    
     return Padding(
       padding: const EdgeInsets.only(
           left: _innerPadding, right: _innerPadding, top: 16),
@@ -89,12 +89,12 @@ class EventCardBody extends StatelessWidget {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                      const Text(
+                        const Text(
                           'Status',
                           style: TextStyle(fontSize: 12),
                         ),
                         Text(
-                          event.status ?? 'Desconhecido',
+                          event.status.descricao ?? 'Desconhecido',
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               color: Theme.of(context).primaryColor,
@@ -103,21 +103,22 @@ class EventCardBody extends StatelessWidget {
                       ],
                     ),
                     RaisedButton(
-                      color: Theme.of(context).accentColor,
+                      color: event.isConsideringProposal
+                          ? Theme.of(context).accentColor
+                          : Theme.of(context).primaryColor,
                       elevation: 0,
                       padding: EdgeInsets.symmetric(horizontal: 32),
                       visualDensity: VisualDensity.compact,
-                      onPressed: () => Navigator.of(context).pushNamed(
-                          EventDetailScreen.routeName,
-                          arguments: event.id),
+                      onPressed: () =>
+                          _navigateToDetails(context, refreshEventsList),
                       child: Text(
-                        'Ver Proposta',
+                        '${event.isConsideringProposal ? 'Ver Proposta' : 'Detalhes'}',
                       ),
                     ),
                   ],
                 ),
                 SizedBox(
-                  height: 8,
+                  height: 12,
                 ),
               ],
             ),

@@ -2,9 +2,10 @@ import 'package:collection/collection.dart';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:event_uau/models/address_model.dart';
-import 'package:event_uau/models/employee_event_model.dart';
-import 'package:event_uau/service/event_service.dart';
+import '../models/address_model.dart';
+import '../models/employee_event_model.dart';
+import '../models/event_employment_status_model.dart';
+import '../service/event_service.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -22,7 +23,7 @@ class EmployeeEvents with ChangeNotifier {
     return _events.firstWhere(((element) => element.id == id));
   }
 
-  Future<void> fetchEmployeeEvents() async {    
+  Future<void> fetchEmployeeEvents() async {
     final url =
         'https://10.0.2.2:6011/api/propostas/parceiro?indice=0&tamanhoPagina=20';
     try {
@@ -52,6 +53,11 @@ class EmployeeEvents with ChangeNotifier {
               estado: addresses[index]['estado'],
               complemento: addresses[index]['complemento']);
 
+          final eventStatus = new EventEmploymentStatus(
+              hasRefused: e['statusContratacao']['ehRecusado'],
+              id: e['statusContratacao']['id'],
+              descricao: e['statusContratacao']['descricao']);
+
           _events.add(
             new EmployeeEventModel(
               id: e['id'],
@@ -61,14 +67,14 @@ class EmployeeEvents with ChangeNotifier {
               endDate: DateTime.parse(e['dataTermino']),
               maxDuration: e['duracaoMinima'],
               minDuration: e['duracaoMaxima'],
-              status: e['status'],
+              status: eventStatus,
               address: address,
             ),
           );
         });
       }
     } catch (e) {
-      _events = null;
+      _events = [];
       throw e;
     }
     notifyListeners();

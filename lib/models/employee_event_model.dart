@@ -1,5 +1,6 @@
-import 'package:event_uau/models/address_model.dart';
 import 'package:flutter/material.dart';
+import './address_model.dart';
+import './event_employment_status_model.dart';
 
 class EmployeeEventModel {
   int id;
@@ -9,9 +10,12 @@ class EmployeeEventModel {
   DateTime endDate;
   int minDuration;
   int maxDuration;
-  String status;
+  EventEmploymentStatus status;
   AddressModel address;
 
+  get isConsideringProposal => status.id == 'PEN' && status.hasRefused == false;
+  
+  
   EmployeeEventModel(
       {@required this.id,
       @required this.name,
