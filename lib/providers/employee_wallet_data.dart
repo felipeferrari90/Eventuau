@@ -28,7 +28,7 @@ class Operation {
       @required this.date,
       @required this.eventId,
       @required this.value,
-      this.operationType});
+      @required this.operationType});
 }
 
 class BankData {
@@ -62,8 +62,8 @@ class EmployeeWalletData with ChangeNotifier {
 
   double avaliableBalance = 0.0;
   double futureBalance = 0.0;
-  List<Operation> futureOperations = [];
-  List<Operation> pastOperations = [];
+  // List<Operation> futureOperations = [];
+  List<Operation> operations = [];
   // does not exist on backend, just a mock on front
   List<BankData> bankData = [];
 
@@ -109,6 +109,26 @@ class EmployeeWalletData with ChangeNotifier {
 
     avaliableBalance = double.parse(responseBody['valorDisponivel'].toString());
     futureBalance = double.parse(responseBody['valorFuturo'].toString());
+
+    List<Operation> _operations = [];
+    (responseBody['operacoes'] as List).forEach((element) {
+      final operationType = element['tipoOperacao'];
+      _operations.add(
+        new Operation(
+          id: element['id'].toString(),
+          date: DateTime.parse(element['dataHora']),
+          eventId: element['idEvento'],
+          value: double.parse(element['valor'].toString()),
+          operationType: new OperationType(
+            id: operationType['id'],
+            description: operationType['descricao'],
+            multiplier: operationType['multplicador'],
+            isAvaliable: operationType['ehDisponivel'],
+          ),
+        ),
+      );
+    });
+    operations = _operations;
 
     notifyListeners();
   }

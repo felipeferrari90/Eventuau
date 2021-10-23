@@ -226,12 +226,23 @@ class _EmployeeWalletState extends State<EmployeeWallet> {
                             ),
                             title: Text('Minhas Transações'),
                           ),
-                      body: ListTile(
-                        visualDensity: VisualDensity.compact,
-                        title: Text(
-                          'Nenhuma transação ainda...',
-                          style: TextStyle(color: Colors.grey[600]),
-                        ),
+                      body: Column(
+                        children: walletData.operations
+                            .map(
+                              (e) => ListTile(
+                                visualDensity: VisualDensity.compact,
+                                title: Text(e.operationType.description),
+                                trailing: Text(
+                                  'R\$ ${(e.value * e.operationType.multiplier).toStringAsFixed(2)}',
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      color: e.operationType.multiplier > 0
+                                          ? Colors.green
+                                          : Colors.redAccent),
+                                ),
+                              ),
+                            )
+                            .toList(),
                       ),
                       isExpanded: _expansionItems[1])
                 ],
