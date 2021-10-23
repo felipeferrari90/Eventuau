@@ -3,10 +3,16 @@ import 'package:flutter/material.dart';
 class EventCardEmployee extends StatelessWidget {
   const EventCardEmployee({
     this.trailing,
+    this.name,
+    this.age,
+    this.job,
     Key key,
   }) : super(key: key);
 
   final trailing;
+  final String name;
+  final String age;
+  final String job;
 
   Widget renderTrailing() {
     if (trailing is Widget) return trailing;
@@ -31,25 +37,25 @@ class EventCardEmployee extends StatelessWidget {
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(15))),
         tileColor: Color.fromRGBO(0, 0, 0, 0.05),
-        leading: CircleAvatar(
-          backgroundColor: Colors.transparent,
-          backgroundImage: NetworkImage(
-              'https://spinoff.com.br/wp-content/uploads/2020/09/borat_uAQBQff-1200x720.jpg'),
+        leading: Icon(
+          Icons.person,
+          color: Theme.of(context).primaryColor,
+          size: 42,
         ),
-        title: Text('Pedro Lemes, 24'),
+        title: Text('$name ${age ?? ''}'),
         subtitle: Row(
           children: [
             Text(
-              'Garçom',
+              job,
               style: TextStyle(color: Colors.black),
             ),
-            SizedBox(
-              width: 8,
-            ),
-            Text(
-              '4.89/5',
-              style: TextStyle(color: Theme.of(context).primaryColor),
-            )
+            // SizedBox(
+            //   width: 8,
+            // ),
+            // Text(
+            //   '4.89/5',
+            //   style: TextStyle(color: Theme.of(context).primaryColor),
+            // )
           ],
         ),
       ),

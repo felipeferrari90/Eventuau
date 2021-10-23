@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 
 import './providers/auth.dart';
 import './providers/employee_events.dart';
+import 'providers/employee_wallet_data.dart';
 
 import './screens/contract_screen.dart';
 import './screens/contratante/signup_success.dart';
@@ -44,14 +45,23 @@ class EventUau extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => Auth()),
         ChangeNotifierProxyProvider<Auth, EmployeeEvents>(
           create: (_) => EmployeeEvents(null),
-          update: (context, value, previous) => EmployeeEvents(value.token),
-        )
+          update: (context, value, previous) {
+            return EmployeeEvents(value.token);
+          },
+        ),
+        ChangeNotifierProxyProvider<Auth, EmployeeWalletData>(
+          create: (_) => EmployeeWalletData(null),
+          update: (context, value, previous) {
+            return EmployeeWalletData(value.token);
+          },
+        ),
       ],
       child: Consumer<Auth>(
-        builder: (ctx, auth, _) => MaterialApp(
-            title: 'EventUAU',
+          builder: (ctx, auth, _) => MaterialApp(
+          title: 'EventUAU',
                 debugShowCheckedModeBanner: false,
                 theme: ThemeData(
+                  
                   progressIndicatorTheme: ProgressIndicatorThemeData(
                     color: secundaryColor,
                   ),
@@ -108,7 +118,7 @@ class EventUau extends StatelessWidget {
                     bodyText1: TextStyle(fontSize: 8, color: primaryColor),
                     button: TextStyle(fontSize: 16, color: Colors.white),
                   ),
-                  inputDecorationTheme: InputDecorationTheme(
+                  inputDecorationTheme: InputDecorationTheme(                    
                     isDense: true,
                     alignLabelWithHint: false,
                     labelStyle: TextStyle(
@@ -135,8 +145,8 @@ class EventUau extends StatelessWidget {
                         "/employee/events": (context) => HomeScreen(),
                         "/contract/id": (context) => ContractScreen(),
 
-                    /*ROTAS DO FLUXO APP FUNCIONARIO*/
-                    EmployeeSignupScreen.routeName: (context) =>
+                        /*ROTAS DO FLUXO APP FUNCIONARIO*/
+                  EmployeeSignupScreen.routeName: (context) =>
                             EmployeeSignupScreen(),
                         EmployeeAddDocuments.routeName: (context) =>
                             EmployeeAddDocuments(),
@@ -145,27 +155,27 @@ class EventUau extends StatelessWidget {
                         EmployeeApplicationSuccess.routeName: (context) =>
                             EmployeeApplicationSuccess(),
                         ProfileScreen.routeName: (context) => ProfileScreen(),
-                    EmployeeHomeScreen.routeName: (context) =>
+                        EmployeeHomeScreen.routeName: (context) =>
                             EmployeeHomeScreen(),
                         EventDetailScreen.routeName: (context) =>
                             EventDetailScreen(),
                         "/employee/id": (context) => ContractScreen(),
                         EmployeeWallet.routeName: (context) => EmployeeWallet(),
                         AddBankScreen.routeName: (context) => AddBankScreen(),
-                }
+                      }
                     : {
                         SignUpScreen.routeName: (context) => SignUpScreen(),
                         SignupSuccess.routeName: (context) => SignupSuccess(),
                       },
                 onUnknownRoute: (route) {
                   return MaterialPageRoute(
-                    builder: (ctx) =>
+                      builder: (ctx) =>
                           auth.isAuth ? HomeScreen() : InitScreen());
                 },
-            onGenerateRoute: auth.isAuth
+                onGenerateRoute: auth.isAuth
                     ? null
                     : (_) => MaterialPageRoute(builder: (ctx) => InitScreen()),
-              )
+              ),
       ),
     );
   }

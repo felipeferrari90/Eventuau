@@ -32,7 +32,7 @@ class EventUauAppBar extends StatelessWidget with PreferredSizeWidget {
                     : Navigator.of(context)
                         .pushReplacementNamed(EmployeeHomeScreen.routeName),
                 child: Text(
-                  'Área do Parceiro',
+                  !_isPartner ? 'Seja um Parceiro!' : 'Área do Parceiro',
                   style: TextStyle(
                       decoration: TextDecoration.underline,
                       fontSize: 14,

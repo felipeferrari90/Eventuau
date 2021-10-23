@@ -62,12 +62,13 @@ Future<dynamic> getEventAddress(int eventId) async {
 
 Future<bool> acceptProposal(int eventId) async {
   final url = '$baseUrl/eventos/$eventId/propostas';
-  final headers = {
+  final _headers = {
+    ...headers,
     HttpHeaders.authorizationHeader: 'Bearer ${userData.token}',
-    HttpHeaders.contentTypeHeader: 'application/json'
+    
   };
 
-  final res = await http.put(url, headers: headers, body: json.encode({}));
+  final res = await http.put(url, headers: _headers, body: json.encode({}));
 
   if (res.statusCode != 200) return false;
 

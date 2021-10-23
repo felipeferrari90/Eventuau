@@ -18,7 +18,7 @@ class EmployeeHomeScreen extends StatefulWidget {
 }
 
 class _EmployeeHomeScreenState extends State<EmployeeHomeScreen> {
-  List<String> _tabs = ['Todos', 'Solicitações', 'Confirmados', 'Finalizados'];
+  List<String> _tabs = ['Em aberto', 'Finalizados'];
   Future<void> _fetchDataRef;
 
   @override
@@ -30,9 +30,7 @@ class _EmployeeHomeScreenState extends State<EmployeeHomeScreen> {
   }
 
   @override
-  void didUpdateWidget(covariant EmployeeHomeScreen oldWidget) {
-    print('didChange');
-    if (Provider.of<EmployeeEvents>(context, listen: false).events.length == 0)
+  void didUpdateWidget(covariant EmployeeHomeScreen oldWidget) {        
       _fetchDataRef = Provider.of<EmployeeEvents>(context, listen: false)
           .fetchEmployeeEvents();
     super.didUpdateWidget(oldWidget);
@@ -42,9 +40,9 @@ class _EmployeeHomeScreenState extends State<EmployeeHomeScreen> {
   Widget build(BuildContext context) {
     final _events = Provider.of<EmployeeEvents>(context).events;
     final userInitials = Provider.of<Auth>(context).user.initials;
-    return DefaultTabController(
+    return DefaultTabController(      
       initialIndex: 0,
-      length: 4,
+      length: _tabs.length,
       child: Scaffold(
         appBar: AppBar(
           actions: [
@@ -99,9 +97,14 @@ class _EmployeeHomeScreenState extends State<EmployeeHomeScreen> {
             ),
           ),
           bottom: TabBar(
-              isScrollable: true,
+
+              isScrollable: false,
               labelColor: Theme.of(context).primaryColor,
-              labelStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+              
+              labelStyle: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+              ),
               tabs:
                   _tabs.map((e) => TabWithUnreadIndicator(label: e)).toList()),
         ),
@@ -164,7 +167,8 @@ class TabWithUnreadIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Tab(
-      child: Row(children: [
+
+      child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
         Text(label),
         if (amountUnread != null)
           Container(
