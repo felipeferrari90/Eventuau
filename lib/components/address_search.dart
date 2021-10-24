@@ -8,10 +8,12 @@ import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../models/address_model.dart';
+
 class AddressSearch extends StatefulWidget {
   const AddressSearch({Key key, this.initialValue}) : super(key: key);
 
-  final Map<String, dynamic> initialValue;
+  final AddressModel initialValue;
 
   @override
   _AddressSearchState createState() => _AddressSearchState();
@@ -21,16 +23,14 @@ class _AddressSearchState extends State<AddressSearch> {
   GlobalKey<FormState> _formKey = new GlobalKey();
   TextEditingController cepController;
   bool _isLoading = false;
-  Map<String, dynamic> addressData;
+  AddressModel addressData;
 
   @override
   void initState() {
-    // TODO: implement initState
-
     if (widget.initialValue != null) {
       setState(() {
         cepController =
-            new TextEditingController(text: widget.initialValue['cep']);
+            new TextEditingController(text: widget.initialValue.cep);
         addressData = widget.initialValue;
       });
     } else
@@ -41,7 +41,6 @@ class _AddressSearchState extends State<AddressSearch> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     cepController.dispose();
     super.dispose();
   }
@@ -60,13 +59,13 @@ class _AddressSearchState extends State<AddressSearch> {
       final responseBody = jsonDecode(res.body);
 
       setState(() {
-        addressData = {
-          "cep": responseBody['cep'],
-          "logradouro": responseBody['logradouro'],
-          "bairro": responseBody['bairro'],
-          "localidade": responseBody['localidade'],
-          "uf": responseBody['uf'],
-        };
+        addressData = new AddressModel.create(
+          cep: responseBody['cep'],
+          rua: responseBody['logradouro'],
+          bairro: responseBody['bairro'],
+          cidade: responseBody['localidade'],
+          estado: responseBody['uf'],
+        );
       });
     } catch (e) {
       print(e);
@@ -162,8 +161,8 @@ class _AddressSearchState extends State<AddressSearch> {
                     Flexible(
                       child: TextFormField(
                         enabled: false,
-                        onSaved: (value) => addressData['logradouro'] = value,
-                        initialValue: addressData['logradouro'],
+                        onSaved: (value) => addressData.rua = value,
+                        initialValue: addressData.rua,
                         decoration: InputDecoration(
                           labelText: 'Rua',
                         ),
@@ -175,8 +174,8 @@ class _AddressSearchState extends State<AddressSearch> {
                     ),
                     Flexible(
                       child: TextFormField(
-                        onSaved: (value) => addressData['numero'] = value,
-                        initialValue: addressData['numero'] ?? '',
+                        onSaved: (value) => addressData.numero = value,
+                        initialValue: addressData.numero ?? '',
                         validator: (value) =>
                             value.isEmpty ? 'Campo Obrigatório' : null,
                         inputFormatters: [
@@ -195,8 +194,8 @@ class _AddressSearchState extends State<AddressSearch> {
                   children: [
                     Flexible(
                       child: TextFormField(
-                        onSaved: (value) => addressData['complemento'] = value,
-                        initialValue: addressData['complemento'] ?? '',
+                        onSaved: (value) => addressData.complemento = value,
+                        initialValue: addressData.complemento ?? '',
                         decoration: InputDecoration(
                           labelText: 'Complemento',
                         ),
@@ -209,8 +208,8 @@ class _AddressSearchState extends State<AddressSearch> {
                     Flexible(
                       child: TextFormField(
                         enabled: false,
-                        onSaved: (value) => addressData['bairro'] = value,
-                        initialValue: addressData['bairro'] ?? '',
+                        onSaved: (value) => addressData.bairro = value,
+                        initialValue: addressData.bairro ?? '',
                         decoration: InputDecoration(
                           labelText: 'Bairro',
                         ),
@@ -225,8 +224,8 @@ class _AddressSearchState extends State<AddressSearch> {
                     Flexible(
                       child: TextFormField(
                         enabled: false,
-                        onSaved: (value) => addressData['localidade'] = value,
-                        initialValue: addressData['localidade'] ?? '',
+                        onSaved: (value) => addressData.cidade = value,
+                        initialValue: addressData.cidade ?? '',
                         decoration: InputDecoration(
                           labelText: 'Cidade',
                         ),
@@ -238,8 +237,8 @@ class _AddressSearchState extends State<AddressSearch> {
                     ),
                     Flexible(
                       child: TextFormField(
-                        onSaved: (value) => addressData['uf'] = value,
-                        initialValue: addressData['uf'] ?? '',
+                        onSaved: (value) => addressData.estado = value,
+                        initialValue: addressData.estado ?? '',
                         enabled: false,
                         maxLength: 2,
                         decoration: InputDecoration(

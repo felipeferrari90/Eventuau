@@ -3,6 +3,8 @@ import 'dart:io';
 
 import 'package:brasil_fields/brasil_fields.dart';
 import 'package:event_uau/components/address_search.dart';
+import 'package:event_uau/models/address_model.dart';
+import 'package:event_uau/models/funcionario_model.dart';
 import 'package:event_uau/screens/profissional/employee_signup/employee_application_success.dart';
 import '../../../service/contratado_service.dart' as ContratadoService;
 import 'package:flutter/material.dart';
@@ -19,13 +21,6 @@ import '../../../providers/auth.dart';
 
 import '../../../service/upload_service.dart' as UploadService;
 
-class JobItem {
-  int id;
-  String descricao;
-
-  JobItem({this.id, this.descricao});
-}
-
 class EmployeeSignupScreen extends StatefulWidget {
   static const routeName = '/employee/signup/personaldata';
   const EmployeeSignupScreen({Key key}) : super(key: key);
@@ -39,7 +34,7 @@ class _EmployeeSignupScreenState extends State<EmployeeSignupScreen> {
   TextEditingController _jobFilter = new TextEditingController();
   List<JobItem> jobList = [];
   List<JobItem> selectedJobs = [];
-  Map<String, dynamic> address;
+  AddressModel address;
   File profilePicture;
   String enderecoText;
   double hourlyRate;
@@ -164,7 +159,8 @@ class _EmployeeSignupScreenState extends State<EmployeeSignupScreen> {
       await ContratadoService.signup(hourlyRate, selectedJobs);
 
       // 4. NAVIGATE TO NEXT PAGE
-      Navigator.of(context).pushReplacementNamed(EmployeeApplicationSuccess.routeName);
+      Navigator.of(context)
+          .pushReplacementNamed(EmployeeApplicationSuccess.routeName);
     } catch (e) {
       print(e);
       ScaffoldMessenger.of(context).showSnackBar(

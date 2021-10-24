@@ -1,5 +1,10 @@
+import 'package:event_uau/models/contratado_model.dart';
+import 'package:event_uau/models/funcionario_model.dart';
+import 'package:event_uau/screens/profissional/employee_signup/employee_signup.dart';
+
 import '../models/address_model.dart';
 import 'package:event_uau/service/auth_service.dart' as AuthService;
+import '../service/maps_service.dart' as MapsService;
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -23,6 +28,7 @@ class User {
   DateTime birthDate;
   String status;
   File profilePicture;
+  ContratadoModel partnerData;
 
   User({
     @required this.id,
@@ -38,6 +44,10 @@ class User {
 
   File get userProfilePicture {
     return profilePicture != null ? new File(profilePicture.path) : null;
+  }
+
+  bool get isPartner {
+    return partnerData != null;
   }
 
   Map<String, dynamic> get userInfoPayload => {
@@ -123,6 +133,65 @@ class Auth with ChangeNotifier {
 
   set userProfilePicture(File profilePicture) {
     user.profilePicture = profilePicture;
+    notifyListeners();
+  }
+
+  Future<void> getAddress() async {
+    final url = 'https://10.0.2.2:6031/api/usuarios/${user.id}/enderecos/1';
+    final _headers = {
+      ...headers,
+      HttpHeaders.authorizationHeader: 'Bearer $token',
+    };
+    try {
+      final res = await http.get(url, headers: _headers);
+
+      if (res.statusCode != 200) throw json.decode(res.body);
+
+      final responseBody = json.decode(res.body);
+
+      user.address = new AddressModel(
+        numero: responseBody['numero'],
+        complemento: responseBody['complemento'],
+        id: responseBody['id'],
+        longitude: responseBody['longitude'],
+        latitude: responseBody['latitude'],
+        cep: responseBody['cep'],
+        rua: responseBody['logradouro'],
+        bairro: responseBody['bairro'],
+        cidade: responseBody['cidade'],
+        estado: responseBody['estado'],
+      );
+    } catch (e) {
+      print(e);
+      user.address = null;
+    }
+
+    notifyListeners();
+  }
+
+  Future<void> createAddress(AddressModel addressData) async {
+    final baseUrl = 'https://10.0.2.2:6031/api/usuarios';
+    final _headers = {
+      ...headers,
+      HttpHeaders.authorizationHeader: 'Bearer $token',
+    };
+
+    final coords = await MapsService.fetchLatAndLongByAddress(
+        '${addressData.cep} ${addressData.rua} ${addressData.numero}');
+
+    addressData.latitude = coords['lat'] ?? "12.0";
+    addressData.longitude = coords['long'] ?? "12.0";
+
+    final res = await http.post('$baseUrl/${user.id}/enderecos',
+        headers: _headers, body: addressData.apiPayload);
+
+    if (res.statusCode != 200) throw HttpException(json.decode(res.body));
+  }
+
+  void setContratanteInfo(double valorHora, List<JobItem> especialidades) {
+    user.partnerData = new ContratadoModel(
+        valorHora: valorHora, especialidades: especialidades, grade: null);
+
     notifyListeners();
   }
 }

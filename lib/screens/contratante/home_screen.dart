@@ -54,7 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
         selectedItemColor: primaryColor,
         items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.calendar_view_day),
+            icon: Icon(Icons.calendar_today),
             label: "Eventos",
           ),
           BottomNavigationBarItem(

@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:event_uau/models/contratante_model.dart';
 import 'package:event_uau/models/evento_model.dart';
 import 'package:event_uau/providers/auth.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 final userData = Auth();
@@ -13,11 +14,11 @@ class EventoService {
   String _endPoint = "/eventos";
 
   final _headers = {
-    HttpHeaders.authorizationHeader: 'Bearer ${userData.token ?? 'none'}',
+    HttpHeaders.authorizationHeader: 'Bearer ${userData.token}',
     HttpHeaders.contentTypeHeader: 'application/json'
   };
 
-  Future<void> create(EventoModel eventoModel) async {
+  Future<int> create(EventoModel eventoModel) async {
     try {
       http.Response response = await http.post(
         Uri.parse("$_baseUrl$_endPoint"),
@@ -27,27 +28,25 @@ class EventoService {
       if (response.statusCode == 201) {
         Map<String, dynamic> jsonResponse = json.decode(response.body);
         eventoModel.id = jsonResponse["id"];
+        return eventoModel.id;
       }
+      print("provider.create: status code ${response.statusCode}");
     } catch (error) {
       print("Service Error: $error");
       throw error;
     }
   }
 
-  Future<List<EventoModel>> getAllEvents() async {
-    List<EventoModel> lista = [];
-    try {
-      http.Response response =
-          await http.get(Uri.parse("$_baseUrl$_endPoint"), headers: _headers);
-      if (response.statusCode == 200) {
-        json.decode(response.body)['resultados'].forEach((value) {
-          lista.add(EventoModel.fromMap(value));
-        });
-      }
-    } catch (error) {
-      throw error;
-    }
-    return lista;
+  Future<Map<String, dynamic>> getAllEvents() async {
+    http.Response response =
+        await http.get("$_baseUrl$_endPoint", headers: _headers);
+
+    if (response.statusCode != 200) throw response;
+    print("provider.listagem: status code ${response.statusCode}");
+    print("provider.listagem: status code ${response.body}");
+
+    Map<String, dynamic> resposta = jsonDecode(response.body);
+    return resposta;
   }
 
   Future<EventoModel> getById(int id) async {

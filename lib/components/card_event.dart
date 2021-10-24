@@ -1,5 +1,6 @@
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:event_uau/models/evento_model.dart';
+import 'package:event_uau/screens/contratante/event_screen_description.dart';
 import 'package:event_uau/utils/colors.dart';
 import 'package:event_uau/utils/icons.dart';
 import 'package:flutter/cupertino.dart';
@@ -13,7 +14,12 @@ Widget setCardEvent(context, {EventoModel eventoModel}) => Card(
       color: secundaryColor,
       child: InkWell(
         onTap: () {
-          Navigator.pushNamed(context, "/event/id");
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    EventScreenDescription(event: eventoModel)),
+          );
         },
         child: Column(
           children: [
@@ -49,7 +55,7 @@ Widget setCardEvent(context, {EventoModel eventoModel}) => Card(
                       ),
                     ),
                     Text(
-                        "${DateFormat.yMMMMd('pt_BR').format(eventoModel.dataEHorarioInicio) ?? "Sem data e horario marcados"} - ${DateFormat.Hm('pt_BR').format(eventoModel.dataEHorarioInicio) ?? ""}",
+                        "${DateFormat.yMMMMd('pt_BR').format(eventoModel.dataEHorarioInicio) ?? "Sem data e hora marcados"} - ${DateFormat.Hm('pt_BR').format(eventoModel.dataEHorarioTermino) ?? ""}",
                         style: Theme.of(context).textTheme.headline5)
                   ])
                 ],
@@ -73,6 +79,12 @@ Widget setCardEvent(context, {EventoModel eventoModel}) => Card(
                       color: colorBg,
                       borderRadius: BorderRadius.circular(15),
                     ),
+                    child: Center(
+                      child: Icon(
+                        Icons.info_outline_rounded,
+                        color: primaryColor,
+                      ),
+                    ),
                   ),
                   //inicio da coluna de flexiveis
                   Container(
@@ -80,33 +92,6 @@ Widget setCardEvent(context, {EventoModel eventoModel}) => Card(
                     padding: EdgeInsets.only(left: 12),
                     child: Column(children: [
                       Spacer(flex: 3),
-                      Row(
-                        children: [
-                          Container(
-                              width: MediaQuery.of(context).size.width / 4.5,
-                              child: Align(
-                                alignment: Alignment.center,
-                                child: Row(
-                                  children: [
-                                    Icon(
-                                      EventuauIcons2.handshake,
-                                      size: 16,
-                                      color: primaryColor,
-                                    ),
-                                    SizedBox(
-                                      width: 4,
-                                    ),
-                                    Text(
-                                      "36/${eventoModel.funcionarios.length}",
-                                      style: TextStyle(
-                                          fontSize: 14, color: Colors.black54),
-                                    )
-                                  ],
-                                ),
-                              )),
-                        ],
-                      ),
-                      Spacer(flex: 2),
                       Container(
                           width: MediaQuery.of(context).size.width / 2.3,
                           child: Align(
@@ -115,16 +100,16 @@ Widget setCardEvent(context, {EventoModel eventoModel}) => Card(
                               children: [
                                 Icon(
                                   Icons.hourglass_empty,
-                                  size: 16,
+                                  size: 24,
                                   color: primaryColor,
                                 ),
                                 SizedBox(
                                   width: 4,
                                 ),
                                 Text(
-                                  "${eventoModel.duracaoMinima}",
+                                  "${eventoModel.duracaoMinima ?? 0} Horas",
                                   style: TextStyle(
-                                      fontSize: 14, color: Colors.black54),
+                                      fontSize: 16, color: Colors.black54),
                                 )
                               ],
                             ),
@@ -138,16 +123,16 @@ Widget setCardEvent(context, {EventoModel eventoModel}) => Card(
                               children: [
                                 Icon(
                                   Icons.assignment_ind,
-                                  size: 16,
+                                  size: 24,
                                   color: primaryColor,
                                 ),
                                 SizedBox(
                                   width: 4,
                                 ),
                                 Text(
-                                  "${EnumToString.convertToString(eventoModel.status)}",
+                                  "${eventoModel.funcionarios.length ?? 0} contratados",
                                   style: TextStyle(
-                                      fontSize: 14, color: Colors.black54),
+                                      fontSize: 16, color: Colors.black54),
                                 )
                               ],
                             ),
@@ -183,27 +168,33 @@ Widget setCardEvent(context, {EventoModel eventoModel}) => Card(
                         spacing: 24,
                         clipBehavior: Clip.hardEdge,
                         children: [
-                          RaisedButton(
+                          ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                primary: colorBg,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(6)),
+                                elevation: 8,
+                                fixedSize: Size(40, 20),
+                              ),
                               child: Icon(Icons.person_add,
                                   color: primaryColor, size: 24),
                               onPressed: () {
                                 Navigator.pushNamed(context, "/employees");
-                              },
-                              color: colorBg,
-                              elevation: 4,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(6))),
-                          RaisedButton(
+                              }),
+                          ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(6)),
+                                primary: colorBg,
+                                elevation: 8,
+                                fixedSize: Size(40, 20),
+                              ),
                               child: Icon(Icons.assignment_ind,
                                   color: primaryColor, size: 24),
                               onPressed: () {
                                 Navigator.pushNamed(
                                     context, "/employee/management");
-                              },
-                              color: colorBg,
-                              elevation: 4,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(6))),
+                              }),
                         ],
                       ),
                       Spacer(),

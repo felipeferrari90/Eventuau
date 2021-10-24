@@ -5,7 +5,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-final String _authKey = "AIzaSyBp7SSgZBtrUe0OMNAkvZEZr9TJ_z8sCIg";
+final String _authKey = "AIzaSyDHQwK2ubMV3Gv6cZGy2TlyFb8t1ZfHoKA";
 
 Future<Map<String, String>> fetchLatAndLongByAddress(String address) async {
   final res = await http.get(
@@ -16,8 +16,15 @@ Future<Map<String, String>> fetchLatAndLongByAddress(String address) async {
   if (res.statusCode != 200 && responseData['status'] != 'OK') {
     throw HttpException(responseData);
   }
+
+  print(responseData);
+
   return {
-    'lat': responseData[0]['geometry']['location']['lat'].toString(),
-    'long': responseData[0]['geometry']['location']['long'].toString(),
+    'lat':
+        responseData['results'][0]['geometry']['location']['lat'].toString() ??
+            "12.00000",
+    'long':
+        responseData['results'][0]['geometry']['location']['lng'].toString() ??
+            "12.00000",
   };
 }

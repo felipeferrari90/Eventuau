@@ -1,4 +1,7 @@
+import 'package:event_uau/models/evento_model.dart';
+import 'package:event_uau/models/funcionario_model.dart';
 import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
 import 'dart:convert';
 import 'dart:io';
 
@@ -41,4 +44,28 @@ Future<void> signup(double hourlyRate, List<JobItem> selectedJobs) async {
   final res = await http.post('$signupUrl', headers: headers, body: body);
 
   if (res.statusCode != 200) throw HttpException(json.decode(res.body));
+}
+
+class ContratadoService {
+  static Future getEspecialidadesById(int id) async {
+    final res = await http.get('$signupUrl/$id', headers: headers);
+    if (res.statusCode != 200) throw HttpException(json.decode(res.body));
+    return json.decode(res.body)['especialidades'];
+  }
+
+  static Future<List<String>> getEspecialidadesDescriptionById(int id) async {
+    final res = await http.get('$signupUrl/$id', headers: headers);
+    if (res.statusCode != 200) throw HttpException(json.decode(res.body));
+    List especialidades = json.decode(res.body)['especialidades'] as List;
+    List especialidadesDescricao =
+        especialidades.map((e) => e["descricao"] as String).toList();
+    return especialidadesDescricao;
+  }
+
+  Future<Map<String, dynamic>> getAllPartners() async {
+    final res = await http.get('$signupUrl', headers: headers);
+    if (res.statusCode != 200) throw HttpException(json.decode(res.body));
+    print(res.body);
+    return jsonDecode(res.body) as Map<String, dynamic>;
+  }
 }

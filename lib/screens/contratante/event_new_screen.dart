@@ -1,10 +1,12 @@
+import 'package:event_uau/components/address_search.dart';
 import 'package:event_uau/components/app_bar_eventual.dart';
 import 'package:event_uau/components/buttons.dart';
 import 'package:brasil_fields/brasil_fields.dart';
+import 'package:event_uau/models/address_model.dart';
 import 'package:event_uau/models/contratante_model.dart';
 import 'package:event_uau/models/evento_model.dart';
 import 'package:event_uau/providers/auth.dart';
-import 'package:event_uau/providers/evento_provider.dart';
+import 'package:event_uau/service/address_service_event.dart';
 import 'package:event_uau/service/evento_service.dart';
 import 'package:event_uau/utils/colors.dart';
 import 'package:flutter/material.dart';
@@ -23,12 +25,17 @@ class EventNewScreen extends StatefulWidget {
 }
 
 class _EventNewScreenState extends State<EventNewScreen> {
-  StatusEvento _valueDropdownStatusEvent;
-
+  StatusEvento _valueDropdownStatusEvent = StatusEvento.CONTRATANDO;
   final GlobalKey<FormState> _formKeyNewEvent = new GlobalKey<FormState>();
-
   EventoModel eventoModel = new EventoModel();
   ContratanteModel contratanteModel = new ContratanteModel();
+  String enderecoText;
+  AddressModel address;
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   void _onSubmit() async {
     if (!_formKeyNewEvent.currentState.validate()) {
@@ -37,8 +44,12 @@ class _EventNewScreenState extends State<EventNewScreen> {
               "erro ao criar evento, verifique se os dados estão validos")));
     }
     _formKeyNewEvent.currentState.save();
-    EventoProvider eventoProvider = new EventoProvider();
-    eventoProvider.createEvent(eventoModel).then((_) => Navigator.pop(context));
+    EventoService eventoService = EventoService();
+    int idEvento = await eventoService.create(eventoModel);
+    Map<String, dynamic> map =
+        await AddressServiceEvent.createEventAddress(address, idEvento);
+    AddressServiceEvent.setEventAddressModel(eventoModel, map);
+    Navigator.pop(context);
   }
 
   @override
@@ -69,6 +80,53 @@ class _EventNewScreenState extends State<EventNewScreen> {
                       eventoModel.nome = value ?? "Sem titulo";
                     });
                   },
+                ),
+                SizedBox(
+                  height: 32,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ConstrainedBox(
+                      constraints: BoxConstraints(
+                          maxWidth: MediaQuery.of(context).size.width * 0.8),
+                      child: Text(
+                        userData.user.address ??
+                            enderecoText ??
+                            'Adicione um endereço',
+                        textAlign: TextAlign.left,
+                        style: Theme.of(context).textTheme.headline1.copyWith(
+                              fontSize: 18,
+                            ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 16,
+                    ),
+                    InkWell(
+                      child: Icon(
+                        Icons.edit,
+                        size: 24,
+                        color: Theme.of(context).primaryColor,
+                      ),
+                      onTap: () async {
+                        final newAddress = await showModalBottomSheet(
+                          isScrollControlled: true,
+                          context: context,
+                          builder: (context) => AddressSearch(
+                            initialValue: address,
+                          ),
+                        );
+                        if (newAddress != null)
+                          setState(() {
+                            setState(() {
+                              address = newAddress;
+                              enderecoText = newAddress.toString();
+                            });
+                          });
+                      },
+                    ),
+                  ],
                 ),
                 SizedBox(
                   height: 16,
@@ -174,6 +232,7 @@ class _EventNewScreenState extends State<EventNewScreen> {
                     });
                   },
                 ),
+                SizedBox(height: 24),
                 ListTile(
                   leading: Text(
                     "Status Contratacao: ",
@@ -192,7 +251,7 @@ class _EventNewScreenState extends State<EventNewScreen> {
                       items: [
                         DropdownMenuItem(
                           child: Text(
-                            "SEM CONTRATAR",
+                            "CONTRATANDO",
                             style: TextStyle(fontSize: 12),
                             overflow: TextOverflow.clip,
                           ),
@@ -200,7 +259,7 @@ class _EventNewScreenState extends State<EventNewScreen> {
                         ),
                         DropdownMenuItem(
                           child: Text(
-                            "CONTRATANDO",
+                            "SEM CONTRATAR",
                             style: TextStyle(fontSize: 12),
                             overflow: TextOverflow.clip,
                           ),
@@ -209,56 +268,17 @@ class _EventNewScreenState extends State<EventNewScreen> {
                       ],
                       onChanged: (value) {
                         setState(() {
-                          eventoModel.status = value;
+                          _valueDropdownStatusEvent = value;
+                          eventoModel.status = value as StatusEvento;
                           debugPrint(eventoModel.status.toString());
                         });
                       }),
                 ),
                 Divider(),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(8, 8, 0, 2),
-                  child: Text("Contrate funcionarios para seu evento",
-                      style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.black)),
-                ),
-                SizedBox(height: 12),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(8, 4, 0, 4),
-                  child: Text(
-                      "navegue pela tela de escolhas para enviar propostas a funcionarios para trabalhar pro seu evento...",
-                      style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                          color: primaryColor)),
-                ),
                 SizedBox(height: 24),
-                Align(
-                  alignment: Alignment.center,
-                  child: ElevatedButton.icon(
-                    onPressed: () {
-                      Navigator.pushNamed(context, "/employees");
-                    },
-                    icon: Icon(Icons.search, size: 16, color: primaryColor),
-                    label: Text("IR PRA TELA DE ESCOLHAS",
-                        style: TextStyle(
-                          color: primaryColor,
-                        )),
-                    style: ElevatedButton.styleFrom(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                      primary: secundaryColor,
-                      onSurface: colorBg,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15)),
-                    ),
-                  ),
-                ),
-                Divider(),
                 Padding(
                   padding: EdgeInsets.fromLTRB(8, 8, 0, 2),
-                  child: Text("Gerencie funcionarios que ja foram contratados",
+                  child: Text("Mensagem importante pra quem ja foi contratado",
                       style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.w500,
@@ -296,63 +316,8 @@ class _EventNewScreenState extends State<EventNewScreen> {
                     ),
                   ),
                 ),
-                SizedBox(height: 24),
-                Align(
-                  alignment: Alignment.center,
-                  child: ElevatedButton.icon(
-                    onPressed: () {
-                      Navigator.pushNamed(context, "/employee/management");
-                    },
-                    style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15)),
-                        primary: primaryColor,
-                        padding: EdgeInsets.all(8)),
-                    icon: Icon(Icons.assignment_ind, size: 16),
-                    label: Text("GERENCIADOR DE FUNCIONARIOS"),
-                  ),
-                ),
-                Divider(),
-                SizedBox(height: 24),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text("VALOR TOTAL:  ",
-                            style: TextStyle(
-                                fontSize: 16,
-                                color: primaryColor,
-                                fontWeight: FontWeight.w700)),
-                        Text("350,00",
-                            style: TextStyle(
-                                fontSize: 24,
-                                color: primaryColor,
-                                fontWeight: FontWeight.w700)),
-                      ]),
-                ),
-                SizedBox(height: 24),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text("saldo disponivel: ",
-                            style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.black,
-                                fontWeight: FontWeight.w700)),
-                        Text(
-                            "R\$ ${contratanteModel.valorEmCaixaDisponivel ?? "0,00"}",
-                            style: TextStyle(
-                                fontSize: 24,
-                                color: Colors.black,
-                                fontWeight: FontWeight.w700)),
-                      ]),
-                ),
-                SizedBox(height: 24),
                 setButton(
-                  text: "Publicar evento",
+                  text: "Criar evento",
                   uppercase: true,
                   function: _onSubmit,
                 )

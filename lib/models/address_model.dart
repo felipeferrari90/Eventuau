@@ -2,7 +2,10 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
+enum AddressType { Event, User }
+
 class AddressModel {
+  int id;
   String latitude;
   String longitude;
   String cep;
@@ -12,9 +15,11 @@ class AddressModel {
   String bairro;
   String cidade;
   String estado;
+  AddressType tipoEnd;
 
   AddressModel(
-      {@required this.latitude,
+      {@required this.id,
+      @required this.latitude,
       @required this.longitude,
       @required this.cep,
       @required this.rua,
@@ -22,7 +27,20 @@ class AddressModel {
       @required this.bairro,
       @required this.cidade,
       @required this.estado,
-      this.complemento});
+      @required this.complemento,
+      this.tipoEnd});
+
+  AddressModel.create({
+    @required this.cep,
+    @required this.rua,
+    @required this.bairro,
+    @required this.cidade,
+    @required this.estado,
+  });
+
+  set setTipoEnd(int id) {
+    tipoEnd = id == 1 ? AddressType.User : AddressType.Event;
+  }
 
   get apiPayload {
     return json.encode({

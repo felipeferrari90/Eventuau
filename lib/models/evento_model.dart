@@ -1,9 +1,11 @@
 import 'dart:convert';
 
+import 'package:event_uau/models/address_model.dart';
 import 'package:event_uau/models/contratante_model.dart';
 import 'package:event_uau/models/contrato_model.dart';
 import 'package:event_uau/models/funcionario_model.dart';
 import 'package:enum_to_string/enum_to_string.dart';
+import 'package:event_uau/providers/auth.dart';
 import 'package:flutter/cupertino.dart';
 
 class EventoModel with ChangeNotifier {
@@ -11,7 +13,7 @@ class EventoModel with ChangeNotifier {
   int numeroDeEvento;
   String nome;
   String descricao;
-  String endereco;
+  AddressModel endereco;
   StatusEvento status;
   ContratanteModel organizador;
   DateTime dataEHoraCriacaoEvento = DateTime.now();
@@ -42,6 +44,8 @@ class EventoModel with ChangeNotifier {
       this.estaPago,
       this.funcionarios});
 
+  final userData = Auth();
+
   factory EventoModel.fromMap(Map<String, dynamic> json) => EventoModel(
       id: json["id"],
       numeroDeEvento: json["numeroDeEvento"],
@@ -67,7 +71,7 @@ class EventoModel with ChangeNotifier {
         "nome": this.nome,
         "endereco": this.endereco,
         "status": EnumToString.convertToString(
-            this.status ?? StatusEvento.PENDENTE,
+            this.status ?? StatusEvento.CONTRATANDO,
             camelCase: false),
         "dataCriacao":
             (this.dataEHoraCriacaoEvento ?? DateTime.now()).toIso8601String(),
@@ -85,20 +89,10 @@ class EventoModel with ChangeNotifier {
       EventoModel.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
-
-  /*
-  double pegarValorTotalEvento(){
-    double aux = 0;
-    for (var contrato in this.funcionariosContratados) {
-       aux += contrato.valorTotal;
-    }
-    return aux;
-  }*/
-
 }
 
 enum StatusEvento {
-  PENDENTE, // evento foi criado apenas, sem funcionarios contratados
+  CRIADO, // evento foi criado apenas, sem funcionarios contratados
   CONTRATANDO,
   FECHADO, //todas as vagas ja foram ocupadas porem funcionarios que aceitaram a proposta podem aparecer na lista de espera
   ACONTECENDO, // evento em questão esta acontecendo no momento
