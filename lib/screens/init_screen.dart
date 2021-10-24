@@ -74,7 +74,7 @@ class _InitScreenState extends State<InitScreen> {
             child: Form(
               key: _formKey,
               child: Stack(children: [
-                Column(
+ Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: <Widget>[

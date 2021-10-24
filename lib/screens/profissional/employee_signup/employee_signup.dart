@@ -1,3 +1,15 @@
+<<<<<<< HEAD
+import 'dart:async';
+import 'dart:io';
+
+import 'package:brasil_fields/brasil_fields.dart';
+import 'package:event_uau/components/address_search.dart';
+import 'package:event_uau/models/address_model.dart';
+import 'package:event_uau/models/funcionario_model.dart';
+import 'package:event_uau/screens/profissional/employee_signup/employee_application_success.dart';
+import '../../../service/contratado_service.dart' as ContratadoService;
+=======
+>>>>>>> ccf5aee9f6c355d449406b51ff835a5b2ec328dc
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -19,11 +31,14 @@ import '../../../components/employee/signup/editable_row.dart';
 
 import '../../../screens/profissional/employee_signup/employee_application_success.dart';
 
+<<<<<<< HEAD
+=======
 import '../../../providers/auth.dart';
 
 import '../../../service/upload_service.dart' as UploadService;
 import '../../../service/contratado_service.dart' as ContratadoService;
 
+>>>>>>> ccf5aee9f6c355d449406b51ff835a5b2ec328dc
 class EmployeeSignupScreen extends StatefulWidget {
   static const routeName = '/employee/signup/personaldata';
   const EmployeeSignupScreen({Key key}) : super(key: key);
@@ -165,10 +180,15 @@ class _EmployeeSignupScreenState extends State<EmployeeSignupScreen> {
           profilePicture;
       //3. SUBMIT PARTNER DATA
       await ContratadoService.signup(hourlyRate, selectedJobs);
+<<<<<<< HEAD
+
+      // 4. NAVIGATE TO NEXT PAGE
+=======
       Provider.of<Auth>(context, listen: false)
           .setContratanteInfo(hourlyRate, selectedJobs);
   
       // 5. NAVIGATE TO NEXT PAGE
+>>>>>>> ccf5aee9f6c355d449406b51ff835a5b2ec328dc
       Navigator.of(context)
           .pushReplacementNamed(EmployeeApplicationSuccess.routeName);
     } catch (e) {

@@ -136,7 +136,6 @@ class EventUau extends StatelessWidget {
                         HomeScreen.routeName: (context) => HomeScreen(),
                         SignupSuccess.routeName: (context) => SignupSuccess(),
                         "/event/new": (context) => EventNewScreen(),
-                        "/event/id": (context) => EventScreenDescription(),
                         '/employees': (context) => EmployeeChoiceScreen(),
                         '/employees/id': (context) =>
                             EmployeeScreenDescription(),
@@ -147,6 +146,7 @@ class EventUau extends StatelessWidget {
 
                         /*ROTAS DO FLUXO APP FUNCIONARIO*/
                   EmployeeSignupScreen.routeName: (context) =>
+
                             EmployeeSignupScreen(),
                         EmployeeAddDocuments.routeName: (context) =>
                             EmployeeAddDocuments(),
@@ -156,6 +156,7 @@ class EventUau extends StatelessWidget {
                             EmployeeApplicationSuccess(),
                         ProfileScreen.routeName: (context) => ProfileScreen(),
                         EmployeeHomeScreen.routeName: (context) =>
+
                             EmployeeHomeScreen(),
                         EventDetailScreen.routeName: (context) =>
                             EventDetailScreen(),
@@ -167,6 +168,7 @@ class EventUau extends StatelessWidget {
                         SignUpScreen.routeName: (context) => SignUpScreen(),
                         SignupSuccess.routeName: (context) => SignupSuccess(),
                       },
+
                 onUnknownRoute: (route) {
                   return MaterialPageRoute(
                       builder: (ctx) =>

@@ -26,8 +26,7 @@ class _AddressSearchState extends State<AddressSearch> {
   AddressModel addressData;
 
   @override
-  void initState() {    
-
+  void initState() {
     if (widget.initialValue != null) {
       setState(() {
         cepController =
@@ -42,7 +41,6 @@ class _AddressSearchState extends State<AddressSearch> {
 
   @override
   void dispose() {
-    
     cepController.dispose();
     super.dispose();
   }

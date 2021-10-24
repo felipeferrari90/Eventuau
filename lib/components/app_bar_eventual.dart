@@ -5,21 +5,26 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../utils/colors.dart';
 
-class EventUauAppBar extends StatelessWidget with PreferredSizeWidget {
-  @override
-  Size get preferredSize => Size.fromHeight(kToolbarHeight);
-
+class EventUauAppBar extends StatefulWidget with PreferredSizeWidget {
   const EventUauAppBar({Key key, this.title, this.username}) : super(key: key);
 
   final String title;
   final String username;
 
   @override
+  _EventUauAppBarState createState() => _EventUauAppBarState();
+
+  @override
+  Size get preferredSize => Size.fromHeight(kToolbarHeight);
+}
+
+class _EventUauAppBarState extends State<EventUauAppBar> {
+  @override
   Widget build(BuildContext context) {
     final bool _isPartner = Provider.of<Auth>(context).user.isPartner;
     return AppBar(
       title: Text(
-        title ?? "",
+        widget.title ?? "",
       ),
       toolbarHeight: 70,
       elevation: 0,
@@ -42,33 +47,31 @@ class EventUauAppBar extends StatelessWidget with PreferredSizeWidget {
             : null,
         username != null
             ? GestureDetector(
+                child: CircleAvatar(
+                backgroundColor: userLogged,
                 child: Container(
-                    margin: EdgeInsets.fromLTRB(16, 16, 16, 16),
-                    decoration: BoxDecoration(
-                        shape: BoxShape.circle, color: userLogged),
-                    child: Center(
-                        child: Padding(
-                      padding: EdgeInsets.all(10.0),
-                      child: Text(
-                        username != null
-                            ? username
-                                .split(" ")
-                                .sublist(0, 2)
-                                .map((e) {
-                                  return e[0];
-                                })
-                                .join()
-                                .toUpperCase()
-                            : "",
-                        style: TextStyle(fontSize: 18.0, color: primaryColor),
-                      ),
-                    ))),
-              )
+                  padding: EdgeInsets.all(4),
+                  child: Text(
+                    widget.username != null
+                        ? widget.username
+                            .split(" ")
+                            .sublist(0, 2)
+                            .map((e) {
+                              return e[0];
+                            })
+                            .join()
+                            .toUpperCase()
+                        : "NO",
+                    style: TextStyle(fontSize: 20.0, color: primaryColor),
+                  ),
+                ),
+              ))
             : Padding(
                 padding: EdgeInsets.all(16),
                 child:
                     Text("fazer login", style: TextStyle(color: primaryColor)),
               ),
+
       ],
       iconTheme: IconThemeData(color: primaryColor, size: 16),
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,

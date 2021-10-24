@@ -49,16 +49,19 @@ Future<void> postEvent(EventItem event) async {
   return json.decode(res.body);
 }
 
+
 Future<dynamic> getEventAddress(int eventId) async {
   final url = 'https://10.0.2.2:6031/api/eventos/$eventId/enderecos';
   final headers = {HttpHeaders.authorizationHeader: 'Bearer ${userData.token}'};
 
   final res = await http.get(url, headers: headers);
 
+
   if (res.statusCode != 200) throw res;
 
   return json.decode(res.body)[0];
 }
+
 
 Future<bool> acceptProposal(int eventId) async {
   final url = '$baseUrl/eventos/$eventId/propostas';
@@ -74,3 +77,4 @@ Future<bool> acceptProposal(int eventId) async {
 
   return true;
 }
+

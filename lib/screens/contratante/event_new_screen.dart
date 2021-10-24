@@ -1,11 +1,12 @@
+import 'package:event_uau/components/address_search.dart';
 import 'package:event_uau/components/app_bar_eventual.dart';
 import 'package:event_uau/components/buttons.dart';
 import 'package:brasil_fields/brasil_fields.dart';
-import 'package:event_uau/components/error_toast.dart';
+import 'package:event_uau/models/address_model.dart';
 import 'package:event_uau/models/contratante_model.dart';
 import 'package:event_uau/models/evento_model.dart';
 import 'package:event_uau/providers/auth.dart';
-import 'package:event_uau/repository/evento_repository.dart';
+import 'package:event_uau/service/address_service_event.dart';
 import 'package:event_uau/service/evento_service.dart';
 import 'package:event_uau/utils/colors.dart';
 import 'package:flutter/material.dart';
@@ -13,33 +14,41 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/date_symbol_data_local.dart';
+import 'package:intl/intl.dart';
 
 class EventNewScreen extends StatefulWidget {
   const EventNewScreen({Key key}) : super(key: key);
 
   @override
   _EventNewScreenState createState() => _EventNewScreenState();
-
 }
 
 class _EventNewScreenState extends State<EventNewScreen> {
-  StatusEvento _valueDropdownStatusEvent = StatusEvento.PENDENTE;
-  
+  StatusEvento _valueDropdownStatusEvent = StatusEvento.CONTRATANDO;
   final GlobalKey<FormState> _formKeyNewEvent = new GlobalKey<FormState>();
-
   EventoModel eventoModel = new EventoModel();
   ContratanteModel contratanteModel = new ContratanteModel();
+  String enderecoText;
+  AddressModel address;
 
-  void _onSubmit() {
-    
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  void _onSubmit() async {
     if (!_formKeyNewEvent.currentState.validate()) {
       Scaffold.of(context).showSnackBar(SnackBar(
           content: Text(
-              "erro ao criar evento, verifique se os dados estão validos"))); 
+              "erro ao criar evento, verifique se os dados estão validos")));
     }
     _formKeyNewEvent.currentState.save();
-    EventoService eventoService = new EventoService();
-    eventoService.create(eventoModel);
+    EventoService eventoService = EventoService();
+    int idEvento = await eventoService.create(eventoModel);
+    Map<String, dynamic> map =
+        await AddressServiceEvent.createEventAddress(address, idEvento);
+    AddressServiceEvent.setEventAddressModel(eventoModel, map);
     Navigator.pop(context);
   }
 
@@ -68,17 +77,68 @@ class _EventNewScreenState extends State<EventNewScreen> {
                   },
                   onSaved: (value) {
                     setState(() {
-                        eventoModel.nome = value?? "Sem titulo";
+                      eventoModel.nome = value ?? "Sem titulo";
                     });
                   },
                 ),
+                SizedBox(
+                  height: 32,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ConstrainedBox(
+                      constraints: BoxConstraints(
+                          maxWidth: MediaQuery.of(context).size.width * 0.8),
+                      child: Text(
+                        userData.user.address ??
+                            enderecoText ??
+                            'Adicione um endereço',
+                        textAlign: TextAlign.left,
+                        style: Theme.of(context).textTheme.headline1.copyWith(
+                              fontSize: 18,
+                            ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 16,
+                    ),
+                    InkWell(
+                      child: Icon(
+                        Icons.edit,
+                        size: 24,
+                        color: Theme.of(context).primaryColor,
+                      ),
+                      onTap: () async {
+                        final newAddress = await showModalBottomSheet(
+                          isScrollControlled: true,
+                          context: context,
+                          builder: (context) => AddressSearch(
+                            initialValue: address,
+                          ),
+                        );
+                        if (newAddress != null)
+                          setState(() {
+                            setState(() {
+                              address = newAddress;
+                              enderecoText = newAddress.toString();
+                            });
+                          });
+                      },
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 16,
+                ),
                 TextFormField(
                     keyboardType: TextInputType.multiline,
-                    maxLines: 7, 
+                    maxLines: 7,
                     decoration: InputDecoration(
                       fillColor: colorBg,
                       hintText: "descrição sobre o evento",
                       hintStyle: TextStyle(color: Colors.black54),
+                      contentPadding: EdgeInsets.all(16),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15),
                       ),
@@ -91,354 +151,134 @@ class _EventNewScreenState extends State<EventNewScreen> {
                     },
                     onSaved: (value) {
                       setState(() {
-                        eventoModel.descricao = value.toString();
-                      });   
+                        eventoModel.descricao =
+                            value.toString() ?? "sem descricao";
+                      });
                     }),
-                    TextFormField(
-                      keyboardType: TextInputType.datetime,
-                      decoration: InputDecoration(labelText: 'Data do evento'),
-                      textInputAction: TextInputAction.next,
-                      inputFormatters: [
-                        FilteringTextInputFormatter.digitsOnly,
-                        DataInputFormatter(),
-                      ],
-                      validator: (value) {
-                        if (value.isEmpty) {
-                          return "Campo Obrigatório";
-                        }
-                        return null;
-                      },
-                      onSaved: (value) {
-                        setState(() {
-                            eventoModel.dataEHorarioInicio =
-                            DateFormat.yMd("pt_BR").parse(value);
-                            debugPrint(eventoModel.dataEHorarioInicio.toString());
-                        });
-                      },
-                    ),
-                    TextFormField(
-                      keyboardType: TextInputType.datetime,
-                      decoration: InputDecoration(labelText: 'Hora do evento'),
-                      textInputAction: TextInputAction.next,
-                      inputFormatters: [
-                        FilteringTextInputFormatter.digitsOnly,
-                        HoraInputFormatter()
-                      ],
-                      validator: (value) {
-                        /*
-                        if (!RegExp(r"/^[0-2]?[0-9]:[0-5][0-9]$/")
-                            .hasMatch(value.toString())) {
-                            debugPrint(value);
-                          return "digite uma Hora valida";
-                        }*/
-                        if(value.isEmpty){
-                          return "digite uma hora valida";
-                        }
-                        return null;
-                      },
-                      onSaved: (value) {
-                        setState(() {
-                          var _ponteiros = (value).split(":");
+                TextFormField(
+                  keyboardType: TextInputType.datetime,
+                  decoration: InputDecoration(labelText: 'Data do evento'),
+                  textInputAction: TextInputAction.next,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                    DataInputFormatter(),
+                  ],
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return "Campo Obrigatório";
+                    }
+                    return null;
+                  },
+                  onSaved: (value) {
+                    setState(() {
+                      print(value);
+                      initializeDateFormatting('pt_BR', null);
+                      eventoModel.dataEHorarioInicio =
+                          DateFormat.yMd("pt_BR").parse(value);
+                      debugPrint(eventoModel.dataEHorarioInicio.toString());
+                    });
+                  },
+                ),
+                TextFormField(
+                  keyboardType: TextInputType.datetime,
+                  decoration: InputDecoration(labelText: 'Hora do evento'),
+                  textInputAction: TextInputAction.next,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                    HoraInputFormatter()
+                  ],
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return "digite uma hora valida";
+                    }
+                    return null;
+                  },
+                  onSaved: (value) {
+                    setState(() {
+                      print(value);
+                      var _ponteiros = (value).split(":");
+                      eventoModel.dataEHorarioInicio =
                           eventoModel.dataEHorarioInicio.add(Duration(
-                            hours: int.parse(_ponteiros[0]),
-                            minutes: int.parse(_ponteiros[1])));
-                        });
-                        debugPrint(eventoModel.dataEHorarioInicio.toString());
-                      },
-                    ),
-                    TextFormField(
-                      keyboardType: TextInputType.datetime,
-                      decoration: InputDecoration(labelText: 'Duracao Minima(em horas)'),
-                      textInputAction: TextInputAction.next,
-                      inputFormatters: [
-                        FilteringTextInputFormatter.digitsOnly,
-                      ],
-                      validator: (value) {
-                        /*
-                        if (!RegExp(r"/^(02[0-3]):([0-5][0-9])$/")
-                            .hasMatch(value)) {
-                          return "digite um tempo valido";
-                        }*/
-                       
-                        if (value as double> 20 || value as double < 0.5) {
-                          return "evento deve ter um tempo minimo entre 1 a 23 horas";
-                        }
-                        return null;
-                      },
-                      onSaved: (value) {
-                        setState(() {       
-                          eventoModel.duracaoMinima = Duration(
-                            hours: (double.parse(value) / 1) as int,
-                            minutes: ((double.parse(value) % 1)*60).round()
-                          );
-                          if ( eventoModel.duracaoMaxima  == null) {
-                            eventoModel.duracaoMaxima =
-                            eventoModel.duracaoMinima;
-                          }
-                          debugPrint(eventoModel.duracaoMaxima.toString());
-                        });
-                      },
-                    ),
-                    TextFormField(
-                      keyboardType: TextInputType.datetime,
-                      decoration: InputDecoration(labelText: 'Duracao Maxima(em horas)'),
-                      textInputAction: TextInputAction.next,
-                      inputFormatters: [
-                        FilteringTextInputFormatter.digitsOnly,
-                        HoraInputFormatter(),
-                      ],
-                      validator: (value) {
-                        /*
-                        if ( this._eventoModel.tempoDuracaoMinimoPreDeterminado == null) {
-                          return "digite primeiro o tempo minimo";
-                        }
-                        if (!RegExp(r"/^(02[0-3]):([0-5][0-9])$/")
-                            .hasMatch(value.toString())) {
-                          return "digite um tempo valido";
-                        }
-                        DateTime tempo =
-                            DateFormat.Hm("pt_BR").parse(value);
-                        if (tempo.hour > 20 || tempo.hour < 1) {
-                          return "evento deve ter um tempo maximo entre 1 a 22 horas";
-                        }
-                        if ( this._eventoModel.tempoDuracaoMinimoPreDeterminado == null) {
-                          return "digite primeiro o tempo minimo";
-                        }
-                        if (tempo.microsecondsSinceEpoch <
-                            this._eventoModel
-                                .tempoDuracaoMinimoPreDeterminado.inMicroseconds) {
-                          return "tempo maximo deve ser maior que o tempo minimo";
-                        }*/
-                        return null;
-                      },
-                      onSaved: (value) {
-                        setState(() {
-                            eventoModel.duracaoMaxima = Duration(
-                              hours: (double.parse(value) / 1) as int,
-                              minutes: ((double.parse(value) % 1)*60).round()
-                            );
-                            debugPrint(eventoModel.duracaoMaxima.toString());
-                        });
-                      },
-                    ),
-                    ListTile(
-                      leading: Text(
-                        "Status Contratacao: ",
-                        style: TextStyle(fontSize: 16),
-                      ),
-                      title: DropdownButton(
-                          value: _valueDropdownStatusEvent,
-                          dropdownColor: Color.fromRGBO(255, 255, 255, 1.0),
-                          style: TextStyle(
-                              fontSize: 12,
-                              color: primaryColor,
-                              fontWeight: FontWeight.w700),
-                          focusColor: primaryColor,
-                          itemHeight: 50,
-                          elevation: 12,
-
-                          items: [
-                            DropdownMenuItem(
-                              child: Text(
-                                "SEM CONTRATAR",
-                                style: TextStyle(fontSize: 12),
-                                overflow: TextOverflow.clip,
-                              ),
-                              value: StatusEvento.CONTRATANDO,
-                            ),
-                            DropdownMenuItem(
-                              child: Text(
-                                "CONTRATANDO",
-                                style: TextStyle(fontSize: 12),
-                                overflow: TextOverflow.clip,
-                              ),
-                              value: StatusEvento.FECHADO,
-                            ),
-                          ],
-                          onChanged: (value) {
-                            setState(() {
-                              eventoModel.status = value;
-                              debugPrint(eventoModel.status.toString());
-                            });
-                          }),
-                    ),
-                Divider(),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(8, 8, 0, 2),
-                  child: Text("Contrate funcionarios para seu evento",
-                      style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.black)),
+                              hours: int.parse(_ponteiros[0]),
+                              minutes: int.parse(_ponteiros[1])));
+                    });
+                    debugPrint(eventoModel.dataEHorarioInicio.toString());
+                  },
                 ),
-                SizedBox(height: 12),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(8, 4, 0, 4),
-                  child: Text(
-                      "maximo numero de funcionarios a serem contratados do tipo...",
-                      style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                          color: primaryColor)),
+                TextFormField(
+                  keyboardType: TextInputType.datetime,
+                  decoration:
+                      InputDecoration(labelText: 'Duracao (em horas exatas)'),
+                  textInputAction: TextInputAction.next,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                  ],
+                  validator: (value) {
+                    int valor = int.parse(value);
+                    if (valor > 22 || valor < 1) {
+                      return "evento deve ter um tempo minimo entre 1 a 23 horas";
+                    }
+                    return null;
+                  },
+                  onSaved: (value) {
+                    setState(() {
+                      int valueInteiro = int.parse(value);
+                      eventoModel.duracaoMinima = valueInteiro;
+                      Duration valueDurationType =
+                          Duration(hours: valueInteiro);
+                      eventoModel.dataEHorarioTermino =
+                          eventoModel.dataEHorarioInicio.add(valueDurationType);
+                      debugPrint(eventoModel.dataEHorarioTermino.toString());
+                    });
+                  },
                 ),
                 SizedBox(height: 24),
                 ListTile(
-                    leading: Text(
-                      "GARÇOM",
-                      style: TextStyle(fontSize: 16, height: 1.5),
-                      textAlign: TextAlign.center,
-                    ),
-                    trailing: SizedBox(
-                      width: 50,
-                      child: TextFormField(
-                        validator:(value) {
-                          int numero = int.parse(value);
-                          if(numero >= 0){
-                              return null;
-                          }
-                          return "escolha um numero maior que 0";
-                        },
-                        onSaved: (value){
-                          setState(() {
-                             eventoModel.numeroMaximoDeGarcons = value as int;
-                             debugPrint(eventoModel.numeroMaximoDeGarcons.toString());
-                          });
-                        },
-                        keyboardType: TextInputType.number,
-                        decoration: InputDecoration(
-                          hintText: "0",
-                          isCollapsed: true,
-                          alignLabelWithHint: true,
-                          contentPadding: EdgeInsets.symmetric(vertical: 4),
-                          border: OutlineInputBorder(),
-                        ),
-                      ),
-                  )
-                ),
-                ListTile(
-                    leading: Text(
-                      "ANIMADOR",
-                      style: TextStyle(fontSize: 16, height: 1.5),
-                      textAlign: TextAlign.center,
-                    ),
-                    trailing: SizedBox(
-                      width: 50,
-                      child: TextFormField(
-                        validator:(value) {
-                          int numero = int.parse(value);
-                          if(numero >= 0){
-                              return null;
-                          }
-                          return "escolha um numero maior que 0";
-                        },
-                        onSaved: (value){
-                          setState(() {
-                               eventoModel.numeroMaximoDeAnimadores = value as int;
-                               debugPrint(eventoModel.numeroMaximoDeAnimadores.toString());
-                          });
-                        },
-                        keyboardType: TextInputType.number,
-                        decoration: InputDecoration(
-                          hintText: "0",
-                          isCollapsed: true,
-                          alignLabelWithHint: true,
-                          contentPadding: EdgeInsets.symmetric(vertical: 4),
-                          border: OutlineInputBorder(),
-                        ),
-                      ),
-                  )
-                ),
-                ListTile(
-                    leading: Text(
-                      "BUFFET",
-                      style: TextStyle(fontSize: 16, height: 1.5),
-                      textAlign: TextAlign.center,
-                    ),
-                    trailing: SizedBox(
-                      width: 50,
-                      child: TextFormField(
-                        validator:(value) {
-                          int numero = int.parse(value);
-                          if(numero >= 0){
-                              return null;
-                          }
-                          return "escolha um numero maior que 0";
-                        },
-                        onSaved: (value){
-                          setState(() {
-                                 eventoModel.numeroMaximoDeBuffets = value as int;
-                                 debugPrint(eventoModel.numeroMaximoDeBuffets.toString());
-                          });
-                        },
-                        keyboardType: TextInputType.number,
-                        decoration: InputDecoration(
-                          hintText: "0",
-                          isCollapsed: true,
-                          alignLabelWithHint: true,
-                          contentPadding: EdgeInsets.symmetric(vertical: 4),
-                          border: OutlineInputBorder(),
-                        ),
-                      ),
-                  )
-                ),
-                ListTile(
-                    leading: Text(
-                      "CHURRASQUEIRO",
-                      style: TextStyle(fontSize: 16, height: 1.5),
-                      textAlign: TextAlign.center,
-                    ),
-                    trailing: SizedBox(
-                      width: 50,
-                      child: TextFormField(
-                        validator:(value) {
-                          int numero = int.parse(value);
-                          if(numero >= 0){
-                              return null;
-                          }
-                          return "escolha um numero maior que 0";
-                        },
-                        onSaved: (value){
-                          setState(() {
-                             eventoModel.numeroMaximoDeChurrasqueiros = value as int;
-                             debugPrint(eventoModel.numeroMaximoDeChurrasqueiros.toString());
-                          });
-                        },
-                        keyboardType: TextInputType.number,
-                        decoration: InputDecoration(
-                          hintText: "0",
-                          isCollapsed: true,
-                          alignLabelWithHint: true,
-                          contentPadding: EdgeInsets.symmetric(vertical: 4),
-                          border: OutlineInputBorder(),
-                        ),
-                      ),
-                  )
-                ),
-                SizedBox(height: 24),
-                Align(
-                  alignment: Alignment.center,
-                  child: ElevatedButton.icon(
-                    onPressed: () {
-                      Navigator.pushNamed(context, "/employees");
-                    },
-                    icon: Icon(Icons.search, size: 16, color: primaryColor),
-                    label: Text("IR PRA TELA DE ESCOLHAS", style: TextStyle(
-                        color: primaryColor,
-                      )
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                      primary: secundaryColor,
-                      onSurface: colorBg,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15)),
-                    ),
+                  leading: Text(
+                    "Status Contratacao: ",
+                    style: TextStyle(fontSize: 16),
                   ),
+                  title: DropdownButton(
+                      value: _valueDropdownStatusEvent,
+                      dropdownColor: Color.fromRGBO(255, 255, 255, 1.0),
+                      style: TextStyle(
+                          fontSize: 12,
+                          color: primaryColor,
+                          fontWeight: FontWeight.w700),
+                      focusColor: primaryColor,
+                      itemHeight: 50,
+                      elevation: 12,
+                      items: [
+                        DropdownMenuItem(
+                          child: Text(
+                            "CONTRATANDO",
+                            style: TextStyle(fontSize: 12),
+                            overflow: TextOverflow.clip,
+                          ),
+                          value: StatusEvento.CONTRATANDO,
+                        ),
+                        DropdownMenuItem(
+                          child: Text(
+                            "SEM CONTRATAR",
+                            style: TextStyle(fontSize: 12),
+                            overflow: TextOverflow.clip,
+                          ),
+                          value: StatusEvento.FECHADO,
+                        ),
+                      ],
+                      onChanged: (value) {
+                        setState(() {
+                          _valueDropdownStatusEvent = value;
+                          eventoModel.status = value as StatusEvento;
+                          debugPrint(eventoModel.status.toString());
+                        });
+                      }),
                 ),
                 Divider(),
+                SizedBox(height: 24),
                 Padding(
                   padding: EdgeInsets.fromLTRB(8, 8, 0, 2),
-                  child: Text("Gerencie funcionarios que ja foram contratados",
+                  child: Text("Mensagem importante pra quem ja foi contratado",
                       style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.w500,
@@ -446,10 +286,10 @@ class _EventNewScreenState extends State<EventNewScreen> {
                 ),
                 SizedBox(
                   height: 24,
-                ),            
+                ),
                 Padding(
                   padding: EdgeInsets.all(16),
-                    child: TextFormField(
+                  child: TextFormField(
                     keyboardType: TextInputType.multiline,
                     maxLines: 7,
                     validator: (value) {
@@ -460,13 +300,15 @@ class _EventNewScreenState extends State<EventNewScreen> {
                     },
                     onSaved: (value) {
                       setState(() {
-                         eventoModel.observacoes = value?? "sem observacoes";
-                         debugPrint(eventoModel.observacoes);
+                        eventoModel.observacoes = value ?? "sem observacoes";
+                        debugPrint(eventoModel.observacoes);
                       });
                     },
                     decoration: InputDecoration(
                       fillColor: colorBg,
-                      hintText: "observacoes sobre o evento para os funcionarios contratados",
+                      contentPadding: EdgeInsets.all(16.0),
+                      hintText:
+                          "observacoes sobre o evento para os funcionarios contratados",
                       hintStyle: TextStyle(color: Colors.black54),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15),
@@ -474,66 +316,11 @@ class _EventNewScreenState extends State<EventNewScreen> {
                     ),
                   ),
                 ),
-                SizedBox(height: 24),
-                Align(
-                  alignment: Alignment.center,
-                  child: ElevatedButton.icon(
-                    onPressed: () {
-                      Navigator.pushNamed(context, "/employee/management");
-                    }, 
-                    style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15)),
-                        primary: primaryColor,
-                        padding: EdgeInsets.all(8)
-                    ),
-                    icon: Icon(Icons.assignment_ind, size: 16),
-                    label: Text("GERENCIADOR DE FUNCIONARIOS"),
-                  ),
-                ),
-                Divider(),
-                SizedBox(height: 24),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text("VALOR TOTAL:  ",
-                            style: TextStyle(
-                                fontSize: 16,
-                                color: primaryColor,
-                                fontWeight: FontWeight.w700)),
-                        Text("350,00",
-                            style: TextStyle(
-                                fontSize: 24,
-                                color: primaryColor,
-                                fontWeight: FontWeight.w700)),
-                      ]),
-                ),
-                SizedBox(height: 24),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text("saldo disponivel: ",
-                            style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.black,
-                                fontWeight: FontWeight.w700)),
-                        Text("R\$ ${contratanteModel.valorEmCaixaDisponivel?? "0,00"}",
-                            style: TextStyle(
-                                fontSize: 24,
-                                color: Colors.black,
-                                fontWeight: FontWeight.w700)),
-                      ]),
-                ),
-                SizedBox(height: 24),
                 setButton(
-                    text: "Publicar evento",
-                    uppercase: true,
-                    function:  _onSubmit,
-                )      
+                  text: "Criar evento",
+                  uppercase: true,
+                  function: _onSubmit,
+                )
               ],
             ),
           ),

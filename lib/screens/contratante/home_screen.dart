@@ -33,13 +33,13 @@ class _HomeScreenState extends State<HomeScreen> {
     NotificationScreen(),
   ];
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: EventUauAppBar(username: Provider.of<Auth>(context).user.name),
+      appBar: EventUauAppBar(
+        username: Provider.of<Auth>(context).user.name,
+      ),
       backgroundColor: colorBg,
-      drawer: Drawer(),
       body: _screens[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
@@ -54,7 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
         selectedItemColor: primaryColor,
         items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.calendar_view_day), 
+            icon: Icon(Icons.calendar_today),
             label: "Eventos",
           ),
           BottomNavigationBarItem(

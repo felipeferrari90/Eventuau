@@ -61,6 +61,7 @@ flutter:
     - assets/images/barbecue.png
     - assets/images/logo-roxo.png
     - assets/images/file_upload.png
+    - assets/images/photo_no_avatar.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
