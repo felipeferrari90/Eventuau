@@ -32,118 +32,86 @@ class _DashBoardScreenEventsState extends State<DashBoardScreenEvents> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(16),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Padding(
-            padding: EdgeInsets.only(bottom: 10),
-            child: Text(
-              "MEUS EVENTOS",
-              style: TextStyle(
-                  fontSize: 24,
-                  color: primaryColor,
-                  fontWeight: FontWeight.bold),
-            ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Padding(
-                padding: EdgeInsets.only(
-                  left: 16,
-                ),
-                child: Icon(
-                  Icons.history,
-                  size: 32,
-                  color: pink,
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(bottom: 8),
-                child: RaisedButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, "/event/new")
-                          .then((value) => setState(() {}));
-                    },
-                    color: primaryColor,
-                    textColor: colorBg,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15.0),
-                    ),
-                    child: Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                      child: Text("Criar Evento"),
-                    )),
-              )
-            ],
-          ),
-          Container(
+    return Scaffold(
+      floatingActionButton: FloatingActionButton.small(
+        onPressed: () async => Navigator.pushNamed(context, "/event/new")
+            .then((value) => setState(() {})),
+        child: Icon(
+          Icons.add,
+          size: 32,
+          color: Theme.of(context).primaryColor,
+        ),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
               child: Expanded(
-            child: SingleChildScrollView(
-              child: FutureBuilder<Map<String, dynamic>>(
-                  future: eventoService.getAllEvents(),
-                  builder: (context, snapshot) {
-                    switch (snapshot.connectionState) {
-                      // Uncompleted State
-                      case ConnectionState.none:
-                      case ConnectionState.waiting:
-                        return Center(child: CircularProgressIndicator());
-                        break;
-                      default:
-                        // Completed with error
-                        if (snapshot.hasError)
+                child: SingleChildScrollView(
+                  child: FutureBuilder<Map<String, dynamic>>(
+                    future: eventoService.getAllEvents(),
+                    builder: (context, snapshot) {
+                      switch (snapshot.connectionState) {
+                        // Uncompleted State
+                        case ConnectionState.none:
+                        case ConnectionState.waiting:
+                          return Center(child: CircularProgressIndicator());
+                          break;
+                        default:
+                          // Completed with error
+                          if (snapshot.hasError)
+                            return Container(
+                                child: Text(snapshot.error.toString()));
+                          // Completed with data
                           return Container(
-                              child: Text(snapshot.error.toString()));
-                        // Completed with data
-                        return Container(
-                            child: (snapshot.data['total'] == 0)
-                                ? Column(
-                                    children: [
+                            child: Column(
+                              children: (snapshot.data['total'] == 0)
+                                  ? [
                                       SizedBox(
-                                        height:
+                                          height:
                                             MediaQuery.of(context).size.height /
                                                 4,
                                       ),
                                       Text(
                                         "você não possui eventos no momento\n, crie um para você poder contratar funcionarios",
                                         textAlign: TextAlign.center,
-                                        style: TextStyle(color: Colors.black54),
+                                          style: TextStyle(color: Colors.black54),
                                       ),
-                                    ],
-                                  )
-                                : Column(
-                                    children: (snapshot.data['resultados']
+                                    ]
+                                  : (snapshot.data['resultados']
                                                 as List ??
                                             [])
-                                        .map((e) => setCardEvent(context,
+                                        .map(
+                                        (e) => setCardEvent(
+                                          context,
                                             eventoModel: new EventoModel(
                                               id: (e as Map<String, dynamic>)[
                                                   'id'],
                                               descricao: (e as Map<String,
                                                   dynamic>)['descricao'],
-                                              nome: (e as Map<String, dynamic>)[
+                                                nome: (e as Map<String, dynamic>)[
                                                   'nome'],
                                               dataEHorarioInicio:
                                                   DateTime.parse((e as Map<
-                                                      String,
+                                                            String,
                                                       dynamic>)['dataInicio']),
                                               dataEHorarioTermino:
                                                   DateTime.parse((e as Map<
-                                                      String,
+                                                            String,
                                                       dynamic>)['dataTermino']),
                                               duracaoMinima: DateTime.parse((e
                                                           as Map<String,
                                                               dynamic>)[
                                                       'dataTermino'])
-                                                  .difference(DateTime.parse((e
+                                                    .difference(DateTime.parse(
+                                                    (e
                                                           as Map<String,
                                                               dynamic>)[
                                                       'dataInicio']))
                                                   .inHours,
-                                              observacoes: (e as Map<String,
+                                                observacoes: (e as Map<String,
                                                       dynamic>)["observacao"] ??
                                                   "Sem observacoes",
                                               status: EnumToString.fromString(
@@ -154,13 +122,20 @@ class _DashBoardScreenEventsState extends State<DashBoardScreenEvents> {
                                                           dynamic>)[
                                                       'funcionariosContratados'] ??
                                                   List.empty(),
-                                            )))
-                                        .toList()));
-                    }
-                  }),
+                                              ),
+                                        ),
+                                      )
+                                      .toList(),
+                            ),
+                          );
+                      }
+                      },
+                  ),
+                ),
+              ),
             ),
-          )),
-        ],
+          ],
+        ),
       ),
     );
   }

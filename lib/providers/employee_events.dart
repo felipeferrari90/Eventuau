@@ -19,6 +19,15 @@ class EmployeeEvents with ChangeNotifier {
     return _events != null ? [..._events] : [];
   }
 
+  List<EmployeeEventModel> get finishedEvents {
+    return _events == null
+        ? [
+            ..._events
+                .where((element) => element.endDate.isAfter(DateTime.now()))
+          ]
+        : [];
+  }
+
   EmployeeEventModel getById(int id) {
     return _events.firstWhere(((element) => element.id == id));
   }
@@ -53,10 +62,13 @@ class EmployeeEvents with ChangeNotifier {
               estado: addresses[index]['estado'],
               complemento: addresses[index]['complemento']);
 
-          final eventStatus = new EventEmploymentStatus(
+          final employmentStatus = new EventEmploymentStatus(
               hasRefused: e['statusContratacao']['ehRecusado'],
               id: e['statusContratacao']['id'],
               descricao: e['statusContratacao']['descricao']);
+          
+          final eventStatus = new EventStatus(
+              id: e['status']['id'], descricao: e['status']['descricao']);
 
           _events.add(
             new EmployeeEventModel(
@@ -67,7 +79,8 @@ class EmployeeEvents with ChangeNotifier {
               endDate: DateTime.parse(e['dataTermino']),
               maxDuration: e['duracaoMinima'],
               minDuration: e['duracaoMaxima'],
-              status: eventStatus,
+              employmentStatus: employmentStatus,
+              eventStatus: eventStatus,
               address: address,
             ),
           );

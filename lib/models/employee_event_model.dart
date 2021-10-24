@@ -10,12 +10,14 @@ class EmployeeEventModel {
   DateTime endDate;
   int minDuration;
   int maxDuration;
-  EventEmploymentStatus status;
+  EventEmploymentStatus employmentStatus;
+  EventStatus eventStatus;
+
   AddressModel address;
 
-  get isConsideringProposal => status.id == 'PEN' && status.hasRefused == false;
-  
-  
+  get isConsideringProposal =>
+      employmentStatus.id == 'PEN' && employmentStatus.hasRefused == false;
+
   EmployeeEventModel(
       {@required this.id,
       @required this.name,
@@ -24,6 +26,7 @@ class EmployeeEventModel {
       @required this.endDate,
       @required this.maxDuration,
       @required this.minDuration,
-      @required this.status,
+      @required this.employmentStatus,
+      @required this.eventStatus,
       @required this.address});
 }

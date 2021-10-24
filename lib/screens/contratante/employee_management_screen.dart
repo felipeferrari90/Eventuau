@@ -23,7 +23,7 @@ class _EmployeesManagementState extends State<EmployeesManagement> {
     return Scaffold(
         appBar: EventUauAppBar(
             title: 'gerenciador de funcionarios',
-            username: Provider.of<Auth>(context).user.name),
+            ),
         body: Container(
             padding: EdgeInsets.symmetric(vertical: 16),
             color: colorBg,

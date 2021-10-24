@@ -25,7 +25,7 @@ class _EventScreenDescriptionState extends State<EventScreenDescription> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: EventUauAppBar(
-          username: Provider.of<Auth>(context).user.name,
+          
         ),
         body: Container(
             padding: EdgeInsets.all(16),

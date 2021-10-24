@@ -27,14 +27,15 @@ Future<void> uploadImage({FileTypes fileType, File image}) async {
   if (response.statusCode != 200) throw response;
 }
 
-Future<Uint8List> fetchProfilePicture() async {
+Future<Uint8List> fetchProfilePicture(int id) async {
   final filename = describeEnum(FileTypes.profilePicture);
 
-  var res = await http.get('$baseUrl/$filename');
+  var res = await http.get('$baseUrl/$id/$filename',
+      headers: {HttpHeaders.authorizationHeader: 'Bearer ${userData.token}'});
 
   if (res.statusCode != 200) throw res;
 
-  final blob = json.decode(res.body);
+  final blob = res.body;
 
-  return base64Decode(blob);
+  return base64.decode(blob);
 }

@@ -54,6 +54,30 @@ class BankData {
   }
 }
 
+class CreditCard {
+  String name;
+  String cpf;
+  String number;
+  DateTime dueDate;
+  String cvv;
+  bool isSelected;
+
+  CreditCard(
+      {@required this.name,
+      @required this.cpf,
+      @required this.number,
+      @required this.dueDate,
+      @required this.cvv,
+      this.isSelected = false});
+
+  @override
+  String toString() {
+    super.toString();
+    var numlength = number.length;
+    return 'Cartão de Final ${number.substring(numlength - 4, numlength)}';
+  }
+}
+
 final baseUrl = 'https://10.0.2.2:6041';
 
 class EmployeeWalletData with ChangeNotifier {
@@ -66,10 +90,16 @@ class EmployeeWalletData with ChangeNotifier {
   List<Operation> operations = [];
   // does not exist on backend, just a mock on front
   List<BankData> bankData = [];
+  List<CreditCard> cardData = [];
 
   BankData get selectedBankAccount {
     final index = bankData.indexWhere((element) => element.isSelected == true);
     return index != -1 ? bankData[index] : null;
+  }
+
+  CreditCard get selectedCreditCard {
+    final index = cardData.indexWhere((element) => element.isSelected == true);
+    return index != -1 ? cardData[index] : null;
   }
 
   set bankDataFromForm(Map<String, String> formData) {
@@ -83,6 +113,29 @@ class EmployeeWalletData with ChangeNotifier {
 
     notifyListeners();
   }
+
+  set cardDataFromForm(Map<String, String> formData) {
+    var _data = formData['validade'].split('/');
+    cardData.add(new CreditCard(
+        cpf: formData['cpf'],
+        cvv: formData['cvv'],
+        name: formData['name'],
+        dueDate: new DateTime(int.parse('20${_data[1]}'), int.parse(_data[0])),
+        number: formData['number'],
+        isSelected: bankData.length < 1 ? true : false));
+
+    notifyListeners();
+  }
+
+  void setMainCreditCard(int index) {
+    final previousCreditCard = selectedCreditCard;
+
+    if (previousCreditCard != null) previousCreditCard.isSelected = false;
+
+    cardData[index].isSelected = true;
+
+    notifyListeners();
+  }  
 
   void setMainBankAccount(int index) {
     final previousBankData = selectedBankAccount;
@@ -144,6 +197,21 @@ class EmployeeWalletData with ChangeNotifier {
     if (res.statusCode != 200) throw res;
 
     avaliableBalance -= value;
+
+    notifyListeners();
+  }
+
+  Future<void> deposit(double value) async {
+    final res = await http.post('https://10.0.2.2:6041/api/operacoes/deposito',
+        headers: {
+          HttpHeaders.contentTypeHeader: 'application/json',
+          HttpHeaders.authorizationHeader: 'Bearer $_token'
+        },
+        body: json.encode({"valor": value}));
+
+    if (res.statusCode != 200) throw res;
+
+    avaliableBalance += value;
 
     notifyListeners();
   }

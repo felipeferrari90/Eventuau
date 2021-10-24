@@ -1,5 +1,6 @@
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
+import 'package:collection/collection.dart';
 
 import '../../components/employee/event_card.dart';
 import '../../providers/employee_events.dart';
@@ -30,17 +31,18 @@ class _EmployeeHomeScreenState extends State<EmployeeHomeScreen> {
   }
 
   @override
-  void didUpdateWidget(covariant EmployeeHomeScreen oldWidget) {        
-      _fetchDataRef = Provider.of<EmployeeEvents>(context, listen: false)
-          .fetchEmployeeEvents();
+  void didUpdateWidget(covariant EmployeeHomeScreen oldWidget) {
+    _fetchDataRef = Provider.of<EmployeeEvents>(context, listen: false)
+        .fetchEmployeeEvents();
     super.didUpdateWidget(oldWidget);
   }
 
   @override
   Widget build(BuildContext context) {
     final _events = Provider.of<EmployeeEvents>(context).events;
+    final _finishedEvents = Provider.of<EmployeeEvents>(context).finishedEvents;
     final userInitials = Provider.of<Auth>(context).user.initials;
-    return DefaultTabController(      
+    return DefaultTabController(
       initialIndex: 0,
       length: _tabs.length,
       child: Scaffold(
@@ -75,7 +77,7 @@ class _EmployeeHomeScreenState extends State<EmployeeHomeScreen> {
                 PopupMenuItem(
                   child: Text('Minha carteira'),
                   value: EmployeeWallet.routeName,
-                ),                
+                ),
                 PopupMenuItem(
                   child: Text('Sair'),
                   value: '/',
@@ -97,10 +99,8 @@ class _EmployeeHomeScreenState extends State<EmployeeHomeScreen> {
             ),
           ),
           bottom: TabBar(
-
               isScrollable: false,
               labelColor: Theme.of(context).primaryColor,
-              
               labelStyle: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
@@ -116,40 +116,41 @@ class _EmployeeHomeScreenState extends State<EmployeeHomeScreen> {
                   child: CircularProgressIndicator(),
                 );
               return TabBarView(
-                  children: _tabs
-                      .map(
-                        (_) => RefreshIndicator(
-                          color: Theme.of(context).accentColor,
-                          onRefresh: Provider.of<EmployeeEvents>(context,
-                                  listen: false)
-                              .fetchEmployeeEvents,
-                          child: _events.length <= 0
-                              ? ListView(
-                                  shrinkWrap: true,
-                                  padding: const EdgeInsets.all(20.0),
-                                  children: [
-                                    Center(
-                                      child: Text(
-                                        'Nenhum evento aqui ainda.',
-                                        style: TextStyle(color: Colors.grey),
-                                      ),
-                                    ),
-                                    Center(
-                                      child: Text(
-                                        'Arraste para baixo para atualizar',
-                                        style: TextStyle(color: Colors.grey),
-                                      ),
-                                    )
-                                  ],
-                                )
-                              : ListView.builder(
-                                  itemBuilder: (context, index) =>
-                                      EventCard(id: _events[index].id),
-                                  itemCount: _events.length,
+                  children: _tabs.mapIndexed(
+                (tabIndex, _) {
+                  final localEvents = tabIndex == 0 ? _events : _finishedEvents;
+                  return RefreshIndicator(
+                    color: Theme.of(context).accentColor,
+                    onRefresh:
+                        Provider.of<EmployeeEvents>(context, listen: false)
+                            .fetchEmployeeEvents,
+                    child: localEvents.length <= 0
+                        ? ListView(
+                            shrinkWrap: true,
+                            padding: const EdgeInsets.all(20.0),
+                            children: [
+                              Center(
+                                child: Text(
+                                  'Nenhum evento aqui ainda.',
+                                  style: TextStyle(color: Colors.grey),
                                 ),
-                        ),
-                      )
-                      .toList());
+                              ),
+                              Center(
+                                child: Text(
+                                  'Arraste para baixo para atualizar',
+                                  style: TextStyle(color: Colors.grey),
+                                ),
+                              )
+                            ],
+                          )
+                        : ListView.builder(
+                            itemBuilder: (context, index) =>
+                                EventCard(id: localEvents[index].id),
+                            itemCount: localEvents.length,
+                          ),
+                  );
+                },
+              ).toList());
             }),
       ),
     );
@@ -167,7 +168,6 @@ class TabWithUnreadIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Tab(
-
       child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
         Text(label),
         if (amountUnread != null)
