@@ -1,4 +1,9 @@
+import 'package:event_uau/models/employee_event_model.dart';
+import 'package:event_uau/providers/employee_events.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 import '../../screens/event_detail_screen.dart';
 import './employee_event_card.dart';
@@ -6,53 +11,47 @@ import './employee_event_card.dart';
 const _innerPadding = 12.0;
 
 class EventCard extends StatelessWidget {
-  const EventCard({Key key}) : super(key: key);
+  const EventCard({Key key, this.id}) : super(key: key);
+
+  final int id;
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () => Navigator.of(context).pushNamed(EventDetailScreen.routeName),
-      onLongPress: () => print('open options menu'),
-      child: Card(
-        color: Colors.white,
-        elevation: 2,
-        child: Column(
-          children: [
-            EventCardHeader(),
-            EventCardBody(),
-            Padding(
-              padding: const EdgeInsets.all(_innerPadding),
-              child: EventCardEmployee(
-                trailing: RaisedButton(
-                  elevation: 0,
-                  padding: EdgeInsets.symmetric(horizontal: 32),
-                  visualDensity: VisualDensity.compact,
-                  onPressed: () {},
-                  child: Text(
-                    'Avaliar',
-                    style: TextStyle(fontSize: 14),
-                  ),
-                ),
-              ),
-            )
-          ],
-        ),
+    final EmployeeEventModel event =
+        Provider.of<EmployeeEvents>(context, listen: false).getById(id);
+    return Card(
+      color: Colors.white,
+      elevation: 2,
+      child: Column(
+        children: [
+          EventCardHeader(
+            event: event,
+          ),
+          EventCardBody(
+            event: event,
+          ),
+        ],
       ),
     );
   }
 }
 
 class EventCardBody extends StatelessWidget {
-  const EventCardBody({
-    Key key,
-  }) : super(key: key);
+  const EventCardBody({Key key, this.event}) : super(key: key);
 
-  void showOptionsDialog() {}
+  final EmployeeEventModel event;
 
-  void navigateToEvenetDetails() {}
+  void _navigateToDetails(BuildContext context, Function callback) async {
+    await Navigator.of(context)
+        .pushNamed(EventDetailScreen.routeName, arguments: event.id);
 
-  @override
+    callback();
+  }
+
   Widget build(BuildContext context) {
+    final refreshEventsList =
+        Provider.of<EmployeeEvents>(context, listen: false).fetchEmployeeEvents;
+    
     return Padding(
       padding: const EdgeInsets.only(
           left: _innerPadding, right: _innerPadding, top: 16),
@@ -73,8 +72,8 @@ class EventCardBody extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Rua 14 de Abril, Brasilândia - São Paulo - SP',
-                  maxLines: 2,
+                  event.address.toString(),
+                  // maxLines: ,
                   style: Theme.of(context)
                       .textTheme
                       .headline2
@@ -83,17 +82,44 @@ class EventCardBody extends StatelessWidget {
                 SizedBox(
                   height: 8,
                 ),
-                const Text(
-                  'Status',
-                  style: TextStyle(fontSize: 12),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Status',
+                          style: TextStyle(fontSize: 12),
+                        ),
+                        Text(
+                          event.status.descricao ?? 'Desconhecido',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Theme.of(context).primaryColor,
+                              fontSize: 16),
+                        ),
+                      ],
+                    ),
+                    RaisedButton(
+                      color: event.isConsideringProposal
+                          ? Theme.of(context).accentColor
+                          : Theme.of(context).primaryColor,
+                      elevation: 0,
+                      padding: EdgeInsets.symmetric(horizontal: 32),
+                      visualDensity: VisualDensity.compact,
+                      onPressed: () =>
+                          _navigateToDetails(context, refreshEventsList),
+                      child: Text(
+                        '${event.isConsideringProposal ? 'Ver Proposta' : 'Detalhes'}',
+                      ),
+                    ),
+                  ],
                 ),
-                Text(
-                  'Finalizado',
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Theme.of(context).primaryColor,
-                      fontSize: 16),
-                )
+                SizedBox(
+                  height: 12,
+                ),
               ],
             ),
           ),
@@ -106,7 +132,10 @@ class EventCardBody extends StatelessWidget {
 class EventCardHeader extends StatelessWidget {
   const EventCardHeader({
     Key key,
+    this.event,
   }) : super(key: key);
+
+  final EmployeeEventModel event;
 
   @override
   Widget build(BuildContext context) {
@@ -121,12 +150,13 @@ class EventCardHeader extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Aniversário da Ana',
+            event.name,
             style: Theme.of(context).textTheme.headline6.copyWith(
                 fontWeight: FontWeight.bold,
                 color: Theme.of(context).primaryColor),
           ),
-          Text('20 de Novambro de 2021 - 13:30 até 18:45',
+          Text(
+              '${DateFormat.yMMMMd('pt_BR').format(event.startDate)} - das ${DateFormat.Hm('pt_BR').format(event.startDate)} às ${DateFormat.Hm('pt_BR').format(event.endDate)}',
               style: Theme.of(context).textTheme.headline5)
         ],
       ),

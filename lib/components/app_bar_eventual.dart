@@ -1,6 +1,8 @@
 import 'package:event_uau/providers/auth.dart';
+import 'package:event_uau/screens/profissional/employee_home_screen.dart';
 import 'package:event_uau/screens/profissional/employee_signup/employee_signup.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../utils/colors.dart';
 
 class EventUauAppBar extends StatefulWidget with PreferredSizeWidget {
@@ -19,6 +21,7 @@ class EventUauAppBar extends StatefulWidget with PreferredSizeWidget {
 class _EventUauAppBarState extends State<EventUauAppBar> {
   @override
   Widget build(BuildContext context) {
+    final bool _isPartner = Provider.of<Auth>(context).user.isPartner;
     return AppBar(
       title: Text(
         widget.title ?? "",
@@ -26,14 +29,15 @@ class _EventUauAppBarState extends State<EventUauAppBar> {
       toolbarHeight: 70,
       elevation: 0,
       actions: <Widget>[
-        widget.username != null
+        username != null
             ? TextButton(
-                onPressed: () {
-                  Navigator.of(context)
-                      .pushNamed(EmployeeSignupScreen.routeName);
-                },
+                onPressed: () => !_isPartner
+                    ? Navigator.of(context)
+                        .pushNamed(EmployeeSignupScreen.routeName)
+                    : Navigator.of(context)
+                        .pushReplacementNamed(EmployeeHomeScreen.routeName),
                 child: Text(
-                  'Área do Parceiro',
+                  !_isPartner ? 'Seja um Parceiro!' : 'Área do Parceiro',
                   style: TextStyle(
                       decoration: TextDecoration.underline,
                       fontSize: 14,
@@ -41,10 +45,7 @@ class _EventUauAppBarState extends State<EventUauAppBar> {
                 ),
               )
             : null,
-        SizedBox(
-          width: 16,
-        ),
-        widget.username != null
+        username != null
             ? GestureDetector(
                 child: CircleAvatar(
                 backgroundColor: userLogged,
@@ -70,9 +71,7 @@ class _EventUauAppBarState extends State<EventUauAppBar> {
                 child:
                     Text("fazer login", style: TextStyle(color: primaryColor)),
               ),
-        SizedBox(
-          width: 16,
-        )
+
       ],
       iconTheme: IconThemeData(color: primaryColor, size: 16),
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,

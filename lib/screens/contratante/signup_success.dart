@@ -23,8 +23,7 @@ class SignupSuccess extends StatelessWidget {
             ),
             RaisedButton(
               onPressed: () {
-                Navigator.of(context)
-                    .pushReplacementNamed(EmployeeHomeScreen.routeName);
+                Navigator.of(context).popUntil((route) => route.isFirst);
               },
               child: Text('Voltar ao Home'),
             )

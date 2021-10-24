@@ -17,17 +17,21 @@ class AddressModel {
   String estado;
   AddressType tipoEnd;
 
+  get latitudeValue => double.parse(latitude);
+
+  get longitudeValue => double.parse(longitude);
+
   AddressModel(
-      {this.id,
-      this.latitude,
-      this.longitude,
+      {@required this.id,
+      @required this.latitude,
+      @required this.longitude,
       @required this.cep,
       @required this.rua,
-      this.numero,
+      @required this.numero,
       @required this.bairro,
       @required this.cidade,
       @required this.estado,
-      this.complemento,
+      @required this.complemento,
       this.tipoEnd});
 
   AddressModel.create({

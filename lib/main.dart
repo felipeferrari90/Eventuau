@@ -1,12 +1,14 @@
 import 'dart:io';
-
-import 'package:event_uau/providers/employee_events.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
-import './screens/contract_screen.dart';
+
 import './providers/auth.dart';
+import './providers/employee_events.dart';
+import 'providers/employee_wallet_data.dart';
+
+import './screens/contract_screen.dart';
 import './screens/contratante/signup_success.dart';
 import './screens/event_detail_screen.dart';
 import './screens/profissional/employee_home_screen.dart';
@@ -22,13 +24,16 @@ import './screens/contratante/signup_screen.dart';
 import './screens/profissional/employee_signup/employee_add_documents.dart';
 import './screens/profissional/employee_signup/employee_application_success.dart';
 import './screens/profissional/employee_signup/employee_application_pending.dart';
-import './screens/profissional/employee_wallet.dart';
+import './screens/profissional/wallet/add_bank_screen.dart';
+import './screens/profissional/wallet/employee_wallet.dart';
 import './screens/profile_screen.dart';
 import './utils/colors.dart';
 
+import 'package:intl/date_symbol_data_local.dart';
+
 void main() {
   HttpOverrides.global = new MyHttpOverrides();
-
+  initializeDateFormatting('pt_BR', null);
   runApp(EventUau());
 }
 
@@ -40,14 +45,23 @@ class EventUau extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => Auth()),
         ChangeNotifierProxyProvider<Auth, EmployeeEvents>(
           create: (_) => EmployeeEvents(null),
-          update: (context, value, previous) => EmployeeEvents(value.token),
-        )
+          update: (context, value, previous) {
+            return EmployeeEvents(value.token);
+          },
+        ),
+        ChangeNotifierProxyProvider<Auth, EmployeeWalletData>(
+          create: (_) => EmployeeWalletData(null),
+          update: (context, value, previous) {
+            return EmployeeWalletData(value.token);
+          },
+        ),
       ],
       child: Consumer<Auth>(
           builder: (ctx, auth, _) => MaterialApp(
-                title: 'EventUAU',
+          title: 'EventUAU',
                 debugShowCheckedModeBanner: false,
                 theme: ThemeData(
+                  
                   progressIndicatorTheme: ProgressIndicatorThemeData(
                     color: secundaryColor,
                   ),
@@ -104,7 +118,7 @@ class EventUau extends StatelessWidget {
                     bodyText1: TextStyle(fontSize: 8, color: primaryColor),
                     button: TextStyle(fontSize: 16, color: Colors.white),
                   ),
-                  inputDecorationTheme: InputDecorationTheme(
+                  inputDecorationTheme: InputDecorationTheme(                    
                     isDense: true,
                     alignLabelWithHint: false,
                     labelStyle: TextStyle(
@@ -131,7 +145,8 @@ class EventUau extends StatelessWidget {
                         "/contract/id": (context) => ContractScreen(),
 
                         /*ROTAS DO FLUXO APP FUNCIONARIO*/
-                        EmployeeSignupScreen.routeName: (context) =>
+                  EmployeeSignupScreen.routeName: (context) =>
+
                             EmployeeSignupScreen(),
                         EmployeeAddDocuments.routeName: (context) =>
                             EmployeeAddDocuments(),
@@ -139,29 +154,21 @@ class EventUau extends StatelessWidget {
                             EmployeeApplicationPending(),
                         EmployeeApplicationSuccess.routeName: (context) =>
                             EmployeeApplicationSuccess(),
-<<<<<<< HEAD
-                        EmployeeProfileScreen.routeName: (context) =>
-                            EmployeeProfileScreen(),
-                        EmployeeHomeScreen.routeName: (context) =>
-=======
                         ProfileScreen.routeName: (context) => ProfileScreen(),
-                    EmployeeHomeScreen.routeName: (context) =>
->>>>>>> ccf5aee9f6c355d449406b51ff835a5b2ec328dc
+                        EmployeeHomeScreen.routeName: (context) =>
+
                             EmployeeHomeScreen(),
                         EventDetailScreen.routeName: (context) =>
                             EventDetailScreen(),
                         "/employee/id": (context) => ContractScreen(),
-<<<<<<< HEAD
-                      }
-                    : {},
-=======
                         EmployeeWallet.routeName: (context) => EmployeeWallet(),
-                }
+                        AddBankScreen.routeName: (context) => AddBankScreen(),
+                      }
                     : {
                         SignUpScreen.routeName: (context) => SignUpScreen(),
                         SignupSuccess.routeName: (context) => SignupSuccess(),
                       },
->>>>>>> ccf5aee9f6c355d449406b51ff835a5b2ec328dc
+
                 onUnknownRoute: (route) {
                   return MaterialPageRoute(
                       builder: (ctx) =>
@@ -170,7 +177,8 @@ class EventUau extends StatelessWidget {
                 onGenerateRoute: auth.isAuth
                     ? null
                     : (_) => MaterialPageRoute(builder: (ctx) => InitScreen()),
-              )),
+              ),
+      ),
     );
   }
 }
