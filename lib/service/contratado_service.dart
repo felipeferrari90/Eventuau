@@ -1,9 +1,6 @@
-<<<<<<< HEAD
-import 'package:event_uau/models/evento_model.dart';
 import 'package:event_uau/models/funcionario_model.dart';
-=======
+
 import '../providers/auth.dart';
->>>>>>> ccf5aee9f6c355d449406b51ff835a5b2ec328dc
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'dart:convert';

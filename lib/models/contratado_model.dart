@@ -1,6 +1,4 @@
-<<<<<<< HEAD
 import 'dart:io';
-
 import 'package:event_uau/components/employee/profile_screen/profile_picture.dart';
 import 'package:event_uau/models/funcionario_model.dart';
 import 'package:event_uau/providers/auth.dart';
@@ -34,24 +32,4 @@ class ContratadoModel with ChangeNotifier {
           .add(new JobItem(id: element["id"], descricao: element["descricao"]));
     });
   }
-=======
-import 'package:flutter/material.dart';
-
-class ContratadoModel {
-  double valorHora;
-  List<JobItem> especialidades;
-  double grade;
-
-  ContratadoModel(
-      {@required this.valorHora,
-      @required this.especialidades,
-      @required this.grade});
-}
-
-class JobItem {
-  int id;
-  String descricao;
-
-  JobItem({this.id, this.descricao});
->>>>>>> ccf5aee9f6c355d449406b51ff835a5b2ec328dc
 }

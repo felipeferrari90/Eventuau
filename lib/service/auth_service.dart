@@ -36,13 +36,6 @@ Future<void> signup(SignupModel signupInfo) async {
 
   if (res.statusCode != 200 && res.statusCode != 201)
     throw json.decode(res.body);
-<<<<<<< HEAD
-  }
-
-  debugPrint("FOI CRIADO COM SUCESSO");
-=======
-  
->>>>>>> ccf5aee9f6c355d449406b51ff835a5b2ec328dc
   return res;
 }
 

@@ -139,29 +139,18 @@ class EventUau extends StatelessWidget {
                             EmployeeApplicationPending(),
                         EmployeeApplicationSuccess.routeName: (context) =>
                             EmployeeApplicationSuccess(),
-<<<<<<< HEAD
-                        EmployeeProfileScreen.routeName: (context) =>
-                            EmployeeProfileScreen(),
-                        EmployeeHomeScreen.routeName: (context) =>
-=======
                         ProfileScreen.routeName: (context) => ProfileScreen(),
-                    EmployeeHomeScreen.routeName: (context) =>
->>>>>>> ccf5aee9f6c355d449406b51ff835a5b2ec328dc
+                        EmployeeHomeScreen.routeName: (context) =>
                             EmployeeHomeScreen(),
                         EventDetailScreen.routeName: (context) =>
                             EventDetailScreen(),
                         "/employee/id": (context) => ContractScreen(),
-<<<<<<< HEAD
-                      }
-                    : {},
-=======
                         EmployeeWallet.routeName: (context) => EmployeeWallet(),
-                }
+                      }
                     : {
                         SignUpScreen.routeName: (context) => SignUpScreen(),
                         SignupSuccess.routeName: (context) => SignupSuccess(),
                       },
->>>>>>> ccf5aee9f6c355d449406b51ff835a5b2ec328dc
                 onUnknownRoute: (route) {
                   return MaterialPageRoute(
                       builder: (ctx) =>

@@ -50,17 +50,17 @@ class ContratanteModel {
       );
 
   Map<String, dynamic> toMap() => {
-    "id": this.id,
-    "nome": this.nome,
-    "senha": this.senha,
-    "cpf": this.cpf,
-    "email": this.email,
-    "telefone": this.telefone,
-    "dataNascimento": this.dataNascimento.millisecondsSinceEpoch,
-    "dataCriacaoConta": this.dataCriacaoConta.millisecondsSinceEpoch,
-    "valorEmCaixaDisponivel": this.valorEmCaixaDisponivel,
-    "valorBloqueado": this.valorBloqueado,
-  };
+        "id": this.id,
+        "nome": this.nome,
+        "senha": this.senha,
+        "cpf": this.cpf,
+        "email": this.email,
+        "telefone": this.telefone,
+        "dataNascimento": this.dataNascimento.millisecondsSinceEpoch,
+        "dataCriacaoConta": this.dataCriacaoConta.millisecondsSinceEpoch,
+        "valorEmCaixaDisponivel": this.valorEmCaixaDisponivel,
+        "valorBloqueado": this.valorBloqueado,
+      };
 
   factory ContratanteModel.fromJson(String str) =>
       ContratanteModel.fromMap(json.decode(str));

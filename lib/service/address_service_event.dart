@@ -11,8 +11,7 @@ import 'package:http/http.dart' as http;
 import '../service/maps_service.dart' as MapsService;
 
 class AddressServiceEvent {
-  static AddressModel setEventAddressModel(
-      EventoModel eventoModel, Map<String, dynamic> jsonResponse) {
+  static AddressModel setEventAddressModel(Map<String, dynamic> jsonResponse) {
     return AddressModel(
         id: jsonResponse['id'],
         latitude: jsonResponse['latitude'] ?? "12.0",

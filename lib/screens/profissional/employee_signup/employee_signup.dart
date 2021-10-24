@@ -1,15 +1,11 @@
-<<<<<<< HEAD
 import 'dart:async';
 import 'dart:io';
-
 import 'package:brasil_fields/brasil_fields.dart';
 import 'package:event_uau/components/address_search.dart';
 import 'package:event_uau/models/address_model.dart';
 import 'package:event_uau/models/funcionario_model.dart';
 import 'package:event_uau/screens/profissional/employee_signup/employee_application_success.dart';
 import '../../../service/contratado_service.dart' as ContratadoService;
-=======
->>>>>>> ccf5aee9f6c355d449406b51ff835a5b2ec328dc
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -18,27 +14,18 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:brasil_fields/brasil_fields.dart';
-
 import 'dart:async';
 import 'dart:io';
-
 import '../../../models/address_model.dart';
 import '../../../models/contratado_model.dart';
-
 import '../../../components/address_search.dart';
 import '../../../components/employee/signup/paragraph_text.dart';
 import '../../../components/employee/signup/editable_row.dart';
-
 import '../../../screens/profissional/employee_signup/employee_application_success.dart';
-
-<<<<<<< HEAD
-=======
 import '../../../providers/auth.dart';
-
 import '../../../service/upload_service.dart' as UploadService;
 import '../../../service/contratado_service.dart' as ContratadoService;
 
->>>>>>> ccf5aee9f6c355d449406b51ff835a5b2ec328dc
 class EmployeeSignupScreen extends StatefulWidget {
   static const routeName = '/employee/signup/personaldata';
   const EmployeeSignupScreen({Key key}) : super(key: key);
@@ -147,7 +134,7 @@ class _EmployeeSignupScreenState extends State<EmployeeSignupScreen> {
 
   void _handleSubmit() async {
     var _hasError = false;
-    final userAddress = Provider.of<Auth>(context, listen: false).user.address;    
+    final userAddress = Provider.of<Auth>(context, listen: false).user.address;
     // 1. VALDATE IF USER HAS IMAGE AND HAS SELECTED AT LEAST 1 JOB + HOURLYRATE
 
     if (profilePicture == null) {
@@ -174,10 +161,7 @@ class _EmployeeSignupScreenState extends State<EmployeeSignupScreen> {
           profilePicture;
       //3. SUBMIT PARTNER DATA
       await ContratadoService.signup(hourlyRate, selectedJobs);
-<<<<<<< HEAD
 
-      // 4. NAVIGATE TO NEXT PAGE
-=======
       Provider.of<Auth>(context, listen: false)
           .setContratanteInfo(hourlyRate, selectedJobs);
 
@@ -188,7 +172,6 @@ class _EmployeeSignupScreenState extends State<EmployeeSignupScreen> {
       }
 
       // 5. NAVIGATE TO NEXT PAGE
->>>>>>> ccf5aee9f6c355d449406b51ff835a5b2ec328dc
       Navigator.of(context)
           .pushReplacementNamed(EmployeeApplicationSuccess.routeName);
     } catch (e) {
