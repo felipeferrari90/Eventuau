@@ -17,13 +17,18 @@ class EventDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final id = ModalRoute.of(context).settings.arguments;
+    final args = ModalRoute.of(context).settings.arguments as Map;
+    final _isComingFromEmployeeScreen =
+        args['previousRoute'] == EmployeeHomeScreen.routeName;
     final eventData = Provider.of<EmployeeEvents>(
-      context,
-    ).getById(id);
+      context, listen: false).getById(args['id']);
+
+    final _showCompleteAdress =
+        eventData.startDate.difference(DateTime.now()).inHours <= 4;
+        
     return Scaffold(
       appBar: AppBar(
-        title: Text('Resumo do evento'),
+        title: Text('Resumo do Evento'),
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -75,9 +80,10 @@ class EventDetailScreen extends StatelessWidget {
               ),
               Field(
                   label: 'Endereço',
-                  value:
-                      '${eventData.address.cep} - ${eventData.address.bairro}, ${eventData.address.cidade}'),
-              if (eventData.isConsideringProposal)
+                  value: _showCompleteAdress
+                      ? eventData.address.toString()
+                      : '${eventData.address.cep} - ${eventData.address.bairro}, ${eventData.address.cidade}'),
+              if (_isComingFromEmployeeScreen && !_showCompleteAdress)
                 Row(
                   children: [
                     Icon(
@@ -86,12 +92,15 @@ class EventDetailScreen extends StatelessWidget {
                       color: Colors.grey[600],
                     ),
                     SizedBox(
-                      width: 2,
+                      width: 4,
                     ),
-                    Text(
-                      'O endereço completo será revelado no dia do evento.',
-                      style: TextStyle(
-                        color: Colors.grey[600],
+                    Flexible(
+                      child: Text(
+                        'O endereço completo será revelado 5 horas antes do início do evento.',
+                        style: TextStyle(
+                          color: Colors.grey[600],
+                        ),
+                        
                       ),
                     ),
                   ],
@@ -104,17 +113,28 @@ class EventDetailScreen extends StatelessWidget {
                 child: GoogleMap(
                     zoomGesturesEnabled: true,
                     liteModeEnabled: true,
-                    circles: {
-                      Circle(
-                          strokeWidth: 1,
-                          strokeColor: Color.fromRGBO(0, 0, 255, 0.4),
-                          fillColor: Color.fromRGBO(0, 0, 255, 0.2),
-                          visible: true,
-                          circleId: CircleId('thisisaneasteregg'),
-                          center: LatLng(eventData.address.latitudeValue,
-                              eventData.address.longitudeValue),
-                          radius: 800)
-                    },
+                    circles: !_showCompleteAdress
+                        ? {
+                            Circle(
+                                strokeWidth: 1,
+                                strokeColor: Color.fromRGBO(0, 0, 255, 0.4),
+                                fillColor: Color.fromRGBO(0, 0, 255, 0.2),
+                                visible: true,
+                                circleId: CircleId('thisisaneasteregg'),
+                                center: LatLng(eventData.address.latitudeValue,
+                                    eventData.address.longitudeValue),
+                                radius: 800)
+                          }
+                        : null,
+                    markers: _showCompleteAdress
+                        ? {
+                            Marker(
+                              markerId: MarkerId('ohhimark(er)'),
+                              position: LatLng(eventData.address.latitudeValue,
+                                  eventData.address.longitudeValue),
+                            )
+                          }
+                        : null,
                     initialCameraPosition: CameraPosition(
                         zoom: 14,
                         target: LatLng(eventData.address.latitudeValue,
@@ -131,7 +151,7 @@ class EventDetailScreen extends StatelessWidget {
                     .copyWith(fontWeight: FontWeight.bold),
               ),
               FutureBuilder(
-                future: fetchEventById(id),
+                future: fetchEventById(args['id']),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting)
                     return Center(
@@ -144,6 +164,7 @@ class EventDetailScreen extends StatelessWidget {
                     return Column(children: [
                       ...funcionariosContratados
                           .map((e) => EventCardEmployee(
+                            id: e['funcionario']['id'],
                                 name: e['funcionario']['nome'],
                                 job: 'Garçom',
                               )) //@TODO TIRAR O MOCK
@@ -156,7 +177,7 @@ class EventDetailScreen extends StatelessWidget {
                   );
                 },
               ),
-              Proposal(),
+              if (_isComingFromEmployeeScreen) Proposal(),
               // Title('Assistentes Selecionados'),
               // SizedBox(
               //   height: 12,
@@ -249,7 +270,8 @@ class Proposal extends StatelessWidget {
                 ? () => Navigator.of(context).popUntil((route) =>
                     route.settings.name == EmployeeHomeScreen.routeName)
                 : () async {
-                    final id = ModalRoute.of(context).settings.arguments;
+                    final id = (ModalRoute.of(context).settings.arguments
+                        as Map)['id'];
                     bool success = await acceptProposal(id);
                     if (!success) {
                       Navigator.of(context).pop();
@@ -269,7 +291,7 @@ class Proposal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final id = ModalRoute.of(context).settings.arguments;
+    final id = (ModalRoute.of(context).settings.arguments as Map)['id'];
     final eventData =
         Provider.of<EmployeeEvents>(context, listen: false).getById(id);
 
@@ -307,7 +329,7 @@ class Proposal extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('Preço por hora:'),
+            Text('Preço por Hora:'),
             Text(
               'R\$${hourlyRate.toStringAsFixed(2)}',
               style: TextStyle(

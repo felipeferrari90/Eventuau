@@ -31,7 +31,7 @@ class _EmployeeChoiceScreenState extends State<EmployeeChoiceScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: EventUauAppBar(username: Provider.of<Auth>(context).user.name),
+        appBar: EventUauAppBar(),
         backgroundColor: colorBg,
         body: Container(
           padding: EdgeInsets.symmetric(horizontal: 24),

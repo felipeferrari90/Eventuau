@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:event_uau/screens/profissional/wallet/add_credit.card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
@@ -140,6 +141,7 @@ class EventUau extends StatelessWidget {
                   "/employee/management": (context) => EmployeesManagement(),
                   "/employee/events": (context) => HomeScreen(),
                   "/contract/id": (context) => ContractScreen(),
+                  AddCreditCard.routeName: (context) => AddCreditCard(),
 
                   /*ROTAS DO FLUXO APP FUNCIONARIO*/
                   EmployeeSignupScreen.routeName: (context) =>
@@ -162,10 +164,8 @@ class EventUau extends StatelessWidget {
                   SignUpScreen.routeName: (context) => SignUpScreen(),
                   SignupSuccess.routeName: (context) => SignupSuccess(),
                 },
-          onUnknownRoute: (route) {
-            return MaterialPageRoute(
-                builder: (ctx) => auth.isAuth ? HomeScreen() : InitScreen());
-          },
+          onUnknownRoute: (route) => MaterialPageRoute(
+              builder: (ctx) => auth.isAuth ? HomeScreen() : InitScreen()),
           onGenerateRoute: auth.isAuth
               ? null
               : (_) => MaterialPageRoute(builder: (ctx) => InitScreen()),

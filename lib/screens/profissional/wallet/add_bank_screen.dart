@@ -55,6 +55,12 @@ class _AddBankScreenState extends State<AddBankScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          onPressed: () => Navigator.of(context).popUntil(
+              (route) => route.settings.name == EmployeeWallet.routeName),
+          icon: Icon(Icons.arrow_back),
+          color: Theme.of(context).primaryColor,
+        ),
         title: Text('Novos dados bancários'),
         actions: [
           IconButton(

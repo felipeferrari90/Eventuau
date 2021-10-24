@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:event_uau/service/upload_service.dart';
 import 'package:flutter/material.dart';
 
 class EventCardEmployee extends StatelessWidget {
@@ -6,6 +9,7 @@ class EventCardEmployee extends StatelessWidget {
     this.name,
     this.age,
     this.job,
+    this.id,
     Key key,
   }) : super(key: key);
 
@@ -13,6 +17,7 @@ class EventCardEmployee extends StatelessWidget {
   final String name;
   final String age;
   final String job;
+  final int id;
 
   Widget renderTrailing() {
     if (trailing is Widget) return trailing;
@@ -37,10 +42,17 @@ class EventCardEmployee extends StatelessWidget {
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(15))),
         tileColor: Color.fromRGBO(0, 0, 0, 0.05),
-        leading: Icon(
+        leading: FutureBuilder(
+          builder: (context, snapshot) =>
+              snapshot.connectionState != ConnectionState.waiting &&
+                      snapshot.hasData == false
+                  ? Icon(
           Icons.person,
           color: Theme.of(context).primaryColor,
           size: 42,
+        )
+                  : CircleAvatar(backgroundImage: MemoryImage(snapshot.data)),
+          future: fetchProfilePicture(id),
         ),
         title: Text('$name ${age ?? ''}'),
         subtitle: Row(

@@ -221,7 +221,7 @@ class Auth with ChangeNotifier {
 
   void getProfilePicture() async {
     try {
-      final profilePicture = await UploadService.fetchProfilePicture();
+      final profilePicture = await UploadService.fetchProfilePicture(user.id);
 
       userProfilePicture = File.fromRawPath(profilePicture);
     } catch (e) {

@@ -24,7 +24,7 @@ Widget setCardEvent(context, {EventoModel eventoModel}) => Card(
         child: Column(
           children: [
             Container(
-              padding: EdgeInsets.all(16),
+              padding: EdgeInsets.all(12),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(15),

@@ -6,10 +6,9 @@ import 'package:provider/provider.dart';
 import '../utils/colors.dart';
 
 class EventUauAppBar extends StatefulWidget with PreferredSizeWidget {
-  const EventUauAppBar({Key key, this.title, this.username}) : super(key: key);
+  const EventUauAppBar({Key key, this.title}) : super(key: key);
 
-  final String title;
-  final String username;
+  final String title;  
 
   @override
   _EventUauAppBarState createState() => _EventUauAppBarState();
@@ -21,56 +20,50 @@ class EventUauAppBar extends StatefulWidget with PreferredSizeWidget {
 class _EventUauAppBarState extends State<EventUauAppBar> {
   @override
   Widget build(BuildContext context) {
-    final bool _isPartner = Provider.of<Auth>(context).user.isPartner;
+    
+    final user = Provider.of<Auth>(context).user;
     return AppBar(
       title: Text(
         widget.title ?? "",
-      ),
-      toolbarHeight: 70,
+      ),            
       elevation: 0,
-      actions: <Widget>[
-        widget.username != null
-            ? TextButton(
-                onPressed: () => !_isPartner
+      actions: <Widget>[        
+         TextButton(
+          onPressed: () => !user.isPartner
                     ? Navigator.of(context)
                         .pushNamed(EmployeeSignupScreen.routeName)
                     : Navigator.of(context)
                         .pushReplacementNamed(EmployeeHomeScreen.routeName),
                 child: Text(
-                  !_isPartner ? 'Seja um Parceiro!' : 'Área do Parceiro',
+                  !user.isPartner ? 'Seja um Parceiro!' : 'Área do Parceiro',
                   style: TextStyle(
                       decoration: TextDecoration.underline,
                       fontSize: 14,
                       color: Theme.of(context).primaryColor),
                 ),
-              )
-            : null,
-        widget.username != null
-            ? GestureDetector(
-                child: CircleAvatar(
-                backgroundColor: userLogged,
-                child: Container(
-                  padding: EdgeInsets.all(4),
-                  child: Text(
-                    widget.username != null
-                        ? widget.username
-                            .split(" ")
-                            .sublist(0, 2)
-                            .map((e) {
-                              return e[0];
-                            })
-                            .join()
-                            .toUpperCase()
-                        : "NO",
-                    style: TextStyle(fontSize: 20.0, color: primaryColor),
-                  ),
-                ),
-              ))
-            : Padding(
-                padding: EdgeInsets.all(16),
-                child:
-                    Text("fazer login", style: TextStyle(color: primaryColor)),
               ),
+        PopupMenuButton(
+          onSelected: (value) {
+            if (value == '/') {
+              Provider.of<Auth>(context, listen: false).signout();
+              Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
+            } else
+              Navigator.pushNamed(context, value as String);
+          },
+          itemBuilder: (context) => [
+            PopupMenuItem(
+              child: Text('Sair'),
+              value: '/',
+            ),
+          ],
+          icon: CircleAvatar(
+            backgroundColor: Theme.of(context).accentColor,
+            child: Text(
+                  user.initials,
+              style: TextStyle(color: Colors.black),
+            ),
+              ),
+            )
       ],
       iconTheme: IconThemeData(color: primaryColor, size: 16),
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,

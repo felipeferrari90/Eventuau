@@ -2,6 +2,7 @@ import 'package:event_uau/components/app_bar_eventual.dart';
 import 'package:event_uau/providers/auth.dart';
 import 'package:event_uau/screens/history_chat_screen.dart';
 import 'package:event_uau/screens/notifications_screen.dart';
+import 'package:event_uau/screens/profissional/wallet/employee_wallet.dart';
 import 'package:event_uau/screens/wallet_screen.dart';
 
 import 'package:event_uau/utils/colors.dart';
@@ -28,16 +29,24 @@ class _HomeScreenState extends State<HomeScreen> {
 
   List _screens = [
     DashBoardScreenEvents(),
-    WalletScreen(),
+    EmployeeWallet(),
     HistoryChatScreen(),
     NotificationScreen(),
+  ];
+
+  List<String> _titles = [
+    'Meus Eventos',
+    'Carteira',
+    'Conversas',
+    'Notificacões'
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: EventUauAppBar(
-        username: Provider.of<Auth>(context).user.name,
+      appBar: _currentIndex == 1
+          ? null
+          : EventUauAppBar(title: _titles[_currentIndex]        
       ),
       backgroundColor: colorBg,
       body: _screens[_currentIndex],

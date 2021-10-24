@@ -58,6 +58,6 @@ class AddressModel {
 
   @override
   String toString() {
-    return '${this.rua} ${this.numero} ${this.complemento}, ${this.cep} - ${this.bairro} ${this.cidade} - ${this.estado}';
+    return '${this.cep} ${this.rua} ${this.numero} ${this.complemento} ${this.bairro} ${this.cidade} - ${this.estado}';
   }
 }
