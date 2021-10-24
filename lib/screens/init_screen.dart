@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import './profissional/employee_home_screen.dart';
-import './profissional/employee_profile_screen.dart';
+import 'profile_screen.dart';
 import './profissional/employee_signup/employee_signup.dart';
 
 import '../providers/auth.dart';
@@ -54,10 +54,11 @@ class _InitScreenState extends State<InitScreen> {
 
       _errorMessageTimer = new Timer(
           Duration(seconds: 5), () => setState(() => _hasError = false));
+
+      setState(() {
+        _isLoading = false;
+      });
     }
-    setState(() {
-      _isLoading = false;
-    });
   }
 
   @override
@@ -95,11 +96,6 @@ class _InitScreenState extends State<InitScreen> {
                           child:
                               Text('Go to ${EmployeeSignupScreen.routeName}'),
                           value: EmployeeSignupScreen.routeName,
-                        ),
-                        PopupMenuItem(
-                          child:
-                              Text('Go to ${EmployeeProfileScreen.routeName}'),
-                          value: EmployeeProfileScreen.routeName,
                         ),
                         PopupMenuItem(
                           child: Text('Go to ${EmployeeHomeScreen.routeName}'),

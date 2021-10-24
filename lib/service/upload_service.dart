@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart';
 
@@ -24,4 +25,16 @@ Future<void> uploadImage({FileTypes fileType, File image}) async {
   var response = await request.send();
 
   if (response.statusCode != 200) throw response;
+}
+
+Future<Uint8List> fetchProfilePicture() async {
+  final filename = describeEnum(FileTypes.profilePicture);
+
+  var res = await http.get('$baseUrl/$filename');
+
+  if (res.statusCode != 200) throw res;
+
+  final blob = json.decode(res.body);
+
+  return base64Decode(blob);
 }

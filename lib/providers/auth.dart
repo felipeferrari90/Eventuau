@@ -1,16 +1,16 @@
-import 'package:event_uau/models/contratado_model.dart';
 import 'package:event_uau/models/funcionario_model.dart';
-import 'package:event_uau/screens/profissional/employee_signup/employee_signup.dart';
-
-import '../models/address_model.dart';
-import 'package:event_uau/service/auth_service.dart' as AuthService;
-import '../service/maps_service.dart' as MapsService;
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-
 import 'dart:convert';
 import 'dart:async';
 import 'dart:io';
+
+import 'package:event_uau/service/auth_service.dart' as AuthService;
+import '../service/contratado_service.dart';
+import '../service/maps_service.dart' as MapsService;
+import '../service/upload_service.dart' as UploadService;
+import '../models/contratado_model.dart';
+import '../models/address_model.dart';
 
 import '../models/signup_model.dart';
 
@@ -99,7 +99,12 @@ class Auth with ChangeNotifier {
       phone: _userData['telefone'],
       status: _userData['status'],
     );
+
     notifyListeners();
+
+    await getPartnerInfo();
+    await getAddress();
+    getProfilePicture();
   }
 
   void signout() {
@@ -107,7 +112,24 @@ class Auth with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> updateUserInfo(Map<String, dynamic> newData) async {
+  Future<void> getPartnerInfo() async {
+    try {
+      final res = await getParceiroInfoById(user.id);
+
+      user.partnerData = new ContratadoModel(
+          grade: null, //TODO CHANGE TO VALUE FROM ENDPOINT
+          valorHora: res['valorHora'],
+          especialidades: (res['especialidades'] as List)
+              .map((e) => new JobItem(id: e['id'], descricao: e['descricao']))
+              .toList());
+
+      notifyListeners();
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void updateUserInfo(Map<String, dynamic> newData) async {
     try {
       final _userData =
           await AuthService.updateUser({...user.userInfoPayload, ...newData});
@@ -129,11 +151,6 @@ class Auth with ChangeNotifier {
       if (e?.statusCode == 401) signout();
       throw e;
     }
-  }
-
-  set userProfilePicture(File profilePicture) {
-    user.profilePicture = profilePicture;
-    notifyListeners();
   }
 
   Future<void> getAddress() async {
@@ -179,8 +196,8 @@ class Auth with ChangeNotifier {
     final coords = await MapsService.fetchLatAndLongByAddress(
         '${addressData.cep} ${addressData.rua} ${addressData.numero}');
 
-    addressData.latitude = coords['lat'] ?? "12.0";
-    addressData.longitude = coords['long'] ?? "12.0";
+    addressData.latitude = coords['lat'];
+    addressData.longitude = coords['long'];
 
     final res = await http.post('$baseUrl/${user.id}/enderecos',
         headers: _headers, body: addressData.apiPayload);
@@ -193,5 +210,20 @@ class Auth with ChangeNotifier {
         valorHora: valorHora, especialidades: especialidades, grade: null);
 
     notifyListeners();
+  }
+
+  set userProfilePicture(File profilePicture) {
+    user.profilePicture = profilePicture;
+    notifyListeners();
+  }
+
+  void getProfilePicture() async {
+    try {
+      final profilePicture = await UploadService.fetchProfilePicture();
+
+      userProfilePicture = File.fromRawPath(profilePicture);
+    } catch (e) {
+      userProfilePicture = null;
+    }
   }
 }

@@ -20,8 +20,7 @@ class SignupModel {
     var splitName = name.split(' ');
 
     return {
-      'nome': '${splitName[0]} ${splitName[1]}',
-      'sobreNome': splitName.last,
+      'nome': '${splitName[0]} ${splitName[1]}',      
       'email': email,
       'cpf': cpf,
       'senha': password,

@@ -1,4 +1,4 @@
-import 'package:event_uau/screens/init_screen.dart';
+import '../../screens/profissional/employee_home_screen.dart';
 import 'package:flutter/material.dart';
 
 class SignupSuccess extends StatelessWidget {
@@ -16,14 +16,15 @@ class SignupSuccess extends StatelessWidget {
           children: [
             Text(
               'Usuário cadastrado com sucesso!',
-              style: Theme.of(context).textTheme.headline1,
+              style: Theme.of(context).textTheme.headline4,
             ),
             SizedBox(
-              height: 6,
+              height: 12,
             ),
             RaisedButton(
               onPressed: () {
-                Navigator.of(context).popUntil((route) => route.isFirst);
+                Navigator.of(context)
+                    .pushReplacementNamed(EmployeeHomeScreen.routeName);
               },
               child: Text('Voltar ao Home'),
             )

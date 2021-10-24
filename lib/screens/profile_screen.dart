@@ -1,25 +1,24 @@
-import 'package:event_uau/components/employee/profile_screen/profile_picture.dart';
-import 'package:event_uau/components/employee/profile_screen/user_details.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class EmployeeProfileScreen extends StatefulWidget {
-  const EmployeeProfileScreen({Key key}) : super(key: key);
+import '../components/employee/profile_screen/profile_picture.dart';
+import '../components/employee/profile_screen/user_details.dart';
+import '../service/upload_service.dart' as UploadService;
+import '../../../providers/auth.dart';
+
+class ProfileScreen extends StatefulWidget {
+  const ProfileScreen({Key key}) : super(key: key);
 
   static const routeName = '/employee/profile';
 
   @override
-  _EmployeeProfileScreenState createState() => _EmployeeProfileScreenState();
+  _ProfileScreenState createState() => _ProfileScreenState();
 }
 
-class _EmployeeProfileScreenState extends State<EmployeeProfileScreen> {
-  final List<String> _imageList = [
-    'https://upload.wikimedia.org/wikipedia/commons/7/7e/Borat_in_Cologne.jpg',
-    'https://www.torredevigilancia.com/wp-content/uploads/2021/01/borat-2.png',
-    'https://cdn.jornaldebrasilia.com.br/wp-content/uploads/2021/01/06152117/borat-subsequent-moviefilm-review-1200-1000x600.jpg'
-  ];
-
+class _ProfileScreenState extends State<ProfileScreen> {  
   @override
   Widget build(BuildContext context) {
+    final userData = Provider.of<Auth>(context).user;
     final primaryColor = Theme.of(context).primaryColor;
     return Scaffold(
       floatingActionButton: Row(
@@ -63,10 +62,17 @@ class _EmployeeProfileScreenState extends State<EmployeeProfileScreen> {
         ],
       ),
       body: SingleChildScrollView(
-        child: Column(children: [
-          ProfilePicture(imageList: _imageList),
-          UserDetails(),
-        ]),
+        child: Column(
+          children: [
+            ProfilePicture(
+                imageList: userData.profilePicture != null
+                    ? [userData.profilePicture]
+                    : []),
+            UserDetails(
+              userData: userData,
+            ),
+          ],
+        ),
       ),
     );
   }

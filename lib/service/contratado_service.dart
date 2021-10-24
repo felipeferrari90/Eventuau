@@ -1,38 +1,18 @@
+<<<<<<< HEAD
 import 'package:event_uau/models/evento_model.dart';
 import 'package:event_uau/models/funcionario_model.dart';
+=======
+import '../providers/auth.dart';
+>>>>>>> ccf5aee9f6c355d449406b51ff835a5b2ec328dc
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'dart:convert';
 import 'dart:io';
 
-import '../screens/profissional/employee_signup/employee_signup.dart';
-import '../service/maps_service.dart' as MapsService;
+import '../models/contratado_model.dart';
 
-import '../models/address_model.dart';
-import '../providers/auth.dart';
-
-var baseUrl = 'https://10.0.2.2:6031/api/usuarios/';
 var signupUrl = 'https://10.0.2.2:6001/api/parceiros';
-
-final headers = {
-  HttpHeaders.authorizationHeader: 'Bearer ${userData.token}',
-  HttpHeaders.contentTypeHeader: 'application/json'
-};
-
 final userData = Auth();
-
-Future<void> createAddress(AddressModel addressData) async {
-  final coords = await MapsService.fetchLatAndLongByAddress(
-      '${addressData.cep} ${addressData.rua} ${addressData.numero}');
-
-  addressData.latitude = coords['lat'];
-  addressData.longitude = coords['long'];
-
-  final res = await http.post('$baseUrl/${userData.user.id}/enderecos',
-      headers: headers, body: addressData.apiPayload);
-
-  if (res.statusCode != 200) throw HttpException(json.decode(res.body));
-}
 
 Future<void> signup(double hourlyRate, List<JobItem> selectedJobs) async {
   final body = json.encode({
@@ -41,9 +21,23 @@ Future<void> signup(double hourlyRate, List<JobItem> selectedJobs) async {
         selectedJobs.map((e) => {'id': e.id, 'descricao': e.descricao}).toList()
   });
 
-  final res = await http.post('$signupUrl', headers: headers, body: body);
+  final res = await http.post('$signupUrl',
+      headers: {
+        HttpHeaders.contentTypeHeader: 'application/json',
+        HttpHeaders.authorizationHeader: 'Bearer ${userData.token}'
+      },
+      body: body);
 
-  if (res.statusCode != 200) throw HttpException(json.decode(res.body));
+  if (res.statusCode != 200) throw json.decode(res.body);
+}
+
+Future<Map<String, dynamic>> getParceiroInfoById(int userId) async {
+  final res = await http.get('$signupUrl/$userId',
+      headers: {HttpHeaders.authorizationHeader: 'Bearer ${userData.token}'});
+
+  if (res.statusCode != 200) throw json.decode(res.body);
+
+  return json.decode(res.body);
 }
 
 class ContratadoService {

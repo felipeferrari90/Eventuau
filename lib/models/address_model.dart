@@ -18,16 +18,16 @@ class AddressModel {
   AddressType tipoEnd;
 
   AddressModel(
-      {@required this.id,
-      @required this.latitude,
-      @required this.longitude,
+      {this.id,
+      this.latitude,
+      this.longitude,
       @required this.cep,
       @required this.rua,
-      @required this.numero,
+      this.numero,
       @required this.bairro,
       @required this.cidade,
       @required this.estado,
-      @required this.complemento,
+      this.complemento,
       this.tipoEnd});
 
   AddressModel.create({

@@ -5,7 +5,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-final String _authKey = "AIzaSyDHQwK2ubMV3Gv6cZGy2TlyFb8t1ZfHoKA";
+final String _authKey = "AIzaSyD449LyAT00XQdFdmRkWZoTSfTIMaqvBFg";
 
 Future<Map<String, String>> fetchLatAndLongByAddress(String address) async {
   final res = await http.get(

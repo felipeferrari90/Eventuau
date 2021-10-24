@@ -83,9 +83,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
 
     try {
-      AuthService.signup(signupFields);
-      debugPrint("CADASTRADO COM SUCESSO");
-      debugPrint(signupFields.toString());
+      await AuthService.signup(signupFields);      
       Navigator.of(context).pushReplacementNamed(SignupSuccess.routeName);
     } catch (e) {
       print(e);

@@ -79,23 +79,3 @@ class _EventUauAppBarState extends State<EventUauAppBar> {
     );
   }
 }
-
-/**
- * 
- *   CircleAvatar(
-                        child: Text(
-                           widget.username != null
-                            ? widget.username
-                                .split(" ")
-                                .sublist(0, 2)
-                                .map((e) {
-                                  return e[0];
-                                })
-                                .join()
-                                .toUpperCase()
-                            : "NO",
-                        style: TextStyle(fontSize: 18.0, color: primaryColor),
-                      ),
-                        backgroundColor: userLogged,
-                      )
- */

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:event_uau/providers/employee_events.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
@@ -21,7 +22,8 @@ import './screens/contratante/signup_screen.dart';
 import './screens/profissional/employee_signup/employee_add_documents.dart';
 import './screens/profissional/employee_signup/employee_application_success.dart';
 import './screens/profissional/employee_signup/employee_application_pending.dart';
-import './screens/profissional/employee_profile_screen.dart';
+import './screens/profissional/employee_wallet.dart';
+import './screens/profile_screen.dart';
 import './utils/colors.dart';
 
 void main() {
@@ -36,6 +38,10 @@ class EventUau extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => Auth()),
+        ChangeNotifierProxyProvider<Auth, EmployeeEvents>(
+          create: (_) => EmployeeEvents(null),
+          update: (context, value, previous) => EmployeeEvents(value.token),
+        )
       ],
       child: Consumer<Auth>(
           builder: (ctx, auth, _) => MaterialApp(
@@ -133,15 +139,29 @@ class EventUau extends StatelessWidget {
                             EmployeeApplicationPending(),
                         EmployeeApplicationSuccess.routeName: (context) =>
                             EmployeeApplicationSuccess(),
+<<<<<<< HEAD
                         EmployeeProfileScreen.routeName: (context) =>
                             EmployeeProfileScreen(),
                         EmployeeHomeScreen.routeName: (context) =>
+=======
+                        ProfileScreen.routeName: (context) => ProfileScreen(),
+                    EmployeeHomeScreen.routeName: (context) =>
+>>>>>>> ccf5aee9f6c355d449406b51ff835a5b2ec328dc
                             EmployeeHomeScreen(),
                         EventDetailScreen.routeName: (context) =>
                             EventDetailScreen(),
                         "/employee/id": (context) => ContractScreen(),
+<<<<<<< HEAD
                       }
                     : {},
+=======
+                        EmployeeWallet.routeName: (context) => EmployeeWallet(),
+                }
+                    : {
+                        SignUpScreen.routeName: (context) => SignUpScreen(),
+                        SignupSuccess.routeName: (context) => SignupSuccess(),
+                      },
+>>>>>>> ccf5aee9f6c355d449406b51ff835a5b2ec328dc
                 onUnknownRoute: (route) {
                   return MaterialPageRoute(
                       builder: (ctx) =>
