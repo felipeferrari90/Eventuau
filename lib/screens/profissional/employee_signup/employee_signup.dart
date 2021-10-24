@@ -152,6 +152,12 @@ class _EmployeeSignupScreenState extends State<EmployeeSignupScreen> {
       isLoading = true;
     });
     try {
+
+      if (userAddress == null) {
+        address.setTipoEnd = 1;
+        await Provider.of<Auth>(context, listen: false).createAddress(address);
+      }
+
       // 2. UPLOAD IMAGE
       await UploadService.uploadImage(
           fileType: UploadService.FileTypes.profilePicture,
@@ -164,13 +170,7 @@ class _EmployeeSignupScreenState extends State<EmployeeSignupScreen> {
 
       Provider.of<Auth>(context, listen: false)
           .setContratanteInfo(hourlyRate, selectedJobs);
-
-      //4. ADD ADDRESS IF THE USER DON`T HAVE ONE
-      if (userAddress == null) {
-        address.setTipoEnd = 1;
-        await Provider.of<Auth>(context, listen: false).createAddress(address);
-      }
-
+  
       // 5. NAVIGATE TO NEXT PAGE
       Navigator.of(context)
           .pushReplacementNamed(EmployeeApplicationSuccess.routeName);
@@ -322,10 +322,7 @@ class _EmployeeSignupScreenState extends State<EmployeeSignupScreen> {
                           backgroundColor: Theme.of(context).accentColor,
                           child: profilePicture == null
                               ? Text(
-                                  userData.name.split(' ').reduce(
-                                      (value, element) =>
-                                          value.characters.first +
-                                          element.characters.first),
+                                  userData.initials,
                                   style: Theme.of(context)
                                       .textTheme
                                       .headline3

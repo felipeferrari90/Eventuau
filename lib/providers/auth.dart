@@ -50,6 +50,10 @@ class User {
     return partnerData != null;
   }
 
+   String get initials => name.split(' ').reduce(
+      (value, element) => value.characters.first + element.characters.first);
+  
+
   Map<String, dynamic> get userInfoPayload => {
         'id': this.id,
         'nome': this.name,
@@ -81,7 +85,7 @@ class Auth with ChangeNotifier {
   bool get isAuth {
     _token != null ? print(_token) : print("nao tem token");
     return _token != null;
-  }
+  } 
 
   Future<void> login(String email, String senha) async {
     final response = await AuthService.login(email, senha);
@@ -100,11 +104,9 @@ class Auth with ChangeNotifier {
       status: _userData['status'],
     );
 
-    notifyListeners();
-
+    getProfilePicture();
     await getPartnerInfo();
     await getAddress();
-    getProfilePicture();
   }
 
   void signout() {

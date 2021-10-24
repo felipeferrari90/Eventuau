@@ -1,18 +1,12 @@
 import 'dart:async';
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import './profissional/employee_home_screen.dart';
-import 'profile_screen.dart';
-import './profissional/employee_signup/employee_signup.dart';
-
 import '../providers/auth.dart';
-
 import '../utils/colors.dart';
 import '../components/buttons.dart';
 import '../components/error_toast.dart';
-import 'contratante/home_screen.dart';
+
 
 class InitScreen extends StatefulWidget {
   const InitScreen({Key key}) : super(key: key);
@@ -80,34 +74,7 @@ class _InitScreenState extends State<InitScreen> {
             child: Form(
               key: _formKey,
               child: Stack(children: [
-                Positioned(
-                    top: 10,
-                    left: 0,
-                    child: PopupMenuButton(
-                      onSelected: (value) => Navigator.pushReplacementNamed(
-                          context, value as String),
-                      itemBuilder: (context) => [
-                        PopupMenuItem(
-                          child:
-                              Text('DEVELOPER MENU FOR QUICK SCREEN ROUTING'),
-                          enabled: false,
-                        ),
-                        PopupMenuItem(
-                          child:
-                              Text('Go to ${EmployeeSignupScreen.routeName}'),
-                          value: EmployeeSignupScreen.routeName,
-                        ),
-                        PopupMenuItem(
-                          child: Text('Go to ${EmployeeHomeScreen.routeName}'),
-                          value: EmployeeHomeScreen.routeName,
-                        ),
-                        PopupMenuItem(
-                          child: Text('Go to ${HomeScreen.routeName}'),
-                          value: HomeScreen.routeName,
-                        )
-                      ],
-                    )),
-                Column(
+ Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: <Widget>[
