@@ -1,11 +1,15 @@
 import 'package:event_uau/components/app_bar_eventual.dart';
+import 'package:event_uau/models/contratado_model.dart';
 import 'package:event_uau/utils/colors.dart';
 import 'package:event_uau/utils/icons.dart';
 import 'package:flutter/material.dart';
 
 class EmployeeScreenDescription extends StatefulWidget {
-  const EmployeeScreenDescription({Key key}) : super(key: key);
+  const EmployeeScreenDescription({Key key, this.contratado, this.valorTotal})
+      : super(key: key);
 
+  final ContratadoModel contratado;
+  final double valorTotal;
   @override
   _EmployeeScreenDescriptionState createState() =>
       _EmployeeScreenDescriptionState();
@@ -30,7 +34,7 @@ class _EmployeeScreenDescriptionState extends State<EmployeeScreenDescription> {
                 Container(height: 200),
                 Padding(
                   padding: EdgeInsets.fromLTRB(0, 8, 0, 8),
-                  child: Text("Pedro Lemes, 24",
+                  child: Text("${widget.contratado.nome}",
                       style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.w500,
@@ -57,7 +61,7 @@ class _EmployeeScreenDescriptionState extends State<EmployeeScreenDescription> {
                     ),
                     Padding(
                       padding: EdgeInsets.fromLTRB(8, 2, 12, 4),
-                      child: Text("4.86/5",
+                      child: Text("3.50/5",
                           style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w500,
@@ -73,7 +77,7 @@ class _EmployeeScreenDescriptionState extends State<EmployeeScreenDescription> {
                     ),
                     Padding(
                       padding: EdgeInsets.fromLTRB(8, 2, 12, 4),
-                      child: Text("RS 10,00/h",
+                      child: Text("Total: R\$S ${widget.valorTotal ?? 0}",
                           style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w500,
@@ -83,14 +87,6 @@ class _EmployeeScreenDescriptionState extends State<EmployeeScreenDescription> {
                       padding: EdgeInsets.fromLTRB(8, 2, 0, 4),
                       child: Icon(Icons.my_location,
                           size: 24, color: secundaryColor),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(8, 2, 8, 4),
-                      child: Text("12 km",
-                          style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                              color: primaryColor)),
                     ),
                   ],
                 ),

@@ -42,8 +42,6 @@ class EventoService {
         await http.get("$_baseUrl$_endPoint", headers: _headers);
 
     if (response.statusCode != 200) throw response;
-    print("provider.listagem: status code ${response.statusCode}");
-    print("provider.listagem: status code ${response.body}");
 
     Map<String, dynamic> resposta = jsonDecode(response.body);
     return resposta;

@@ -49,6 +49,7 @@ class _EventNewScreenState extends State<EventNewScreen> {
     Map<String, dynamic> map =
         await AddressServiceEvent.createEventAddress(address, idEvento);
     eventoModel.endereco = AddressServiceEvent.setEventAddressModel(map);
+    print("${eventoModel.endereco.toString()}");
     Navigator.pop(context);
   }
 

@@ -1,5 +1,6 @@
 import 'package:event_uau/models/contratado_model.dart';
 import 'package:event_uau/models/funcionario_model.dart';
+import 'package:event_uau/screens/contratante/employee_screen_description.dart';
 import 'package:event_uau/utils/colors.dart';
 import 'package:event_uau/utils/icons.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +23,13 @@ Widget setCardEmployee(context, {ContratadoModel contratado, int horas}) =>
          ),*/
             InkWell(
               onTap: () {
-                Navigator.pushNamed(context, "/employees/id");
+                /*
+                Navigator.pushNamed(context, "/employees/id",);*/
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            EmployeeScreenDescription(contratado: contratado)));
               },
               child: Container(
                 height: 104,
@@ -69,7 +76,7 @@ Widget setCardEmployee(context, {ContratadoModel contratado, int horas}) =>
                 Padding(
                   padding: EdgeInsets.fromLTRB(2, 4, 0, 4),
                   child: Text(
-                      "R\$ ${contratado.valorHora.toStringAsFixed(2)} por hora",
+                      "R\$ ${(contratado.valorHora * horas).toStringAsFixed(2)} no Total",
                       style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w500,

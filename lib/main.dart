@@ -135,7 +135,6 @@ class EventUau extends StatelessWidget {
                   HomeScreen.routeName: (context) => HomeScreen(),
                   SignupSuccess.routeName: (context) => SignupSuccess(),
                   "/event/new": (context) => EventNewScreen(),
-                  '/employees': (context) => EmployeeChoiceScreen(),
                   '/employees/id': (context) => EmployeeScreenDescription(),
                   "/employee/management": (context) => EmployeesManagement(),
                   "/employee/events": (context) => HomeScreen(),

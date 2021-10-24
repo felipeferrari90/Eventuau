@@ -17,7 +17,12 @@ class ContratadoModel with ChangeNotifier {
   User userData;
 
   ContratadoModel(
-      {this.id, this.valorHora, this.especialidades, this.grade, this.rating});
+      {this.id,
+      this.valorHora,
+      this.especialidades,
+      this.grade,
+      this.rating,
+      this.nome});
 
   File get userProfilePicture {
     return profilePicture != null ? new File(profilePicture.path) : null;

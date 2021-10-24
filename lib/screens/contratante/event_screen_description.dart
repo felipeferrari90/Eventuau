@@ -3,6 +3,7 @@ import 'package:event_uau/components/app_bar_eventual.dart';
 import 'package:event_uau/components/buttons.dart';
 import 'package:event_uau/models/evento_model.dart';
 import 'package:event_uau/providers/auth.dart';
+import 'package:event_uau/screens/contratante/employees_screen.dart';
 import 'package:event_uau/service/evento_service.dart';
 import 'package:event_uau/utils/colors.dart';
 import 'package:event_uau/utils/icons.dart';
@@ -126,22 +127,6 @@ class _EventScreenDescriptionState extends State<EventScreenDescription> {
                       SizedBox(
                         height: 24,
                       ),
-                      Align(
-                        alignment: Alignment.center,
-                        child: RaisedButton.icon(
-                          onPressed: () {
-                            Navigator.pushNamed(context, "/employees");
-                          },
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                          icon: Icon(Icons.search, size: 16),
-                          label: Text("IR PRA TELA DE ESCOLHAS"),
-                          color: primaryColor,
-                          textColor: colorBg,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15)),
-                        ),
-                      ),
                       Divider(),
                       Padding(
                         padding: EdgeInsets.fromLTRB(0, 8, 0, 8),
@@ -160,6 +145,47 @@ class _EventScreenDescriptionState extends State<EventScreenDescription> {
                                 color: Color.fromRGBO(0, 0, 0, 0.7))),
                       ),
                       Divider(),
+                      SizedBox(height: 24),
+                      Text(
+                          "agora que o evento foi criado você pode contratar funcionarios",
+                          style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.black)),
+                      SizedBox(height: 24),
+                      Align(
+                        alignment: Alignment.center,
+                        child: RaisedButton.icon(
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => EmployeeChoiceScreen(
+                                          eventoModel: widget.event,
+                                        )));
+                          },
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                          icon: Icon(Icons.search, size: 16),
+                          label: Text("IR PRA TELA DE ESCOLHAS"),
+                          color: primaryColor,
+                          textColor: colorBg,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15)),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 24,
+                      ),
+                      Text(
+                          "você pode gerenciar os funcionarios que ja foram contratados para esse evento",
+                          style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.black)),
+                      SizedBox(
+                        height: 24,
+                      ),
                       Padding(
                         padding: EdgeInsets.fromLTRB(0, 2, 0, 4),
                         child: Text(
@@ -189,6 +215,7 @@ class _EventScreenDescriptionState extends State<EventScreenDescription> {
                           ),
                         ),
                       ),
+                      SizedBox(height: 24),
                       Divider(),
                       Padding(
                         padding: EdgeInsets.fromLTRB(0, 8, 0, 8),

@@ -17,8 +17,6 @@ Future<Map<String, String>> fetchLatAndLongByAddress(String address) async {
     throw HttpException(responseData);
   }
 
-  print(responseData);
-
   return {
     'lat':
         responseData['results'][0]['geometry']['location']['lat'].toString() ??

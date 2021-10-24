@@ -54,9 +54,12 @@ class ContratadoService {
   }
 
   Future<Map<String, dynamic>> getAllPartners() async {
-    final res = await http.get('$signupUrl', headers: headers);
+    final res = await http.get('$signupUrl', headers: {
+      HttpHeaders.contentTypeHeader: 'application/json',
+      HttpHeaders.authorizationHeader: 'Bearer ${userData.token}'
+    });
     if (res.statusCode != 200) throw HttpException(json.decode(res.body));
-    print(res.body);
+    print("CHEGOU AQUI" + res.body);
     return jsonDecode(res.body) as Map<String, dynamic>;
   }
 }
