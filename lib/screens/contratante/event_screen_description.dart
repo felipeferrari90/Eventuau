@@ -187,11 +187,12 @@ class _EventScreenDescriptionState extends State<EventScreenDescription> {
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(15)),
                         ),
-                      ),
-                      SizedBox(
+                      ),                                           
+                      if (widget.event.employees.length > 0) ...[
+                        SizedBox(
                         height: 24,
                       ),
-                      Text(
+                         Text(
                         "Você pode gerenciar os funcionários que já foram contratados para esse evento",
                         style: TextStyle(
                           fontSize: 16,
@@ -199,7 +200,6 @@ class _EventScreenDescriptionState extends State<EventScreenDescription> {
                           color: Color.fromRGBO(0, 0, 0, 0.7),
                         ),
                       ),
-                      if (widget.event.employees.length > 0) ...[
                         Divider(),
                         Padding(
                           padding: EdgeInsets.fromLTRB(0, 2, 0, 4),

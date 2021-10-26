@@ -34,8 +34,7 @@ class _DashBoardScreenEventsState extends State<DashBoardScreenEvents> {
 
   @override
   void initState() {
-    super.initState();
-    initializeDateFormatting();
+    super.initState();    
     _eventFutureRef = _getEvents();
   }
 
@@ -48,8 +47,7 @@ class _DashBoardScreenEventsState extends State<DashBoardScreenEvents> {
     final events = Provider.of<Event>(context).events;
     return Scaffold(
       floatingActionButton: FloatingActionButton.small(
-        onPressed: () async => Navigator.pushNamed(context, "/event/new")
-            .then((value) => setState(() {})),
+        onPressed: () => Navigator.pushNamed(context, "/event/new"),            
         child: Icon(
           Icons.add,
           size: 32,

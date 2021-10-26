@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:event_uau/models/address_model.dart';
 import 'package:event_uau/service/address_service_event.dart';
 import 'package:event_uau/service/event_service.dart' as EventService;
@@ -36,6 +37,13 @@ enum StatusEvento {
   CANCELADO // evento cancelado antes do termino estipulado,
 }
 
+StatusEvento enumFromString(String str) {
+  StatusEvento f = StatusEvento.values
+      .firstWhere((e) => e.toString() == 'StatusEvento.' + str);
+
+  return f;
+}
+
 class Event with ChangeNotifier {
   List<EventItem> _events = [];
 
@@ -47,21 +55,42 @@ class Event with ChangeNotifier {
     final response = await EventService.getEvents();
     _events.clear();
 
-    if (response['total'] > 0) {
-      (response['resultados'] as List).forEach(
-        (element) => events.add(
-          new EventItem(
-            id: element['id'],
-            description: element['descricao'],
-            name: element['name'],
-            startDate: new DateTime(element['dataInicio']),
-            endDate: new DateTime(element['dataFim']),
-            status: element['status'],
-            address: element['address'],
-            employees: element['employees'],
-          ),
-        ),
-      );
+    final results = response['resultados'] as List;
+
+    try {
+      if (response['total'] > 0) {
+        final addresses = await Future.wait(
+            results.map((e) => EventService.getEventAddress(e['id'])));
+
+        (response['resultados'] as List).forEachIndexed((index, element) {
+          final address = new AddressModel(
+              id: addresses[index]['id'],
+              latitude: addresses[index]['latitude'],
+              longitude: addresses[index]['longitude'],
+              cep: addresses[index]['cep'],
+              rua: addresses[index]['logradouro'],
+              numero: addresses[index]['numero'],
+              bairro: addresses[index]['bairro'],
+              cidade: addresses[index]['cidade'],
+              estado: addresses[index]['estado'],
+              complemento: addresses[index]['complemento']);
+
+          _events.add(
+            new EventItem(
+              id: element['id'],
+              description: element['descricao'],
+              name: element['nome'],
+              startDate: DateTime.parse(element['dataInicio']),
+              endDate: DateTime.parse(element['dataTermino']),
+              status: enumFromString(element['status']['id']),
+              address: address,
+              employees: element['funcionarios'],
+            ),
+          );
+        });
+      }
+    } catch (e) {
+      debugPrint(e);
     }
 
     notifyListeners();
