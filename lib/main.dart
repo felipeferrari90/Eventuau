@@ -143,6 +143,8 @@ class EventUau extends StatelessWidget {
                   "/employee/events": (context) => HomeScreen(),
                   "/contract/id": (context) => ContractScreen(),
                   AddCreditCard.routeName: (context) => AddCreditCard(),
+                  EmployeeChoiceScreen.routeName: (context) =>
+                      EmployeeChoiceScreen(),
 
                   /*ROTAS DO FLUXO APP FUNCIONARIO*/
                   EmployeeSignupScreen.routeName: (context) =>

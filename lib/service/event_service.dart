@@ -63,6 +63,25 @@ Future<dynamic> getEventAddress(int eventId) async {
   return json.decode(res.body)[0];
 }
 
+Future<void> sendProposal(
+    {int userId, int eventId, double salary, int specialtyId}) async {
+  final url = '$baseUrl/eventos/$eventId/propostas';
+  final body = json.encode({
+    'salario': salary,
+    'usuario': {'id': userId},
+    'especialidade': {'id': specialtyId}
+  });
+
+  final res = await http.post(url,
+      headers: {
+        ...headers,
+        HttpHeaders.authorizationHeader: 'Bearer ${userData.token}'
+      },
+      body: body);
+
+  if (res.statusCode > 201) throw res;
+}
+
 Future<bool> acceptProposal(int eventId) async {
   final url = '$baseUrl/eventos/$eventId/propostas';
   final _headers = {

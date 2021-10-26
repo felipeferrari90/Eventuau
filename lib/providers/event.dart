@@ -1,5 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:event_uau/models/address_model.dart';
+import 'package:event_uau/models/contratado_model.dart';
+import 'package:event_uau/models/event_employment_status_model.dart';
 import 'package:event_uau/service/address_service_event.dart';
 import 'package:event_uau/service/event_service.dart' as EventService;
 import 'package:flutter/material.dart';
@@ -15,7 +17,16 @@ class EventItem {
   int maxDuration;
   StatusEvento status;
   AddressModel address;
-  List employees;
+  List<ContratadoModel> employees;
+
+  get durationInHours {
+    final duration =
+        (endDate.difference(startDate).inMinutes / 60).toStringAsPrecision(2);
+
+    print(duration);
+
+    return double.parse(duration);
+  }
 
   EventItem(
       {this.id,
@@ -51,6 +62,36 @@ class Event with ChangeNotifier {
     return [..._events];
   }
 
+  EventItem getById(int id) =>
+      _events.firstWhere((element) => element.id == id);
+
+  Future<void> addEmployeesToEvent(
+      List<ContratadoModel> employees, int id) async {
+    final index = _events.indexWhere((element) => element.id == id);
+    final eventToEdit = _events[index];
+    try {
+      await Future.wait(
+          employees.map(
+            (element) => EventService.sendProposal(
+                eventId: eventToEdit.id,
+                salary: element.valorHora * eventToEdit.durationInHours,
+                specialtyId: element.especialidades[0]
+                    .id, // THIS SUCKS IF THEY HAVE MORE THAN ONE SPECIALTY, FIX LATER
+                userId: element.id),
+          ),
+          eagerError: true);
+
+      eventToEdit.employees = employees;
+
+      _events.removeAt(index);
+      _events.insert(index, eventToEdit);
+    } catch (e) {
+      debugPrint(e);
+    }
+
+    notifyListeners();
+  }
+
   Future<void> fetchEvents() async {
     final response = await EventService.getEvents();
     _events.clear();
@@ -75,6 +116,32 @@ class Event with ChangeNotifier {
               estado: addresses[index]['estado'],
               complemento: addresses[index]['complemento']);
 
+          final List<ContratadoModel> employees =
+              element['funcionarios'].length < 1
+                  ? []
+                  : element['funcionarios'].map(
+                      (e) {
+                        final funcionario = e['funcionario'];
+                        final statusContratacao = e['statusContratacao'];
+                        new ContratadoModel(
+                          id: funcionario['id'],
+                          nome: funcionario['nome'],
+                          cpf: null,
+                          phone: null,
+                          valorHora: funcionario['valorPorHora'],
+                          birthDate:
+                              DateTime.parse(funcionario['dataNascimento']),
+                          especialidades: e['especialidade'] == null
+                              ? []
+                              : throw Exception('Implement this'),
+                          status: new EventEmploymentStatus(
+                              hasRefused: statusContratacao['ehRecusado'],
+                              id: statusContratacao['id'],
+                              descricao: statusContratacao['descricao']),
+                        );
+                      },
+                    );
+
           _events.add(
             new EventItem(
               id: element['id'],
@@ -84,7 +151,7 @@ class Event with ChangeNotifier {
               endDate: DateTime.parse(element['dataTermino']),
               status: enumFromString(element['status']['id']),
               address: address,
-              employees: element['funcionarios'],
+              employees: employees,
             ),
           );
         });

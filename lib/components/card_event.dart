@@ -9,6 +9,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 const _innerPadding = 12.0;
 
@@ -77,7 +78,7 @@ class EventCardBody extends StatelessWidget {
                           .headline2
                           .copyWith(fontSize: 16),
                     ),
-                ),
+                  ),
                 Row(
                   children: [
                     Icon(
@@ -85,9 +86,9 @@ class EventCardBody extends StatelessWidget {
                       size: 16,
                     ),
                     Text(
-                  " ${event.minDuration ?? event.endDate.difference(event.startDate).inHours} Hora ${event.endDate.difference(event.startDate).inHours > 1 ? 's' : ''}",
+                      " ${event.minDuration ?? event.endDate.difference(event.startDate).inHours} Hora${event.endDate.difference(event.startDate).inHours > 1 ? 's' : ''}",
                       style: TextStyle(
-                      fontSize: 16,
+                          fontSize: 16,
                           color: Colors.grey[600],
                           fontWeight: FontWeight.w400),
                     ),
@@ -100,14 +101,14 @@ class EventCardBody extends StatelessWidget {
                       size: 16,
                     ),
                     Text(
-                  ' ${event.employees?.length ?? '0'} Contratados',
+                      ' ${event.employees?.length ?? '0'} Contratado${event.employees?.length > 1 ? 's' : ''}',
                       style: TextStyle(
-                      fontSize: 16,
+                          fontSize: 16,
                           color: Colors.grey[600],
                           fontWeight: FontWeight.w400),
                     ),
                   ],
-                ),
+                ),                
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -139,7 +140,9 @@ class EventCardBody extends StatelessWidget {
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (_) => EventScreenDescription(
                                     event: event,
-                                  ))),
+                                  ),
+                        ),
+                      ),                              
                       child: Text(
                         'Detalhes',
                       ),

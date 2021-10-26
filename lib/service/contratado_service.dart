@@ -37,6 +37,17 @@ Future<Map<String, dynamic>> getParceiroInfoById(int userId) async {
   return json.decode(res.body);
 }
 
+Future getAllPartners() async {
+  final res = await http.get('$signupUrl', headers: {
+    HttpHeaders.contentTypeHeader: 'application/json',
+    HttpHeaders.authorizationHeader: 'Bearer ${userData.token}'
+  });
+
+  if (res.statusCode != 200) throw HttpException(json.decode(res.body));
+
+  return jsonDecode(res.body);
+}
+
 class ContratadoService {
   static Future getEspecialidadesById(int id) async {
     final res = await http.get('$signupUrl/$id', headers: headers);
@@ -51,15 +62,5 @@ class ContratadoService {
     List especialidadesDescricao =
         especialidades.map((e) => e["descricao"] as String).toList();
     return especialidadesDescricao;
-  }
-
-  Future<Map<String, dynamic>> getAllPartners() async {
-    final res = await http.get('$signupUrl', headers: {
-      HttpHeaders.contentTypeHeader: 'application/json',
-      HttpHeaders.authorizationHeader: 'Bearer ${userData.token}'
-    });
-    if (res.statusCode != 200) throw HttpException(json.decode(res.body));
-    print("CHEGOU AQUI" + res.body);
-    return jsonDecode(res.body) as Map<String, dynamic>;
-  }
+  }  
 }

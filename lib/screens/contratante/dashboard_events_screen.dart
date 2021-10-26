@@ -80,7 +80,7 @@ class _DashBoardScreenEventsState extends State<DashBoardScreenEvents> {
                                         MediaQuery.of(context).size.height / 4,
                                   ),
                                   Text(
-                                    "Você não possui eventos no momento. \n Crie um para você poder contratar fúncionários",
+                                    "Você não possui eventos no momento. \n Crie um para você poder contratar funcionários",
                                     textAlign: TextAlign.center,
                                     style: TextStyle(color: Colors.black54),
                                   ),

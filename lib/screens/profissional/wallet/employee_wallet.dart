@@ -145,7 +145,8 @@ class _EmployeeWalletState extends State<EmployeeWallet> {
                           ),
                     ),
                     TextSpan(
-                      text: walletData.avaliableBalance.toStringAsFixed(2),
+                      text: walletData?.avaliableBalance?.toStringAsFixed(2) ??
+                          '0.00',
                       style: Theme.of(context)
                           .textTheme
                           .headline1
@@ -170,7 +171,8 @@ class _EmployeeWalletState extends State<EmployeeWallet> {
                           text: 'R\$ ',
                           style: Theme.of(context).textTheme.headline2),
                       TextSpan(
-                          text: walletData.futureBalance.toStringAsFixed(2),
+                          text: walletData?.futureBalance?.toStringAsFixed(2) ??
+                              '0.00',
                           style: Theme.of(context)
                               .textTheme
                               .headline1
@@ -223,7 +225,8 @@ class _EmployeeWalletState extends State<EmployeeWallet> {
                               ),
                           body: Column(
                             children: [
-                              ...walletData.cardData
+                              if (walletData.cardData != null)
+                                ...walletData.cardData
                                   .mapIndexed(
                                     (index, e) => ListTile(
                                       visualDensity: VisualDensity.compact,
@@ -268,7 +271,8 @@ class _EmployeeWalletState extends State<EmployeeWallet> {
                             ),
                         body: Column(
                           children: [
-                            ...walletData.bankData
+                            if (walletData.cardData != null)
+                              ...walletData.bankData
                                 .mapIndexed(
                                   (index, e) => ListTile(
                                     visualDensity: VisualDensity.compact,
@@ -298,7 +302,7 @@ class _EmployeeWalletState extends State<EmployeeWallet> {
                             ),
                           ],
                         ),
-                        isExpanded: _expansionItems[1]),
+                        isExpanded: _expansionItems[route == '/' ? 1 : 0]),
                     ExpansionPanel(
                         canTapOnHeader: true,
                         headerBuilder: (context, isExpanded) => ListTile(
@@ -312,7 +316,8 @@ class _EmployeeWalletState extends State<EmployeeWallet> {
                               title: Text('Minhas Transações'),
                             ),
                         body: Column(
-                          children: walletData.operations.length > 0
+                          children: walletData.operations != null &&
+                                  walletData.operations.length > 0
                               ? walletData.operations
                                   .map(
                                     (e) => ListTile(
@@ -340,7 +345,7 @@ class _EmployeeWalletState extends State<EmployeeWallet> {
                                   )
                                 ],
                         ),
-                        isExpanded: _expansionItems[2])
+                        isExpanded: _expansionItems[route == '/' ? 2 : 1])
                   ],
                 )
               ],

@@ -84,8 +84,8 @@ class EmployeeWalletData with ChangeNotifier {
   String _token;
   EmployeeWalletData(this._token);
 
-  double avaliableBalance = 0.0;
-  double futureBalance = 0.0;
+  double avaliableBalance = 0;
+  double futureBalance = 0;
   // List<Operation> futureOperations = [];
   List<Operation> operations = [];
   // does not exist on backend, just a mock on front
@@ -122,7 +122,7 @@ class EmployeeWalletData with ChangeNotifier {
         name: formData['name'],
         dueDate: new DateTime(int.parse('20${_data[1]}'), int.parse(_data[0])),
         number: formData['number'],
-        isSelected: bankData.length < 1 ? true : false));
+        isSelected: bankData == null || bankData.length < 1 ? true : false));
 
     notifyListeners();
   }
@@ -135,7 +135,7 @@ class EmployeeWalletData with ChangeNotifier {
     cardData[index].isSelected = true;
 
     notifyListeners();
-  }  
+  }
 
   void setMainBankAccount(int index) {
     final previousBankData = selectedBankAccount;
@@ -160,8 +160,9 @@ class EmployeeWalletData with ChangeNotifier {
 
     final responseBody = json.decode(res.body);
 
-    avaliableBalance = double.parse(responseBody['valorDisponivel'].toString());
-    futureBalance = double.parse(responseBody['valorFuturo'].toString());
+    final avaliableBalance =
+        double.parse(responseBody['valorDisponivel'].toString());
+    final futureBalance = double.parse(responseBody['valorFuturo'].toString());
 
     List<Operation> _operations = [];
     (responseBody['operacoes'] as List).forEach((element) {
@@ -182,6 +183,7 @@ class EmployeeWalletData with ChangeNotifier {
       );
     });
     operations = _operations;
+    
 
     notifyListeners();
   }
