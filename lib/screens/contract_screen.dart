@@ -16,7 +16,7 @@ class _ContractScreenState extends State<ContractScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: EventUauAppBar(title: "Pedro Lemes", username: "Felipe Ferreira"),
+      appBar: EventUauAppBar(title: "Pedro Lemes"),
       body: Container(
           padding: EdgeInsets.all(16),
           color: colorBg,

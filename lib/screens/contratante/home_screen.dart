@@ -1,5 +1,6 @@
 import 'package:event_uau/components/app_bar_eventual.dart';
 import 'package:event_uau/providers/auth.dart';
+import 'package:event_uau/providers/employee_wallet_data.dart';
 import 'package:event_uau/screens/history_chat_screen.dart';
 import 'package:event_uau/screens/notifications_screen.dart';
 import 'package:event_uau/screens/profissional/wallet/employee_wallet.dart';
@@ -21,6 +22,13 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0;
+
+  @override
+  void initState() {
+    Provider.of<EmployeeWalletData>(context, listen: false).getWalletData();
+    super.initState();
+  }
+
   void _updateIndex(int value) {
     setState(() {
       _currentIndex = value;
@@ -46,8 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: _currentIndex == 1
           ? null
-          : EventUauAppBar(title: _titles[_currentIndex]        
-      ),
+          : EventUauAppBar(title: _titles[_currentIndex]),
       backgroundColor: colorBg,
       body: _screens[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
@@ -70,14 +77,14 @@ class _HomeScreenState extends State<HomeScreen> {
             icon: Icon(Icons.monetization_on),
             label: "Carteira",
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.chat_bubble_outline),
-            label: "Conversas",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.notifications),
-            label: "Notificacoes",
-          ),
+          // BottomNavigationBarItem(
+          //   icon: Icon(Icons.chat_bubble_outline),
+          //   label: "Conversas",
+          // ),
+          // BottomNavigationBarItem(
+          //   icon: Icon(Icons.notifications),
+          //   label: "Notificacoes",
+          // ),
         ],
         onTap: _updateIndex,
       ),

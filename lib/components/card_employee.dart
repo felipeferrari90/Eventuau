@@ -4,127 +4,122 @@ import 'package:event_uau/screens/contratante/employee_screen_description.dart';
 import 'package:event_uau/utils/colors.dart';
 import 'package:event_uau/utils/icons.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
-Widget setCardEmployee(context, {ContratadoModel contratado, int horas}) =>
-    InkWell(
-        onTap: () {
-          Navigator.pushNamed(context, "/employees/id");
-        },
-        child: Container(
-          padding: EdgeInsets.all(8.0),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15.0),
-            color: Colors.white,
-          ),
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            /*Image.network(
-          "https://www.bing.com/images/search?view=detailV2&ccid=DF2CgRNd&id=70DA739CA995882860F788653AC52907DDE0A7D6&thid=OIP.DF2CgRNdVeHMVo1uxpjZMwAAAA&mediaurl=https%3a%2f%2fgbaservicos.com%2fcontent%2fuploads%2f2018%2f08%2fgarcom.jpg&cdnurl=https%3a%2f%2fth.bing.com%2fth%2fid%2fR.0c5d8281135d55e1cc568d6ec698d933%3frik%3d1qfg3QcpxTpliA%26pid%3dImgRaw&exph=240&expw=300&q=gar%c3%a7om&simid=608043403599306508&FORM=IRPRST&ck=174407051DFA7FFE27A9B70AB08A0DBC&selectedIndex=5&ajaxhist=0&ajaxserp=0",
-         ),*/
-            InkWell(
-              onTap: () {
-                /*
-                Navigator.pushNamed(context, "/employees/id",);*/
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            EmployeeScreenDescription(contratado: contratado)));
-              },
+class EmployeeCard extends StatelessWidget {
+  const EmployeeCard({
+    Key key,
+    this.isSelected = false,
+    this.contratado,
+    this.horas,
+    this.choose,
+  }) : super(key: key);
+
+  final bool isSelected;
+  final ContratadoModel contratado;
+  final double horas;
+  final Function choose;
+
+  @override
+  Widget build(BuildContext context) {
+    final valorFinal = horas * contratado.valorHora;
+    return Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+      child: InkWell(
+        onTap: () => choose(contratado.id),
+        child: Stack(
+          children: [
+            Image(
+              image: AssetImage('assets/images/waiter.png'),
+              width: double.infinity,
+            ),
+            Align(
+              alignment: Alignment.bottomLeft,
               child: Container(
-                height: 104,
+                padding: EdgeInsets.all(4),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                    color: Colors.white),
+                height: 137,
+                width: double.infinity,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(left: 4),
+                      child: Text(
+                        '${contratado.nome}, ${DateTime.now().year - contratado.birthDate.year}',
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 4,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.star_outlined,
+                          color: Colors.yellow,
+                          size: 20,
+                        ),
+                        Text('Novo!'),
+                        SizedBox(
+                          width: 12,
+                        ),
+                        Icon(
+                          Icons.attach_money,
+                          color: Colors.yellow,
+                          size: 20,
+                        ),
+                        Text('${contratado.valorHora}/h'),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 4,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(left: 4),
+                      child: Text(
+                        'Jornada de trabalho: 1h+',
+                        style: TextStyle(fontSize: 12),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 4,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(left: 4),
+                      child: Text(
+                        'Valor Total: R\$${valorFinal.toStringAsFixed(2)}',
+                        style: TextStyle(fontSize: 14),
+                      ),
+                    ),
+                    Align(
+                      alignment: Alignment.center,
+                      child: TextButton.icon(
+                        onPressed: () => choose(contratado.id),
+                        icon: Icon(
+                          !isSelected
+                              ? Icons.check_box_outline_blank
+                              : Icons.check_box,
+                          size: 20,
+                          color: Theme.of(context).primaryColor,
+                        ),
+                        label: Text(
+                          isSelected ? 'Remover' : 'Selecionar',
+                          style:
+                              TextStyle(color: Theme.of(context).primaryColor),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
-            Padding(
-              padding: EdgeInsets.fromLTRB(1, 0, 0, 8),
-              child: Text("${contratado.nome}",
-                  style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.black)),
-            ),
-            Row(
-              children: [
-                Padding(
-                  padding: EdgeInsets.fromLTRB(4, 0, 0, 4),
-                  child: Icon(
-                    EventuauIcons2.star,
-                    size: 16,
-                    color: yellow,
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(2, 0, 0, 4),
-                  child: Text("3/5",
-                      style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w500,
-                          color: primaryColor)),
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                Padding(
-                  padding: EdgeInsets.fromLTRB(4, 4, 0, 4),
-                  child: Icon(
-                    EventuauIcons2.dollar,
-                    size: 16,
-                    color: yellow,
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(2, 4, 0, 4),
-                  child: Text(
-                      "R\$ ${(contratado.valorHora * horas).toStringAsFixed(2)} no Total",
-                      style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w500,
-                          color: primaryColor)),
-                ),
-              ],
-            ),
-            Padding(
-                padding: EdgeInsets.only(top: 8),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                        margin: EdgeInsets.only(right: 8),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15.0),
-                          color: primaryColor,
-                        ),
-                        child: InkWell(
-                          onTap: () {},
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 12, vertical: 4),
-                            child: Icon(EventuauIcons2.handshake,
-                                color: colorBg,
-                                semanticLabel: "contratar",
-                                size: 40),
-                          ),
-                        )),
-                    Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15.0),
-                          color: accentColor,
-                        ),
-                        child: InkWell(
-                          onTap: () {
-                            Navigator.pushNamed(context, "/employees/id");
-                          },
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 12, vertical: 4),
-                            child: Icon(EventuauIcons2.cancel,
-                                color: primaryColor,
-                                semanticLabel: "recusar",
-                                size: 40),
-                          ),
-                        )),
-                  ],
-                )),
-          ]),
-        ));
+          ],
+        ),
+      ),
+    );
+  }
+}

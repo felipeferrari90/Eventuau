@@ -14,7 +14,8 @@ const Map<String, String> headers = {
 final userData = Auth();
 
 Future<Map> getEvents() async {
-  final res = await http.get('$baseUrl/eventos');
+  final res = await http.get('$baseUrl/eventos',
+      headers: {HttpHeaders.authorizationHeader: 'Bearer ${userData.token}'});
 
   if (res.statusCode != 200) throw res;
 
@@ -32,23 +33,24 @@ Future<Map> fetchEventById(int id) async {
   return json.decode(res.body);
 }
 
-Future<void> postEvent(EventItem event) async {
+Future<int> postEvent(EventItem event) async {
+  var _headers = {HttpHeaders.authorizationHeader: 'Bearer ${userData.token}'};
   var body = json.encode({
     'nome': event.name,
     'descricao': event.description,
     'dataInicio': event.startDate.toIso8601String(),
     'dataTermino': event.endDate.toIso8601String(),
-    'duracaoMinima': event.minDuration,
-    'duracaoMaxima': event.maxDuration
   });
 
-  final res = await http.post('$baseUrl/eventos', body: body, headers: headers);
+  final res = await http
+      .post('$baseUrl/eventos', body: body, headers: {...headers, ..._headers});
 
-  if (res.statusCode != 200) throw res;
+  if (res.statusCode > 201) throw res;
 
-  return json.decode(res.body);
+  final responseBody = json.decode(res.body);
+
+  return responseBody['id'];
 }
-
 
 Future<dynamic> getEventAddress(int eventId) async {
   final url = 'https://10.0.2.2:6031/api/eventos/$eventId/enderecos';
@@ -56,19 +58,35 @@ Future<dynamic> getEventAddress(int eventId) async {
 
   final res = await http.get(url, headers: headers);
 
-
   if (res.statusCode != 200) throw res;
 
   return json.decode(res.body)[0];
 }
 
+Future<void> sendProposal(
+    {int userId, int eventId, double salary, int specialtyId}) async {
+  final url = '$baseUrl/eventos/$eventId/propostas';
+  final body = json.encode({
+    'salario': salary,
+    'usuario': {'id': userId},
+    'especialidade': {'id': specialtyId}
+  });
+
+  final res = await http.post(url,
+      headers: {
+        ...headers,
+        HttpHeaders.authorizationHeader: 'Bearer ${userData.token}'
+      },
+      body: body);
+
+  if (res.statusCode > 201) throw res;
+}
 
 Future<bool> acceptProposal(int eventId) async {
   final url = '$baseUrl/eventos/$eventId/propostas';
   final _headers = {
     ...headers,
     HttpHeaders.authorizationHeader: 'Bearer ${userData.token}',
-    
   };
 
   final res = await http.put(url, headers: _headers, body: json.encode({}));
@@ -78,3 +96,14 @@ Future<bool> acceptProposal(int eventId) async {
   return true;
 }
 
+Future<void> finishEvent(int eventId) async {
+  final url = '$baseUrl/eventos/$eventId/finalizar';
+  final _headers = {
+    ...headers,
+    HttpHeaders.authorizationHeader: 'Bearer ${userData.token}',
+  };
+
+  final res = await http.put(url, headers: _headers, body: json.encode({}));
+
+  if (res.statusCode != 200) throw res;
+}

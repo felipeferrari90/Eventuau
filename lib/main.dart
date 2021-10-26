@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:event_uau/providers/event.dart';
 import 'package:event_uau/screens/profissional/wallet/add_credit.card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
@@ -56,6 +57,7 @@ class EventUau extends StatelessWidget {
             return EmployeeWalletData(value.token);
           },
         ),
+        ChangeNotifierProvider(create: (context) => Event())
       ],
       child: Consumer<Auth>(
         builder: (ctx, auth, _) => MaterialApp(
@@ -141,6 +143,8 @@ class EventUau extends StatelessWidget {
                   "/employee/events": (context) => HomeScreen(),
                   "/contract/id": (context) => ContractScreen(),
                   AddCreditCard.routeName: (context) => AddCreditCard(),
+                  EmployeeChoiceScreen.routeName: (context) =>
+                      EmployeeChoiceScreen(),
 
                   /*ROTAS DO FLUXO APP FUNCIONARIO*/
                   EmployeeSignupScreen.routeName: (context) =>

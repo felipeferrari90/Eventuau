@@ -12,7 +12,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 class EventDetailScreen extends StatelessWidget {
   const EventDetailScreen({Key key}) : super(key: key);
 
-  static const routeName = '/event/details';
+  static const routeName = 'employee/event/details';
   final bool _showPrices = false;
 
   @override
@@ -20,12 +20,12 @@ class EventDetailScreen extends StatelessWidget {
     final args = ModalRoute.of(context).settings.arguments as Map;
     final _isComingFromEmployeeScreen =
         args['previousRoute'] == EmployeeHomeScreen.routeName;
-    final eventData = Provider.of<EmployeeEvents>(
-      context, listen: false).getById(args['id']);
+    final eventData =
+        Provider.of<EmployeeEvents>(context, listen: false).getById(args['id']);
 
     final _showCompleteAdress =
         eventData.startDate.difference(DateTime.now()).inHours <= 4;
-        
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Resumo do Evento'),
@@ -100,7 +100,6 @@ class EventDetailScreen extends StatelessWidget {
                         style: TextStyle(
                           color: Colors.grey[600],
                         ),
-                        
                       ),
                     ),
                   ],
@@ -164,7 +163,7 @@ class EventDetailScreen extends StatelessWidget {
                     return Column(children: [
                       ...funcionariosContratados
                           .map((e) => EventCardEmployee(
-                            id: e['funcionario']['id'],
+                                id: e['funcionario']['id'],
                                 name: e['funcionario']['nome'],
                                 job: 'Garçom',
                               )) //@TODO TIRAR O MOCK

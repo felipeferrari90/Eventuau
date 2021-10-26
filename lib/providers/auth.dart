@@ -120,7 +120,6 @@ class Auth with ChangeNotifier {
       final res = await getParceiroInfoById(user.id);
 
       user.partnerData = new ContratadoModel(
-          grade: null, //TODO CHANGE TO VALUE FROM ENDPOINT
           valorHora: res['valorHora'],
           especialidades: (res['especialidades'] as List)
               .map((e) => new JobItem(id: e['id'], descricao: e['descricao']))
@@ -210,7 +209,9 @@ class Auth with ChangeNotifier {
 
   void setContratanteInfo(double valorHora, List<JobItem> especialidades) {
     user.partnerData = new ContratadoModel(
-        valorHora: valorHora, especialidades: especialidades, grade: null);
+      valorHora: valorHora,
+      especialidades: especialidades,
+    );
 
     notifyListeners();
   }
