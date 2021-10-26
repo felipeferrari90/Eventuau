@@ -2,6 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:event_uau/models/address_model.dart';
 import 'package:event_uau/models/contratado_model.dart';
 import 'package:event_uau/models/event_employment_status_model.dart';
+import 'package:event_uau/models/evento_model.dart';
 import 'package:event_uau/models/funcionario_model.dart';
 import 'package:event_uau/service/address_service_event.dart';
 import 'package:event_uau/service/event_service.dart' as EventService;
@@ -38,15 +39,6 @@ class EventItem {
       this.status,
       this.address,
       this.employees = const []});
-}
-
-enum StatusEvento {
-  CRIADO, // evento foi criado apenas, sem funcionarios contratados
-  CONTRATANDO,
-  FECHADO, //todas as vagas ja foram ocupadas porem funcionarios que aceitaram a proposta podem aparecer na lista de espera
-  ACONTECENDO, // evento em questão esta acontecendo no momento
-  TERMINADO, // evento acabou, nao aparece mais na tela principal de eventos
-  CANCELADO // evento cancelado antes do termino estipulado,
 }
 
 StatusEvento enumFromString(String str) {
@@ -101,7 +93,7 @@ class Event with ChangeNotifier {
 
     final results = response['resultados'] as List;
 
-    try {
+    // try {
       if (response['total'] > 0) {
         final addresses = await Future.wait(
             results.map((e) => EventService.getEventAddress(e['id'])));
@@ -166,9 +158,9 @@ class Event with ChangeNotifier {
           );
         });
       }
-    } catch (e) {
-      debugPrint(e);
-    }
+    // } catch (e) {
+    //   debugPrint(e);
+    // }
 
     notifyListeners();
   }
@@ -187,6 +179,24 @@ class Event with ChangeNotifier {
       debugPrint(e);
       debugPrint('fail create event');
       throw e;
+    }
+
+    notifyListeners();
+  }
+
+  Future<void> finishEvent(int eventId) async {
+    try {
+      await EventService.finishEvent(eventId);
+
+      final index = _events.indexWhere((element) => element.id == eventId);
+
+      final eventToEdit = _events[index];
+
+      eventToEdit.status = StatusEvento.FINALIZADO;
+      _events.removeAt(index);
+      _events.insert(index, eventToEdit);
+    } catch (e) {
+      print(e);
     }
 
     notifyListeners();

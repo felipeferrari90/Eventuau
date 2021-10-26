@@ -1,10 +1,8 @@
-import 'package:brasil_fields/brasil_fields.dart';
 import 'package:collection/collection.dart';
 import 'package:event_uau/components/employee/wallet_screen/deposit_dialog.dart';
 import 'package:event_uau/components/employee/wallet_screen/withdraw_dialog.dart';
 import 'package:event_uau/screens/profissional/wallet/add_credit.card.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import './add_bank_screen.dart';

@@ -1,16 +1,16 @@
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:event_uau/components/app_bar_eventual.dart';
-import 'package:event_uau/components/buttons.dart';
+
 import 'package:event_uau/components/employee/employee_event_card.dart';
-import 'package:event_uau/models/contratado_model.dart';
+
 import 'package:event_uau/models/evento_model.dart';
-import 'package:event_uau/providers/auth.dart';
+
 import 'package:event_uau/providers/employee_wallet_data.dart';
 import 'package:event_uau/providers/event.dart';
 import 'package:event_uau/screens/contratante/employees_screen.dart';
-import 'package:event_uau/service/evento_service.dart';
+
 import 'package:event_uau/utils/colors.dart';
-import 'package:event_uau/utils/icons.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -25,10 +25,35 @@ class EventScreenDescription extends StatefulWidget {
 }
 
 class _EventScreenDescriptionState extends State<EventScreenDescription> {
+  void _finishEvent(int id) async {
+    bool userConfirmedFinishing = await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Quer mesmo finalizar o evento?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: Text('Não'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: Text('Sim'),
+          )
+        ],
+      ),
+    );
+
+    if (!userConfirmedFinishing) return;
+
+    await Provider.of<Event>(context, listen: false).finishEvent(id);
+
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text('Evento finalizado')));
+  }
+
   @override
   Widget build(BuildContext context) {
     final employees = widget.event.employees;
-    final walletData = Provider.of<EmployeeWalletData>(context);
     final eventInfo = Provider.of<Event>(context).getById(widget.event.id);
     final duration = widget.event.endDate.difference(widget.event.startDate);
     final eventDurationSplit = duration.toString().split(':');
@@ -88,7 +113,7 @@ class _EventScreenDescriptionState extends State<EventScreenDescription> {
                     Padding(
                       padding: EdgeInsets.fromLTRB(0, 2, 0, 4),
                       child: Text(
-                          "${eventDurationSplit[0]} Hora${int.parse(eventDurationSplit[0]) > 1 ? 's' : ''} e ${eventDurationSplit[1]} Minuto ${int.parse(eventDurationSplit[1]) > 1 ? 's' : ''}",
+                          "${eventDurationSplit[0]} Hora${int.parse(eventDurationSplit[0]) > 1 ? 's' : ''} e ${eventDurationSplit[1]} Minuto${int.parse(eventDurationSplit[1]) > 1 ? 's' : ''}",
                           style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w300,
@@ -259,8 +284,10 @@ class _EventScreenDescriptionState extends State<EventScreenDescription> {
                         Icons.done,
                         size: 20,
                       ),
-                      onPressed: DateTime.now().isAfter(eventInfo.startDate)
-                          ? () {}
+                      onPressed: DateTime.now().isAfter(eventInfo.startDate) &&
+                              eventInfo.status != StatusEvento.FINALIZADO &&
+                              eventInfo.status != StatusEvento.CANCELADO
+                          ? () => _finishEvent(eventInfo.id)
                           : null,
                     ),
                   )

@@ -94,7 +94,7 @@ class EventoModel with ChangeNotifier {
 enum StatusEvento {
   CRIADO, // evento foi criado apenas, sem funcionarios contratados
   CONTRATANDO,
-  FECHADO, //todas as vagas ja foram ocupadas porem funcionarios que aceitaram a proposta podem aparecer na lista de espera
+  FINALIZADO, //todas as vagas ja foram ocupadas porem funcionarios que aceitaram a proposta podem aparecer na lista de espera
   ACONTECENDO, // evento em questão esta acontecendo no momento
   TERMINADO, // evento acabou, nao aparece mais na tela principal de eventos
   CANCELADO // evento cancelado antes do termino estipulado,
