@@ -2,6 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:event_uau/models/address_model.dart';
 import 'package:event_uau/models/contratado_model.dart';
 import 'package:event_uau/models/event_employment_status_model.dart';
+import 'package:event_uau/models/funcionario_model.dart';
 import 'package:event_uau/service/address_service_event.dart';
 import 'package:event_uau/service/event_service.dart' as EventService;
 import 'package:flutter/material.dart';
@@ -81,7 +82,9 @@ class Event with ChangeNotifier {
           ),
           eagerError: true);
 
-      eventToEdit.employees = employees;
+      final newEmployeesList = [..._events[index].employees, ...employees];
+
+      eventToEdit.employees = newEmployeesList;
 
       _events.removeAt(index);
       _events.insert(index, eventToEdit);
@@ -116,31 +119,38 @@ class Event with ChangeNotifier {
               estado: addresses[index]['estado'],
               complemento: addresses[index]['complemento']);
 
-          final List<ContratadoModel> employees =
-              element['funcionarios'].length < 1
-                  ? []
-                  : element['funcionarios'].map(
-                      (e) {
-                        final funcionario = e['funcionario'];
-                        final statusContratacao = e['statusContratacao'];
-                        new ContratadoModel(
-                          id: funcionario['id'],
-                          nome: funcionario['nome'],
-                          cpf: null,
-                          phone: null,
-                          valorHora: funcionario['valorPorHora'],
-                          birthDate:
-                              DateTime.parse(funcionario['dataNascimento']),
-                          especialidades: e['especialidade'] == null
-                              ? []
-                              : throw Exception('Implement this'),
-                          status: new EventEmploymentStatus(
-                              hasRefused: statusContratacao['ehRecusado'],
-                              id: statusContratacao['id'],
-                              descricao: statusContratacao['descricao']),
-                        );
-                      },
-                    );
+          final List<ContratadoModel> employees = [];
+          final List _funcionarios = element['funcionarios'];
+
+          if (_funcionarios.length > 0)
+            _funcionarios.forEach(
+              (e) {
+                final funcionario = e['funcionario'];
+                final statusContratacao = e['statusContratacao'];
+                final especialidade = e['especialidade'];
+
+                employees.add(
+                  new ContratadoModel(
+                    id: funcionario['id'],
+                    nome: funcionario['nome'],
+                    cpf: null,
+                    phone: null,
+                    valorHora:
+                        double.parse(funcionario['valorPorHora'].toString()),
+                    birthDate: DateTime.parse(funcionario['dataNascimento']),
+                    especialidades: [
+                      JobItem(
+                          id: especialidade['id'],
+                          descricao: especialidade['descricao'])
+                    ],
+                    status: new EventEmploymentStatus(
+                        hasRefused: statusContratacao['ehRecusado'],
+                        id: statusContratacao['id'],
+                        descricao: statusContratacao['descricao']),
+                  ),
+                );
+              },
+            );
 
           _events.add(
             new EventItem(

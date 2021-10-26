@@ -160,9 +160,9 @@ class EmployeeWalletData with ChangeNotifier {
 
     final responseBody = json.decode(res.body);
 
-    final avaliableBalance =
+    final _avaliableBalance =
         double.parse(responseBody['valorDisponivel'].toString());
-    final futureBalance = double.parse(responseBody['valorFuturo'].toString());
+    final _futureBalance = double.parse(responseBody['valorFuturo'].toString());
 
     List<Operation> _operations = [];
     (responseBody['operacoes'] as List).forEach((element) {
@@ -182,8 +182,10 @@ class EmployeeWalletData with ChangeNotifier {
         ),
       );
     });
+
     operations = _operations;
-    
+    avaliableBalance = _avaliableBalance;
+    futureBalance = _futureBalance;
 
     notifyListeners();
   }
