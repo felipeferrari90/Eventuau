@@ -70,14 +70,14 @@ class _HomeScreenState extends State<HomeScreen> {
             icon: Icon(Icons.monetization_on),
             label: "Carteira",
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.chat_bubble_outline),
-            label: "Conversas",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.notifications),
-            label: "Notificacoes",
-          ),
+          // BottomNavigationBarItem(
+          //   icon: Icon(Icons.chat_bubble_outline),
+          //   label: "Conversas",
+          // ),
+          // BottomNavigationBarItem(
+          //   icon: Icon(Icons.notifications),
+          //   label: "Notificacoes",
+          // ),
         ],
         onTap: _updateIndex,
       ),

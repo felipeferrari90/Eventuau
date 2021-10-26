@@ -10,45 +10,39 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../service/maps_service.dart' as MapsService;
 
-class AddressServiceEvent {
-  static AddressModel setEventAddressModel(Map<String, dynamic> jsonResponse) {
-    return AddressModel(
-        id: jsonResponse['id'],
-        latitude: jsonResponse['latitude'] ?? "12.0",
-        longitude: jsonResponse['longitude'] ?? "12.0",
-        cep: jsonResponse['cep'],
-        numero: jsonResponse['numero'] ?? "",
-        complemento: jsonResponse['complemento'] ?? "",
-        rua: jsonResponse['logradouro'],
-        cidade: jsonResponse['cidade'],
-        estado: jsonResponse['estado'],
-        bairro: jsonResponse['bairro'],
-        tipoEnd: AddressType.Event);
-  }
+AddressModel setEventAddressModel(Map<String, dynamic> jsonResponse) {
+  return AddressModel(
+      id: jsonResponse['id'],
+      latitude: jsonResponse['latitude'] ?? "12.0",
+      longitude: jsonResponse['longitude'] ?? "12.0",
+      cep: jsonResponse['cep'],
+      numero: jsonResponse['numero'] ?? "",
+      complemento: jsonResponse['complemento'] ?? "",
+      rua: jsonResponse['logradouro'],
+      cidade: jsonResponse['cidade'],
+      estado: jsonResponse['estado'],
+      bairro: jsonResponse['bairro'],
+      tipoEnd: AddressType.Event);
+}
 
-  static Future<Map<String, dynamic>> createEventAddress(
-      AddressModel addressDataEvent, int idEvent) async {
-    final baseUrl = 'https://10.0.2.2:6031/api/eventos/$idEvent/enderecos';
+Future<Map> createEventAddress(
+    AddressModel addressDataEvent, int idEvent) async {
+  final baseUrl = 'https://10.0.2.2:6031/api/eventos/$idEvent/enderecos';
 
-    final coords = await MapsService.fetchLatAndLongByAddress(
-        '${addressDataEvent.cep} ${addressDataEvent.rua} ${addressDataEvent.numero ?? 12}');
+  final coords = await MapsService.fetchLatAndLongByAddress(
+      '${addressDataEvent.cep} ${addressDataEvent.rua} ${addressDataEvent.numero}');
 
-    print(addressDataEvent.cep);
-    addressDataEvent.latitude = coords['lat'] ?? "12.0000";
-    addressDataEvent.longitude = coords['long'] ?? "12.0000";
+  addressDataEvent.latitude = coords['lat'];
+  addressDataEvent.longitude = coords['long'];
 
-    final res =
-        await http.post('https://10.0.2.2:6031/api/eventos/$idEvent/enderecos',
-            headers: {
-              HttpHeaders.authorizationHeader: 'Bearer ${userData.token}',
-              HttpHeaders.contentTypeHeader: 'application/json'
-            },
-            body: addressDataEvent.apiPayload);
-    print(res.statusCode);
-    if (res.statusCode != 200) throw HttpException(json.decode(res.body));
+  final res = await http.post(baseUrl,
+      headers: {
+        HttpHeaders.authorizationHeader: 'Bearer ${userData.token}',
+        HttpHeaders.contentTypeHeader: 'application/json'
+      },
+      body: addressDataEvent.apiPayload);
 
-    print("resposta do metodo createEventAddress");
-    print("${json.decode(res.body)}");
-    return json.decode(res.body) as Map<String, dynamic>;
-  }
+  if (res.statusCode != 200) throw HttpException(json.decode(res.body));
+
+  return json.decode(res.body);
 }

@@ -192,6 +192,7 @@ class _EmployeeWalletState extends State<EmployeeWallet> {
                     SizedBox(
                       width: 20,
                     ),
+                    if (route == '/')
                     RaisedButton(
                         onPressed: _onDeposit,
                         child: Text('Depositar'),

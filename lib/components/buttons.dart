@@ -13,7 +13,7 @@ Widget setButton({
         margin: margin ?? EdgeInsets.only(top: 20.0),
         width: double.infinity,
         child: RaisedButton(
-            onPressed: function ?? () {},
+            onPressed: function,
             elevation: 0,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(15.0),
@@ -83,7 +83,7 @@ class BaseTextButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FlatButton(
-      onPressed: onPressed ?? () {},
+      onPressed: onPressed,
       child: Padding(
           padding: EdgeInsets.symmetric(vertical: 20.0),
           child: Row(
@@ -121,7 +121,7 @@ Widget setButtonText(
         Color color,
         IconData icon}) =>
     FlatButton(
-      onPressed: function ?? () {},
+      onPressed: function,
       child: Padding(
           padding: EdgeInsets.symmetric(vertical: 20.0),
           child: Row(

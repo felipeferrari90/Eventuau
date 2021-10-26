@@ -34,6 +34,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   bool contractChecked = false;
   bool hasError = false;
+  bool isLoading = false;
 
   TextEditingController _passwordController = new TextEditingController();
 
@@ -69,6 +70,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
     setState(() {
       hasError = false;
+      isLoading = true;
     });
 
     _formKey.currentState.save();
@@ -83,12 +85,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
 
     try {
-      await AuthService.signup(signupFields);      
+      await AuthService.signup(signupFields);
       Navigator.of(context).pushReplacementNamed(SignupSuccess.routeName);
     } catch (e) {
       print(e);
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text('Erro ao cadastrar usuário')));
+
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 
@@ -165,8 +171,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       keyboardType: TextInputType.name,
                       decoration: InputDecoration(labelText: 'Nome Completo'),
                       textInputAction: TextInputAction.next,
-                      onFieldSubmitted: (_) =>
-                          _nameFocusNode.requestFocus(),
+                      onFieldSubmitted: (_) => _nameFocusNode.requestFocus(),
                       validator: (value) {
                         if (value.isEmpty) {
                           return "Campo Obrigatório";
@@ -190,7 +195,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                     TextFormField(
                       keyboardType: TextInputType.datetime,
-                      decoration: InputDecoration(labelText: 'Data de Nascimento'),
+                      decoration:
+                          InputDecoration(labelText: 'Data de Nascimento'),
                       inputFormatters: [
                         FilteringTextInputFormatter.digitsOnly,
                         DataInputFormatter()
@@ -325,7 +331,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 setButton(
                   margin: EdgeInsets.all(0),
                   text: "Confirmar",
-                  function: _onSubmit,
+                  function: !isLoading ? _onSubmit : null,
                 )
               ],
             ),

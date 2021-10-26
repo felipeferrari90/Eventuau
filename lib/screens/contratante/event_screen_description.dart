@@ -3,6 +3,8 @@ import 'package:event_uau/components/app_bar_eventual.dart';
 import 'package:event_uau/components/buttons.dart';
 import 'package:event_uau/models/evento_model.dart';
 import 'package:event_uau/providers/auth.dart';
+import 'package:event_uau/providers/employee_wallet_data.dart';
+import 'package:event_uau/providers/event.dart';
 import 'package:event_uau/screens/contratante/employees_screen.dart';
 import 'package:event_uau/service/evento_service.dart';
 import 'package:event_uau/utils/colors.dart';
@@ -15,7 +17,7 @@ import 'package:provider/provider.dart';
 class EventScreenDescription extends StatefulWidget {
   const EventScreenDescription({Key key, this.event}) : super(key: key);
 
-  final EventoModel event;
+  final EventItem event;
 
   _EventScreenDescriptionState createState() => _EventScreenDescriptionState();
 }
@@ -23,9 +25,10 @@ class EventScreenDescription extends StatefulWidget {
 class _EventScreenDescriptionState extends State<EventScreenDescription> {
   @override
   Widget build(BuildContext context) {
+    final walletData = Provider.of<EmployeeWalletData>(context);
     return Scaffold(
         appBar: EventUauAppBar(
-          
+          title: 'Detalhes',
         ),
         body: Container(
             padding: EdgeInsets.all(16),
@@ -39,10 +42,9 @@ class _EventScreenDescriptionState extends State<EventScreenDescription> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(height: 200),
                       Padding(
                         padding: EdgeInsets.fromLTRB(0, 8, 0, 2),
-                        child: Text("${widget.event.nome}",
+                        child: Text("${widget.event.name}",
                             style: TextStyle(
                                 fontSize: 24,
                                 fontWeight: FontWeight.w500,
@@ -51,7 +53,16 @@ class _EventScreenDescriptionState extends State<EventScreenDescription> {
                       Padding(
                         padding: EdgeInsets.fromLTRB(0, 4, 0, 4),
                         child: Text(
-                            "${DateFormat.yMMMMd('pt_BR').format(widget.event.dataEHorarioInicio) ?? "Sem data e horario marcados"} - ${DateFormat.Hm('pt_BR').format(widget.event.dataEHorarioTermino) ?? ""}",
+                            "De ${DateFormat.yMMMMd('pt_BR').format(widget.event.startDate) ?? "Sem data e horario marcados"} - ${DateFormat.Hm('pt_BR').format(widget.event.startDate) ?? ""}",
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                                color: primaryColor)),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(0, 4, 0, 4),
+                        child: Text(
+                            "Até ${DateFormat.yMMMMd('pt_BR').format(widget.event.endDate) ?? "Sem data e horario marcados"} - ${DateFormat.Hm('pt_BR').format(widget.event.endDate) ?? ""}",
                             style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w500,
@@ -63,7 +74,7 @@ class _EventScreenDescriptionState extends State<EventScreenDescription> {
                         children: [
                           Padding(
                             padding: EdgeInsets.fromLTRB(0, 0, 2, 4),
-                            child: Text("Duração Minima: ",
+                            child: Text("Duração: ",
                                 style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w500,
@@ -71,7 +82,8 @@ class _EventScreenDescriptionState extends State<EventScreenDescription> {
                           ),
                           Padding(
                             padding: EdgeInsets.fromLTRB(0, 2, 0, 4),
-                            child: Text("${widget.event.duracaoMinima} Horas",
+                            child: Text(
+                                " ${widget.event.minDuration ?? widget.event.endDate.difference(widget.event.startDate).inHours} Hora ${widget.event.endDate.difference(widget.event.startDate).inHours > 1 ? 's' : ''}",
                                 style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w300,
@@ -81,6 +93,7 @@ class _EventScreenDescriptionState extends State<EventScreenDescription> {
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Padding(
                             padding: EdgeInsets.fromLTRB(0, 0, 2, 4),
@@ -90,14 +103,16 @@ class _EventScreenDescriptionState extends State<EventScreenDescription> {
                                     fontWeight: FontWeight.w500,
                                     color: primaryColor)),
                           ),
-                          Padding(
-                            padding: EdgeInsets.fromLTRB(0, 2, 0, 4),
-                            child: Text(
-                                "${widget.event.endereco.toString() ?? "Sem endereco"}",
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w300,
-                                    color: Color.fromRGBO(0, 0, 0, 0.7))),
+                          Flexible(
+                            child: Padding(
+                              padding: EdgeInsets.fromLTRB(0, 2, 0, 4),
+                              child: Text(
+                                  "${widget.event?.address?.toString() ?? "Sem endereco"}",
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w300,
+                                      color: Color.fromRGBO(0, 0, 0, 0.7))),
+                            ),
                           ),
                         ],
                       ),
@@ -106,7 +121,7 @@ class _EventScreenDescriptionState extends State<EventScreenDescription> {
                         children: [
                           Padding(
                             padding: EdgeInsets.fromLTRB(0, 0, 2, 4),
-                            child: Text("status evento: ",
+                            child: Text("Status Evento: ",
                                 style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w500,
@@ -124,45 +139,44 @@ class _EventScreenDescriptionState extends State<EventScreenDescription> {
                           ),
                         ],
                       ),
-                      SizedBox(
-                        height: 24,
-                      ),
+
                       Divider(),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(0, 8, 0, 8),
-                        child: Text("sobre o evento",
-                            style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.black)),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(0, 4, 0, 4),
-                        child: Text("${widget.event.descricao}",
-                            style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w300,
-                                color: Color.fromRGBO(0, 0, 0, 0.7))),
-                      ),
-                      Divider(),
-                      SizedBox(height: 24),
+                      if (widget.event.description != null) ...[
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(0, 0, 0, 8),
+                          child: Text("Sobre o Evento",
+                              style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.black)),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(0, 4, 0, 4),
+                          child: Text("${widget.event.description}",
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w300,
+                                  color: Color.fromRGBO(0, 0, 0, 0.7))),
+                        ),
+                        Divider(),
+                      ],
                       Text(
-                          "agora que o evento foi criado você pode contratar funcionarios",
+                          "Agora que o evento foi criado você pode contratar funcionários",
                           style: TextStyle(
                               fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.black)),
+                              fontWeight: FontWeight.w300,
+                              color: Color.fromRGBO(0, 0, 0, 0.7))),
                       SizedBox(height: 24),
                       Align(
                         alignment: Alignment.center,
                         child: RaisedButton.icon(
                           onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => EmployeeChoiceScreen(
-                                          eventoModel: widget.event,
-                                        )));
+                            // Navigator.push(
+                            //     context,
+                            //     MaterialPageRoute(
+                            //         builder: (context) => EmployeeChoiceScreen(
+                            //               eventoModel: widget.event,
+                            //             )));
                           },
                           padding:
                               EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -178,109 +192,108 @@ class _EventScreenDescriptionState extends State<EventScreenDescription> {
                         height: 24,
                       ),
                       Text(
-                          "você pode gerenciar os funcionarios que ja foram contratados para esse evento",
-                          style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.black)),
-                      SizedBox(
-                        height: 24,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(0, 2, 0, 4),
-                        child: Text(
-                          "${widget.event.funcionarios.length} funcionarios contratados: ",
-                          style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w700,
-                              color: Color.fromRGBO(0, 0, 0, 0.7)),
+                        "Você pode gerenciar os funcionários que já foram contratados para esse evento",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w300,
+                          color: Color.fromRGBO(0, 0, 0, 0.7),
                         ),
                       ),
-                      SizedBox(height: 24),
-                      Align(
-                        alignment: Alignment.center,
-                        child: RaisedButton.icon(
-                          onPressed: () {
-                            Navigator.pushNamed(
-                                context, "/employee/management");
-                          },
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                          icon: Icon(Icons.assignment_ind, size: 16),
-                          label: Text("Gerenciador de Funcionarios"),
-                          color: secundaryColor,
-                          textColor: primaryColor,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 24),
-                      Divider(),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(0, 8, 0, 8),
-                        child: Text("observacoes",
-                            style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.black)),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(0, 4, 0, 4),
-                        child: Text("${widget.event.observacoes}",
+                      if (widget.event.employees.length > 0) ...[
+                        Divider(),
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(0, 2, 0, 4),
+                          child: Text(
+                            "${widget.event.employees?.length} funcionarios contratados: ",
                             style: TextStyle(
                                 fontSize: 16,
-                                fontWeight: FontWeight.w300,
-                                color: Color.fromRGBO(0, 0, 0, 0.7))),
-                      ),
+                                fontWeight: FontWeight.w700,
+                                color: Color.fromRGBO(0, 0, 0, 0.7)),
+                          ),
+                        ),
+                        SizedBox(height: 24),
+                        Align(
+                          alignment: Alignment.center,
+                          child: RaisedButton.icon(
+                            onPressed: () {
+                              Navigator.pushNamed(
+                                  context, "/employee/management");
+                            },
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 8),
+                            icon: Icon(Icons.assignment_ind, size: 16),
+                            label: Text("Gerenciador de Funcionarios"),
+                            color: secundaryColor,
+                            textColor: primaryColor,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 24,
+                        ),
+                      ],
                       Divider(),
-                      SizedBox(height: 24),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 16),
-                        child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text("saldo disponivel: ",
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w700)),
-                              Text("R\$ 420,00",
-                                  style: TextStyle(
-                                      fontSize: 24,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w700)),
-                            ]),
-                      ),
-                      SizedBox(height: 24),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 16),
-                        child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text("VALOR TOTAL: ",
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      color: primaryColor,
-                                      fontWeight: FontWeight.w700)),
-                              Text("R\$ 350,00",
-                                  style: TextStyle(
-                                      fontSize: 24,
-                                      color: primaryColor,
-                                      fontWeight: FontWeight.w700)),
-                            ]),
-                      ),
-                      SizedBox(height: 24),
-                      setButton(
-                        text: "editar evento",
-                        uppercase: true,
-                        icon: Icons.edit,
-                      ),
-                      setButtonText(
-                          text: "cancelar evento",
-                          icon: Icons.delete_outline,
-                          uppercase: true,
-                          color: Colors.red.shade400)
+                      if (widget.event.observations != null) ...[
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(0, 8, 0, 8),
+                          child: Text("Observações:",
+                              style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.black)),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(0, 4, 0, 4),
+                          child: Text("${widget.event.observations}",
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w300,
+                                  color: Color.fromRGBO(0, 0, 0, 0.7))),
+                        ),
+                        Divider(),
+                      ],
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text("Saldo Disponível: ",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.black,
+                                )),
+                            Text(
+                                'R\$ ${walletData.avaliableBalance.toStringAsFixed(2)}',
+                                style: TextStyle(
+                                    fontSize: 16,
+                                  color: Colors.black,
+                                )),
+                          ]),
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text("Valor Total: ",
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    color: primaryColor,
+                                    fontWeight: FontWeight.w700)),
+                            Text("R\$ -.--",
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    color: primaryColor,
+                                    fontWeight: FontWeight.w700)),
+                          ]),
+                      // SizedBox(height: 24),
+                      // setButton(
+                      //   text: "editar evento",
+                      //   uppercase: true,
+                      //   icon: Icons.edit,
+                      // ),
+                      // setButtonText(
+                      //     text: "cancelar evento",
+                      //     icon: Icons.delete_outline,
+                      //     uppercase: true,
+                      //     color: Colors.red.shade400)
                     ],
                   ),
                 ))));

@@ -31,19 +31,16 @@ class _EmployeeChoiceScreenState extends State<EmployeeChoiceScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: EventUauAppBar(),
-        backgroundColor: colorBg,
+        appBar: EventUauAppBar(
+          title: "Eu Preciso de um...",
+        ),
+        // backgroundColor: colorBg,
         body: Container(
-          padding: EdgeInsets.symmetric(horizontal: 24),
+          padding: EdgeInsets.symmetric(horizontal: 8),
           child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  "Eu Preciso de um...",
-                  style: Theme.of(context).textTheme.headline1,
-                ),
-                Container(
-                    padding: EdgeInsets.symmetric(vertical: 24),
+              children: <Widget>[                
+                Container(                    
                     child: SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: ToggleButtons(
@@ -163,23 +160,23 @@ class _EmployeeChoiceScreenState extends State<EmployeeChoiceScreen> {
                                 ))));
                       }
                     }),
-                Container(
-                    width: double.infinity,
-                    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 24),
-                    child: RaisedButton.icon(
-                      color: primaryColor,
-                      textColor: colorBg,
-                      padding: EdgeInsets.all(10),
-                      onPressed: () {
-                        Navigator.pushNamed(context, "/employee/management");
-                      },
-                      icon:
-                          Icon(Icons.assignment_ind, color: colorBg, size: 24),
-                      label: Text("ver minhas contratações",
-                          style: TextStyle(fontSize: 16)),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(25)),
-                    ))
+                // Container(
+                //     width: double.infinity,
+                //     padding: EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+                //     child: RaisedButton.icon(
+                //       color: primaryColor,
+                //       textColor: colorBg,
+                //       padding: EdgeInsets.all(10),
+                //       onPressed: () {
+                //         Navigator.pushNamed(context, "/employee/management");
+                //       },
+                //       icon:
+                //           Icon(Icons.assignment_ind, color: colorBg, size: 24),
+                //       label: Text("ver minhas contratações",
+                //           style: TextStyle(fontSize: 16)),
+                //       shape: RoundedRectangleBorder(
+                //           borderRadius: BorderRadius.circular(25)),
+                //     ))
               ]),
         ));
   }

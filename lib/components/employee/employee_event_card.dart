@@ -43,15 +43,18 @@ class EventCardEmployee extends StatelessWidget {
             borderRadius: BorderRadius.all(Radius.circular(15))),
         tileColor: Color.fromRGBO(0, 0, 0, 0.05),
         leading: FutureBuilder(
-          builder: (context, snapshot) =>
-              snapshot.connectionState != ConnectionState.waiting &&
-                      snapshot.hasData == false
-                  ? Icon(
-          Icons.person,
-          color: Theme.of(context).primaryColor,
-          size: 42,
-        )
-                  : CircleAvatar(backgroundImage: MemoryImage(snapshot.data)),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState != ConnectionState.waiting) {
+              if (snapshot.hasData)
+                return CircleAvatar(
+                    backgroundImage: MemoryImage(snapshot.data));
+            }
+            return Icon(
+              Icons.person,
+              color: Theme.of(context).primaryColor,
+              size: 42,
+              );
+          },
           future: fetchProfilePicture(id),
         ),
         title: Text('$name ${age ?? ''}'),

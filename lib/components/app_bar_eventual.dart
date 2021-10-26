@@ -29,11 +29,10 @@ class _EventUauAppBarState extends State<EventUauAppBar> {
       elevation: 0,
       actions: <Widget>[        
          TextButton(
-          onPressed: () => !user.isPartner
-                    ? Navigator.of(context)
-                        .pushNamed(EmployeeSignupScreen.routeName)
-                    : Navigator.of(context)
-                        .pushReplacementNamed(EmployeeHomeScreen.routeName),
+          onPressed: () => user.isPartner
+              ? Navigator.of(context).pushNamedAndRemoveUntil(
+                  EmployeeHomeScreen.routeName, (route) => false)
+              : Navigator.of(context).pushNamed(EmployeeSignupScreen.routeName),
                 child: Text(
                   !user.isPartner ? 'Seja um Parceiro!' : 'Área do Parceiro',
                   style: TextStyle(
